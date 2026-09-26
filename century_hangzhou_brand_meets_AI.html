@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+<title>百年杭字号 AI新本事</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&family=Orbitron:wght@400;700;900&family=ZCOOL+KuaiLe&family=Liu+Jian+Mao+Cao&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET & BASE ===== */
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;
+  background:linear-gradient(135deg,#0a0a1a 0%,#0d0a15 25%,#0a0d1a 50%,#0f0a12 75%,#0a0a1a 100%);
+  background-size:400% 400%;animation:bgShift 20s ease infinite;
+  color:#e8dcc8;
+  font-family:'ZCOOL KuaiLe','Noto Serif SC','PingFang SC',serif;
+  font-size:17px;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;overscroll-behavior:contain;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+@keyframes bgShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+button{font-family:inherit;border:none;cursor:pointer;outline:none}
+
+/* Global flashy text gradient utility */
+.text-gradient{background:linear-gradient(135deg,#d4af37,#ff6b6b,#c084fc,#60a5fa);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  background-size:300% 300%;animation:gradText 6s ease infinite}
+@keyframes gradText{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+
+/* Neon glow pulse */
+@keyframes neonPulse{0%,100%{filter:drop-shadow(0 0 8px var(--neon,.5)) brightness(1)}
+  50%{filter:drop-shadow(0 0 20px var(--neon,.8)) brightness(1.15)}}
+
+/* Store-specific font classes */
+.font-tech{font-family:'Orbitron','PingFang SC',sans-serif;font-weight:700;letter-spacing:3px}
+.font-brush{font-family:'Ma Shan Zheng',cursive;letter-spacing:4px}
+.font-cursive{font-family:'Ma Shan Zheng',cursive;letter-spacing:3px}
+.font-wild{font-family:'Zhi Mang Xing','Ma Shan Zheng',cursive;letter-spacing:5px}
+
+/* ===== PAGE SYSTEM ===== */
+.page{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .8s ease;z-index:1;
+  overflow-y:auto;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;padding:20px;padding-bottom:60px}
+.page.active{opacity:1;pointer-events:auto;z-index:10}
+.page.fade-out{opacity:0;transition:opacity .6s ease}
+
+/* ===== RIPPLE CANVAS (全局) ===== */
+#ripple-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:50;pointer-events:none}
+
+/* ===== MUSIC TOGGLE ===== */
+.music-toggle{position:fixed;top:16px;right:16px;z-index:200;width:44px;height:44px;border-radius:50%;
+  background:rgba(20,18,15,.7);border:1px solid rgba(212,175,55,.25);backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s;
+  box-shadow:0 4px 20px rgba(0,0,0,.4);flex-direction:column;gap:2px}
+.music-toggle:active{transform:scale(.9)}
+.music-toggle .icon{font-size:16px;color:#d4af37;transition:transform .3s;line-height:1}
+.music-toggle.playing .icon{animation:spin 3s linear infinite}
+.music-toggle .bar{display:flex;gap:2px;align-items:flex-end;height:8px}
+.music-toggle .bar span{width:2px;background:#d4af37;border-radius:1px;transition:height .2s;height:2px}
+.music-toggle.playing .bar span{animation:eqBar .8s ease-in-out infinite alternate}
+.music-toggle.playing .bar span:nth-child(2){animation-delay:.15s}
+.music-toggle.playing .bar span:nth-child(3){animation-delay:.3s}
+.music-toggle.muted .icon{opacity:.35}
+.music-toggle.muted .bar span{height:2px!important;animation:none!important}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes eqBar{0%{height:3px}100%{height:8px}}
+
+/* ===== COVER PAGE ===== */
+#cover{background:#0b0a0a;cursor:pointer;padding:0}
+#cover .bg-img{position:absolute;inset:0;background:url('images/第一页背景.jpg') center/cover no-repeat;
+  opacity:.5;transition:opacity 2s ease;filter:brightness(.8) saturate(1.2)}
+#cover .bg-overlay{position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 30% 30%,rgba(196,154,60,.06) 0%,transparent 50%),
+    radial-gradient(ellipse at 70% 60%,rgba(74,139,194,.05) 0%,transparent 50%),
+    radial-gradient(ellipse at 50% 35%,transparent 10%,rgba(11,10,10,.5) 55%,rgba(11,10,10,.88) 100%);z-index:1}
+#cover .stars-container{position:absolute;top:0;left:0;width:100%;height:55%;z-index:0}
+#cover .star{position:absolute;border-radius:50%;animation:twinkle 3s infinite alternate}
+@keyframes twinkle{0%{opacity:.15;transform:scale(.8)}100%{opacity:.9;transform:scale(1.2)}}
+#cover .content{position:relative;z-index:2;text-align:center;padding:0 28px;max-width:480px}
+#cover h1{font-family:'Zhi Mang Xing','Ma Shan Zheng',cursive;font-size:clamp(2rem,9vw,3.8rem);letter-spacing:clamp(4px,2.5vw,12px);margin-bottom:12px;
+  background:linear-gradient(135deg,#ffd700,#ff6b6b,#c084fc,#60a5fa,#ffd700);
+  background-size:400% 400%;animation:gradText 5s ease infinite;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 30px rgba(212,175,55,.3)) drop-shadow(0 4px 20px rgba(0,0,0,.8));line-height:1.4}
+#cover .subtitle{font-family:'ZCOOL KuaiLe',cursive;font-size:1.7rem;letter-spacing:14px;margin-bottom:44px;
+  background:linear-gradient(90deg,#e8c86a,#ff9a76,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 10px rgba(0,0,0,.6))}
+#cover .quote{font-size:1.05rem;line-height:2.2;color:rgba(201,178,139,.78);max-width:360px;margin:0 auto 50px;letter-spacing:1.5px}
+#cover .tap-hint{animation:pulseGold 2.2s infinite;font-size:1.05rem;color:#d4af37;letter-spacing:6px;
+  padding:14px 40px;border:2px solid rgba(212,175,55,.35);border-radius:60px;
+  background:rgba(212,175,55,.05);backdrop-filter:blur(4px);
+  font-family:'Ma Shan Zheng',serif;box-shadow:0 0 30px rgba(212,175,55,.06)}
+@keyframes pulseGold{0%,100%{opacity:.45;transform:scale(1)}50%{opacity:1;transform:scale(1.03)}}
+/* Signboards */
+.signboards{position:absolute;bottom:80px;left:0;right:0;display:flex;justify-content:center;gap:12px;padding:0 20px;z-index:3}
+.sign{font-family:'Ma Shan Zheng',serif;font-size:.75rem;padding:7px 12px;background:rgba(30,30,30,.85);
+  color:#555;border-radius:4px;letter-spacing:3px;border:1px solid #333;transition:all 1.2s ease;
+  text-align:center;backdrop-filter:blur(2px);opacity:.45;text-shadow:0 0 6px rgba(0,0,0,.5)}
+.sign.lit{opacity:1}
+.sign.lit.myl{color:#7ab8e6;border-color:#4a8bc2;box-shadow:0 0 30px rgba(74,139,194,.35);background:rgba(10,30,50,.7)}
+.sign.lit.zbl{color:#e8c86a;border-color:#c49a3c;box-shadow:0 0 30px rgba(196,154,60,.4);background:rgba(40,30,10,.7)}
+.sign.lit.fhc{color:#7ac08a;border-color:#4c8b5a;box-shadow:0 0 30px rgba(76,139,90,.35);background:rgba(10,40,20,.7)}
+
+/* ===== MAP PAGE ===== */
+#mapPage{background:#0d1215;padding:0}
+#mapPage .map-container{position:relative;width:100%;height:100%;overflow:hidden;touch-action:none}
+#mapPage .map-bg{position:absolute;transition:filter 1.8s ease;overflow:visible;transform-origin:0 0}
+#mapPage .map-bg img{display:block;
+  filter:contrast(1.15) saturate(1.1);image-rendering:auto;
+  -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 4%,#000 96%,transparent 100%)}
+#mapPage .map-bg.grayscale{filter:brightness(.45) contrast(1.2)}
+#mapPage .map-bg.grayscale img{filter:grayscale(1) contrast(1.15)}
+#mapPage .map-bg.color{filter:brightness(1.05) contrast(1.12) saturate(1.15)}
+#mapPage .map-bg.color img{filter:contrast(1.15) saturate(1.1)}
+#mapPage .map-title{position:absolute;top:56px;left:0;right:0;text-align:center;z-index:25;
+  font-family:'ZCOOL KuaiLe',cursive;font-size:1.8rem;letter-spacing:6px;
+  background:linear-gradient(90deg,#ffd700,#ff6b6b,#c084fc,#60a5fa);background-size:300% 300%;
+  animation:gradText 5s ease infinite;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 12px rgba(0,0,0,.6))}
+#mapPage .back-btn{position:absolute;top:52px;left:16px;z-index:30;background:rgba(20,18,15,.7);
+  backdrop-filter:blur(8px);border-radius:50%;width:40px;height:40px;display:flex;align-items:center;
+  justify-content:center;font-size:18px;color:#c9b28b;border:1px solid rgba(212,175,55,.2);
+  box-shadow:0 4px 16px rgba(0,0,0,.4);transition:all .3s}
+#mapPage .back-btn:active{transform:scale(.9)}
+/* ===== 竖状招牌 + 中国结 ===== */
+.marker{position:absolute;z-index:15;cursor:pointer;transform-origin:top center;touch-action:none;filter:brightness(1.8) saturate(1.3)!important}
+.marker.mao{animation:signSway 4.5s ease-in-out infinite;animation-delay:-1.2s}
+.marker.zhu{animation:signSway 5.2s ease-in-out infinite;animation-delay:-3.1s}
+.marker.fang{animation:signSway 4.8s ease-in-out infinite;animation-delay:-0.5s}
+.marker:active{animation-play-state:paused;transform:scale(.95)}
+@keyframes signSway{0%,100%{transform:rotate(-3.5deg)}50%{transform:rotate(3.5deg)}}
+
+/* 孔明灯 (招牌顶部) */
+.marker .lantern{position:absolute;top:-68px;left:50%;transform:translateX(-50%);
+  width:30px;height:44px;pointer-events:none}
+.marker .lantern svg{width:100%;height:100%;filter:drop-shadow(0 0 12px rgba(255,170,50,.5)) drop-shadow(0 0 24px rgba(255,140,30,.3))}
+
+/* 悬挂绳 + 顶部绳结 */
+.marker .signboard::before{content:'';position:absolute;top:-20px;left:50%;transform:translateX(-50%);
+  width:2px;height:20px;
+  background:linear-gradient(180deg,rgba(212,175,55,.15) 0%,rgba(212,175,55,.6) 50%,rgba(212,175,55,.9) 100%);
+  box-shadow:0 0 4px rgba(212,175,55,.4)}
+.marker .signboard::after{content:'';position:absolute;top:-5px;left:50%;transform:translateX(-50%);
+  width:10px;height:10px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#ffd700,#a88030);
+  box-shadow:0 0 8px rgba(212,175,55,.6)}
+
+/* 竖写店名 */
+.marker .signboard .brand{font-family:'Ma Shan Zheng',cursive;font-size:1.05rem;letter-spacing:2px;
+  writing-mode:vertical-rl;text-orientation:upright;line-height:1.1;
+  text-shadow:0 1px 2px rgba(0,0,0,.6),0 0 8px rgba(255,215,0,.15);
+  margin:4px 0;white-space:nowrap}
+/* 竖写年份 */
+.marker .signboard .year{font-family:'Ma Shan Zheng',cursive;font-size:.65rem;letter-spacing:1px;
+  writing-mode:vertical-rl;text-orientation:upright;line-height:1;opacity:.7;margin-top:2px}
+
+/* 中国结 (SVG内联) */
+.marker .chinese-knot{position:absolute;bottom:-40px;left:50%;transform:translateX(-50%);
+  width:24px;height:40px;pointer-events:none}
+.marker .chinese-knot svg{width:100%;height:100%}
+
+/* 提示文字 */
+.marker .tap-hint{position:absolute;bottom:-60px;left:50%;transform:translateX(-50%);
+  font-size:.65rem;color:#d4af37;opacity:0;transition:opacity .4s;
+  font-family:'Ma Shan Zheng',serif;letter-spacing:2px;white-space:nowrap;
+  text-shadow:0 0 8px rgba(0,0,0,.9);background:rgba(0,0,0,.5);padding:3px 10px;border-radius:12px;
+  border:1px solid rgba(212,175,55,.3)}
+.marker:active .tap-hint{opacity:1}
+
+/* 毛源昌：胶囊圆角形 */
+.marker.mao .signboard{position:relative;display:flex;flex-direction:column;align-items:center;
+  width:48px;padding:14px 6px 12px;border-radius:24px;
+  background:linear-gradient(180deg,#0c1e3a 0%,#0a1a35 100%);
+  border:1.5px solid rgba(74,139,194,.5);
+  box-shadow:0 8px 24px rgba(0,0,0,.5),0 0 20px rgba(74,139,194,.25),
+    inset 0 1px 0 rgba(122,184,230,.15),inset 0 -2px 4px rgba(0,0,0,.3)}
+.marker.mao .signboard .brand{color:#b8dcf5}
+.marker.mao .signboard .year{color:rgba(184,220,245,.7)}
+
+/* 朱炳仁：宽扁木匾 */
+.marker.zhu .signboard{position:relative;display:flex;flex-direction:column;align-items:center;
+  width:60px;padding:10px 8px 12px;border-radius:3px 3px 6px 6px;
+  background:linear-gradient(180deg,#3a2410 0%,#2a1808 100%);
+  border:1.5px solid rgba(196,154,60,.6);border-top:3px solid rgba(196,154,60,.7);
+  box-shadow:0 8px 24px rgba(0,0,0,.5),0 0 20px rgba(196,154,60,.3),
+    inset 0 1px 0 rgba(232,200,106,.15),inset 0 -2px 4px rgba(0,0,0,.3)}
+.marker.zhu .signboard .brand{color:#f0d580}
+.marker.zhu .signboard .year{color:rgba(240,213,128,.7)}
+
+/* 方回春堂：拱顶传统药铺牌 */
+.marker.fang .signboard{position:relative;display:flex;flex-direction:column;align-items:center;
+  width:50px;padding:16px 6px 12px;border-radius:25px 25px 4px 4px;
+  background:linear-gradient(180deg,#5a1414 0%,#3a0a0a 100%);
+  border:1.5px solid rgba(212,175,55,.6);
+  box-shadow:0 8px 24px rgba(0,0,0,.5),0 0 20px rgba(212,80,80,.25),
+    inset 0 1px 0 rgba(255,200,150,.15),inset 0 -2px 4px rgba(0,0,0,.3)}
+.marker.fang .signboard .brand{color:#ffd97a}
+.marker.fang .signboard .year{color:rgba(255,217,122,.7)}
+
+/* ===== SHARED MERCHANT PAGE ===== */
+.merchant-page{padding:0;flex-direction:column;align-items:stretch;justify-content:flex-start}
+.merchant-page .hero{position:relative;width:100%;min-height:44vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:70px 24px 36px;text-align:center;overflow:hidden}
+.merchant-page .hero::before{content:'';position:absolute;inset:0;z-index:0}
+.merchant-page .hero>*{position:relative;z-index:1}
+.merchant-page .brand-tag{display:inline-block;padding:6px 20px;border-radius:30px;font-size:.9rem;
+  letter-spacing:3px;margin-bottom:20px;border:1px solid rgba(212,175,55,.18);
+  background:rgba(212,175,55,.05);backdrop-filter:blur(8px);font-family:'Ma Shan Zheng',serif}
+.merchant-page .hero h2{font-family:'Ma Shan Zheng',serif;font-size:2rem;font-weight:400;line-height:1.6;
+  margin-bottom:16px;letter-spacing:4px}
+.merchant-page .hero .desc{font-size:1.05rem;line-height:2;color:rgba(201,178,139,.75);max-width:380px}
+.merchant-page .section{padding:28px 20px;width:100%;max-width:480px;margin:0 auto}
+.merchant-page .section-title{font-family:'ZCOOL KuaiLe',cursive;font-size:1.4rem;margin-bottom:16px;
+  letter-spacing:3px;
+  background:linear-gradient(90deg,#d4af37,#ff9a76,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 8px rgba(212,175,55,.15))}
+.merchant-page .quote-text{font-size:1.05rem;line-height:2.2;color:rgba(201,178,139,.78);text-align:center;
+  padding:20px 0;letter-spacing:1.5px;font-style:italic}
+.merchant-page .back-top{position:fixed;top:16px;left:16px;z-index:100;background:rgba(20,18,15,.7);
+  backdrop-filter:blur(8px);border-radius:50%;width:40px;height:40px;display:flex;align-items:center;
+  justify-content:center;color:#c9b28b;font-size:18px;border:1px solid rgba(212,175,55,.2);
+  box-shadow:0 4px 16px rgba(0,0,0,.4);transition:all .3s}
+.merchant-page .back-top:active{transform:scale(.9)}
+
+/* ===== MAO PAGE (Blue) ===== */
+#maoPage{background:#0a0e14}
+#maoPage .hero::before{background:
+  radial-gradient(ellipse at 30% 40%,rgba(74,139,194,.15) 0%,transparent 60%),
+  radial-gradient(ellipse at 70% 60%,rgba(96,165,250,.1) 0%,transparent 50%),
+  linear-gradient(180deg,#050a15 0%,#0c2040 40%,#0a1530 70%,#050a15 100%)}
+#maoPage .brand-tag{color:#60a5fa;border-color:rgba(96,165,250,.4);background:rgba(96,165,250,.08);
+  font-family:'Orbitron',sans-serif;font-size:.8rem;letter-spacing:4px;
+  box-shadow:0 0 15px rgba(96,165,250,.15),inset 0 0 10px rgba(96,165,250,.05)}
+#maoPage .hero h2{font-family:'Orbitron','PingFang SC',sans-serif;font-weight:900;
+  font-size:1.8rem;letter-spacing:4px;line-height:1.7;
+  background:linear-gradient(135deg,#60a5fa,#a5b4fc,#60a5fa);background-size:200% 200%;
+  animation:gradText 4s ease infinite;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 20px rgba(96,165,250,.3))}
+
+/* AI glasses full-viewport "wearing" overlay */
+#maoPage .glasses-overlay-3d{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:200;
+  pointer-events:none;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#maoPage .glasses-overlay-3d img{width:130vw;max-width:none;height:auto;
+  opacity:0;transform:scale(.04) translateZ(0);transform-origin:center center;
+  filter:drop-shadow(0 0 14px rgba(96,165,250,.25));
+  image-rendering:auto;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  will-change:transform,opacity;-webkit-transform-style:preserve-3d}
+#maoPage .glasses-overlay-3d img.spin-in{animation:glassesWearIn 2.6s cubic-bezier(.22,.88,.28,1) forwards}
+@keyframes glassesWearIn{
+  0%{opacity:0;transform:scale(.04) translateZ(0)}
+  15%{opacity:1}
+  100%{opacity:1;transform:scale(1) translateZ(0)}
+}
+#maoPage .glasses-overlay-3d img.settled{
+  animation:glassesFadeOut 5s cubic-bezier(.4,0,.2,1) .4s forwards}
+@keyframes glassesFadeOut{
+  0%{opacity:1;transform:scale(1) translateZ(0)}
+  40%{opacity:.45;transform:scale(1.14) translateZ(0)}
+  100%{opacity:.05;transform:scale(1.32) translateZ(0)}
+}
+
+/* Translation demo with real glasses image */
+.translate-demo{background:rgba(74,139,194,.05);border-radius:20px;padding:24px;
+  border:1px solid rgba(74,139,194,.1);text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.3)}
+.translate-demo .glasses-view{width:100%;aspect-ratio:16/10;background:#070b10;
+  border-radius:16px;margin-bottom:16px;position:relative;overflow:hidden;
+  border:1px solid rgba(74,139,194,.12);
+  box-shadow:0 0 40px rgba(74,139,194,.04),inset 0 0 40px rgba(74,139,194,.02)}
+.translate-demo .glasses-view .glasses-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.translate-demo .glasses-view .glasses-bg img{width:88%;height:auto;opacity:.85;filter:drop-shadow(0 0 15px rgba(74,139,194,.2))}
+/* Left lens area (Chinese text) */
+.translate-demo .lens-left{position:absolute;top:22%;left:12%;width:32%;height:50%;
+  display:flex;align-items:center;justify-content:center;z-index:2}
+.translate-demo .lens-left .cn-text{font-family:'Ma Shan Zheng',serif;font-size:1rem;color:rgba(255,255,255,.9);
+  text-align:center;letter-spacing:2px;line-height:1.6;text-shadow:0 0 12px rgba(74,139,194,.5);
+  opacity:0;transition:opacity .6s;padding:0 4px;word-break:break-all}
+.translate-demo .lens-left .cn-text.show{opacity:1}
+/* Right lens area (English text) */
+.translate-demo .lens-right{position:absolute;top:22%;right:12%;width:32%;height:50%;
+  display:flex;align-items:center;justify-content:center;z-index:2}
+.translate-demo .lens-right .en-text{font-size:.85rem;color:rgba(138,184,216,.9);
+  text-align:center;letter-spacing:1px;line-height:1.5;text-shadow:0 0 10px rgba(74,139,194,.4);
+  opacity:0;transition:opacity .6s .3s;padding:0 4px}
+.translate-demo .lens-right .en-text.show{opacity:1}
+.video-box{width:100%;aspect-ratio:16/9;background:rgba(10,14,20,.8);border-radius:16px;display:flex;
+  align-items:center;justify-content:center;position:relative;overflow:hidden;
+  border:1px solid rgba(74,139,194,.12);box-shadow:0 10px 40px rgba(0,0,0,.4)}
+.video-box .play-icon{width:56px;height:56px;border-radius:50%;background:rgba(74,139,194,.12);
+  display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);
+  border:2px solid rgba(74,139,194,.25);transition:all .3s;z-index:2}
+.video-box .play-icon::after{content:'';width:0;height:0;border-left:18px solid #7ab8e6;
+  border-top:11px solid transparent;border-bottom:11px solid transparent;margin-left:4px}
+.video-box:active .play-icon{background:rgba(74,139,194,.2);transform:scale(.95)}
+.video-box .flash-glasses{position:absolute;font-size:40px;animation:flashGlasses 3s ease-in-out infinite}
+@keyframes flashGlasses{0%,100%{opacity:.12;transform:scale(.8)}50%{opacity:.7;transform:scale(1.1)}}
+.translate-demo .trans-btn{padding:12px 36px;border-radius:60px;
+  background:linear-gradient(135deg,#3b82f6,#8b5cf6);
+  border:none;color:#fff;font-family:'ZCOOL KuaiLe',cursive;font-size:1rem;letter-spacing:4px;
+  box-shadow:0 0 20px rgba(59,130,246,.2),0 0 40px rgba(139,92,246,.1);transition:all .3s}
+.translate-demo .trans-btn:active{transform:scale(.95);box-shadow:0 0 35px rgba(59,130,246,.35)}
+.translate-demo .voice-indicator{margin-top:12px;font-size:.85rem;color:rgba(122,184,230,.45);
+  display:flex;align-items:center;justify-content:center;gap:6px;letter-spacing:2px}
+.voice-dot{width:4px;height:4px;border-radius:50%;background:#7ab8e6;animation:voicePulse 1.5s ease-in-out infinite}
+.voice-dot:nth-child(2){animation-delay:.2s}.voice-dot:nth-child(3){animation-delay:.4s}
+@keyframes voicePulse{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
+.challenge-box{background:rgba(20,30,40,.45);border-radius:24px;padding:28px 20px;
+  border:1px solid rgba(74,139,194,.08);backdrop-filter:blur(8px);text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.challenge-display{width:100%;height:110px;background:rgba(10,14,20,.8);border-radius:16px;
+  display:flex;align-items:center;justify-content:center;font-family:'Ma Shan Zheng',serif;
+  font-size:3rem;color:#d4af37;margin-bottom:16px;letter-spacing:10px;position:relative;
+  overflow:hidden;border:1px solid rgba(212,175,55,.06);text-shadow:0 0 40px rgba(212,175,55,.08)}
+.challenge-display .timer-bar{position:absolute;bottom:0;left:0;height:2px;
+  background:linear-gradient(90deg,#4a8bc2,#d4af37);transition:width .1s linear;border-radius:2px}
+.challenge-options{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:300px;margin:0 auto}
+.challenge-options button{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+  color:#c9b28b;padding:14px;border-radius:16px;font-size:1.2rem;font-family:'Noto Serif SC',serif;
+  letter-spacing:2px;transition:all .2s}
+.challenge-options button:active{background:rgba(74,139,194,.12);transform:scale(.94);border-color:rgba(74,139,194,.25)}
+.challenge-options button.correct{background:rgba(76,139,90,.2);border-color:#4c8b5a;color:#7ac08a}
+.challenge-options button.wrong{background:rgba(180,60,60,.15);border-color:#b43c3c;color:#d46a6a}
+.challenge-result{margin-top:20px;padding:16px;border-radius:16px;background:rgba(212,175,55,.05);
+  border:1px solid rgba(212,175,55,.08);display:none;text-align:center}
+.challenge-result.show{display:block;animation:fadeUp .6s ease}
+.challenge-result p{color:#d4af37;font-size:.95rem;letter-spacing:2px;font-family:'Ma Shan Zheng',serif}
+.challenge-start-btn{padding:14px 48px;border-radius:60px;
+  background:linear-gradient(135deg,#60a5fa,#a78bfa,#f472b6);
+  border:none;color:#fff;font-family:'ZCOOL KuaiLe',cursive;font-size:1.1rem;
+  letter-spacing:4px;box-shadow:0 0 30px rgba(96,165,250,.2),0 0 60px rgba(167,139,250,.1);transition:all .3s}
+.challenge-start-btn:active{transform:scale(.94);box-shadow:0 0 50px rgba(96,165,250,.35)}
+
+/* ===== ZHU PAGE (Copper/Gold) ===== */
+#zhuPage{background:#0d0a06}
+#zhuPage .hero::before{background:
+  radial-gradient(ellipse at 40% 35%,rgba(196,154,60,.12) 0%,transparent 55%),
+  radial-gradient(ellipse at 60% 65%,rgba(232,200,106,.08) 0%,transparent 50%),
+  linear-gradient(180deg,#0d0800 0%,#2a1a08 40%,#1a1005 70%,#0d0800 100%)}
+#zhuPage .brand-tag{color:#e8c86a;border-color:rgba(232,200,106,.35);background:rgba(232,200,106,.06);
+  font-family:'Ma Shan Zheng',cursive;font-size:1rem;letter-spacing:5px;
+  box-shadow:0 0 15px rgba(232,200,106,.12),inset 0 0 10px rgba(232,200,106,.04)}
+#zhuPage .hero h2{font-family:'Ma Shan Zheng',cursive;font-weight:400;
+  font-size:2.4rem;letter-spacing:6px;line-height:1.6;
+  background:linear-gradient(135deg,#ffd700,#e8a832,#ffd700,#c49a3c);background-size:300% 300%;
+  animation:gradText 5s ease infinite;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 25px rgba(232,200,106,.25))}
+.products-grid{display:flex;gap:12px;overflow-x:auto;padding:8px 0;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory}
+.product-card{flex:0 0 calc(33.33% - 8px);min-width:110px;background:rgba(196,154,60,.04);border-radius:20px;
+  padding:16px;text-align:center;border:1px solid rgba(196,154,60,.08);scroll-snap-align:start;
+  cursor:pointer;transition:all .3s;box-shadow:0 8px 30px rgba(0,0,0,.3)}
+.product-card:active{transform:scale(.95);background:rgba(196,154,60,.08)}
+.product-card .emoji{font-size:40px;margin-bottom:10px;display:block;transition:transform .5s}
+.product-card .emoji img{width:80px;height:80px;object-fit:cover;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.4)}
+.product-card:active .emoji{transform:rotate(8deg) scale(1.12)}
+.product-card .p-name{font-family:'Ma Shan Zheng',serif;font-size:1.1rem;color:#e8c86a;margin-bottom:4px;letter-spacing:2px}
+.product-card .p-desc{font-size:.85rem;color:rgba(201,178,139,.45);line-height:1.6}
+.product-speech{margin-top:12px;padding:16px;border-radius:16px;background:rgba(196,154,60,.06);
+  border:1px solid rgba(196,154,60,.12);display:none;text-align:center;animation:fadeUp .5s ease}
+.product-speech.show{display:block}
+.product-speech p{font-family:'Ma Shan Zheng',serif;font-size:1.15rem;color:#e8c86a;line-height:1.8;letter-spacing:2px}
+.ai-design-box{background:rgba(196,154,60,.03);border-radius:20px;padding:24px;
+  border:1px solid rgba(196,154,60,.08);text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.3)}
+.ai-design-box .upload-area{width:100%;aspect-ratio:1;background:rgba(0,0,0,.3);border-radius:16px;
+  border:2px dashed rgba(196,154,60,.15);display:flex;flex-direction:column;align-items:center;
+  justify-content:center;margin-bottom:16px;cursor:pointer;transition:border-color .3s}
+.ai-design-box .upload-area:active{border-color:rgba(196,154,60,.4)}
+.ai-design-box .upload-area .upload-icon{font-size:30px;margin-bottom:8px;opacity:.35}
+.ai-design-box .upload-area p{font-size:.95rem;color:rgba(201,178,139,.4);letter-spacing:1px}
+.ai-design-box .gen-btn{padding:14px 48px;border-radius:60px;background:rgba(196,154,60,.75);
+  border:2px solid #c49a3c;color:#1a1410;font-family:'Ma Shan Zheng',serif;font-size:1.25rem;
+  letter-spacing:4px;box-shadow:0 0 30px rgba(196,154,60,.12);transition:all .3s}
+.ai-design-box .gen-btn:active{transform:scale(.95);box-shadow:0 0 50px rgba(196,154,60,.25)}
+.ai-design-result{margin-top:16px;display:none;text-align:center}
+.ai-design-result.show{display:block;animation:fadeUp .6s ease}
+.ai-design-result .result-img{width:100%;aspect-ratio:1;background:linear-gradient(135deg,#3d2b0f,#5a3d14);
+  border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;
+  border:1px solid rgba(196,154,60,.12);box-shadow:0 10px 40px rgba(0,0,0,.4);position:relative;overflow:hidden}
+.ai-design-result .result-img::before{content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(45deg,transparent,transparent 20px,rgba(196,154,60,.02) 20px,rgba(196,154,60,.02) 21px),
+  repeating-linear-gradient(-45deg,transparent,transparent 20px,rgba(196,154,60,.02) 20px,rgba(196,154,60,.02) 21px);
+  animation:patternShift 4s linear infinite}
+@keyframes patternShift{0%{background-position:0 0}100%{background-position:40px 40px}}
+.ai-design-result .result-img .placeholder-art{font-size:52px;position:relative;z-index:1;
+  filter:drop-shadow(0 4px 20px rgba(196,154,60,.25))}
+
+/* ===== FANG PAGE (Green) ===== */
+#fangPage{background:#080c0a}
+#fangPage .hero::before{background:
+  radial-gradient(ellipse at 35% 40%,rgba(76,139,90,.12) 0%,transparent 55%),
+  radial-gradient(ellipse at 65% 60%,rgba(134,239,172,.06) 0%,transparent 50%),
+  linear-gradient(180deg,#050d08 0%,#0a2515 40%,#081a0e 70%,#050d08 100%)}
+#fangPage .brand-tag{color:#86efac;border-color:rgba(134,239,172,.35);background:rgba(134,239,172,.06);
+  font-family:'Ma Shan Zheng',cursive;font-size:1.05rem;letter-spacing:4px;
+  box-shadow:0 0 15px rgba(134,239,172,.1),inset 0 0 10px rgba(134,239,172,.04)}
+#fangPage .hero h2{font-family:'Ma Shan Zheng',cursive;font-weight:400;
+  font-size:2.6rem;letter-spacing:5px;line-height:1.5;
+  background:linear-gradient(135deg,#86efac,#4ade80,#a7f3d0,#4ade80);background-size:300% 300%;
+  animation:gradText 6s ease infinite;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 25px rgba(134,239,172,.2))}
+.tcm-chat{background:rgba(20,35,25,.25);border-radius:20px;padding:20px;border:1px solid rgba(76,139,90,.08);
+  backdrop-filter:blur(4px);box-shadow:0 10px 40px rgba(0,0,0,.3)}
+.chat-messages{max-height:200px;overflow-y:auto;margin-bottom:16px}
+.chat-msg{padding:10px 14px;border-radius:14px;margin-bottom:8px;font-size:.95rem;line-height:1.8;
+  max-width:85%;animation:msgIn .4s ease;letter-spacing:1px}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.chat-msg.bot{background:rgba(76,139,90,.08);color:rgba(201,178,139,.75);border:1px solid rgba(76,139,90,.1)}
+.chat-msg.user{background:rgba(212,175,55,.06);color:rgba(201,178,139,.75);margin-left:auto;text-align:right;
+  border:1px solid rgba(212,175,55,.08)}
+.chat-input-row{display:flex;gap:8px}
+.chat-input-row input{flex:1;padding:10px 16px;border-radius:24px;background:rgba(255,255,255,.04);
+  border:1px solid rgba(76,139,90,.12);color:#c9b28b;font-size:.95rem;outline:none;font-family:inherit}
+.chat-input-row input::placeholder{color:rgba(201,178,139,.25)}
+.chat-input-row button{padding:10px 24px;border-radius:24px;background:rgba(76,139,90,.12);
+  border:1px solid rgba(76,139,90,.2);color:#7ac08a;font-family:'Ma Shan Zheng',serif;font-size:1.05rem;letter-spacing:2px}
+.chat-input-row button:active{background:rgba(76,139,90,.25);transform:scale(.95)}
+.tongue-box{background:rgba(20,35,25,.25);border-radius:20px;padding:24px;border:1px solid rgba(76,139,90,.08);
+  text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.3)}
+.camera-area{width:100%;max-width:260px;aspect-ratio:1;margin:16px auto;
+  background:rgba(0,0,0,.5);border-radius:20px;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;position:relative;overflow:hidden;border:2px dashed rgba(76,139,90,.15);transition:all .4s}
+.camera-area .cam-icon{font-size:36px;margin-bottom:12px;opacity:.35}
+.camera-area p{font-size:.95rem;color:rgba(201,178,139,.35);letter-spacing:2px}
+.camera-area video{width:100%;height:100%;object-fit:cover;border-radius:20px}
+.camera-area .cam-switch{position:absolute;top:10px;right:10px;z-index:10;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.5);border:1px solid rgba(76,139,90,.3);color:#7ac08a;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(4px);transition:all .3s}
+.camera-area .cam-switch:active{transform:scale(.9);background:rgba(76,139,90,.3)}
+.camera-area .cam-capture{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);z-index:10;width:56px;height:56px;border-radius:50%;background:rgba(76,139,90,.25);border:3px solid #7ac08a;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s}
+.camera-area .cam-capture:active{transform:translateX(-50%) scale(.9);background:rgba(76,139,90,.5)}
+.camera-area .cam-capture::after{content:'';width:24px;height:24px;border-radius:50%;background:#7ac08a}
+.camera-area .scan-line{position:absolute;left:10%;right:10%;height:2px;
+  background:linear-gradient(90deg,transparent,#4c8b5a,transparent);animation:scanLine 2s ease-in-out infinite;display:none}
+.camera-area.scanning .scan-line{display:block}
+@keyframes scanLine{0%{top:20%}50%{top:80%}100%{top:20%}}
+.tongue-btn{padding:14px 48px;border-radius:60px;background:rgba(76,139,90,.12);
+  border:1px solid rgba(76,139,90,.2);color:#7ac08a;font-family:'Ma Shan Zheng',serif;font-size:1.15rem;
+  letter-spacing:4px;transition:all .3s}
+.tongue-btn:active{background:rgba(76,139,90,.25);transform:scale(.95)}
+.report-card{display:none;margin-top:16px;background:rgba(20,35,25,.25);border-radius:20px;padding:24px;
+  border:1px solid rgba(76,139,90,.1);box-shadow:0 10px 40px rgba(0,0,0,.3)}
+.report-card.show{display:block;animation:fadeUp .6s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.report-card h4{font-family:'Ma Shan Zheng',serif;font-size:1.15rem;color:#7ac08a;margin-bottom:16px;
+  text-align:center;letter-spacing:4px}
+.report-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;
+  border-bottom:1px solid rgba(255,255,255,.03)}
+.report-item:last-child{border-bottom:none}
+.report-item .r-label{font-size:.95rem;color:rgba(122,192,138,.55);letter-spacing:1px}
+.report-item .r-value{font-size:.95rem;color:#d4af37;font-weight:700}
+.report-advice{margin-top:16px;padding:14px;border-radius:12px;background:rgba(76,139,90,.05);
+  border:1px solid rgba(76,139,90,.08)}
+.report-advice p{font-size:.95rem;color:rgba(201,178,139,.65);line-height:1.9;letter-spacing:.5px}
+.wellness-game{background:rgba(20,35,25,.25);border-radius:20px;padding:16px;
+  border:1px solid rgba(76,139,90,.08);text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.3)}
+.match-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-top:12px}
+.match-card{padding:6px 2px;border-radius:8px;background:rgba(255,255,255,.04);
+  border:1px solid rgba(76,139,90,.1);font-size:.65rem;color:rgba(201,178,139,.7);cursor:pointer;
+  transition:all .3s;text-align:center;line-height:1.3;letter-spacing:0;
+  aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+  word-break:break-all;overflow:hidden;position:relative;user-select:none;
+  -webkit-user-select:none}
+.match-card:active{transform:scale(.92)}
+.match-card.selected{border-color:#4c8b5a;background:rgba(76,139,90,.18);color:#7ac08a;transform:scale(1.05);box-shadow:0 0 12px rgba(76,139,90,.3)}
+.match-card.matched{animation:matchPop .5s ease forwards}
+@keyframes matchPop{0%{transform:scale(1);opacity:1}50%{transform:scale(1.2);opacity:.8;background:rgba(76,139,90,.25);border-color:#4c8b5a;color:#7ac08a}100%{transform:scale(0);opacity:0;padding:0;margin:0;border:0;overflow:hidden;max-height:0;max-width:0;min-height:0;min-width:0}}
+.match-card.wrong-match{animation:shake .4s ease}
+.match-card.cleared{padding:0;margin:0;border:0;overflow:hidden;max-height:0;max-width:0;min-height:0;min-width:0;opacity:0;pointer-events:none;visibility:hidden}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.match-score{margin-top:10px;font-size:.85rem;color:#7ac08a;font-family:'Ma Shan Zheng',serif;letter-spacing:2px}
+.match-pairs-left{font-size:.75rem;color:rgba(201,178,139,.4);margin-top:4px;letter-spacing:1px}
+
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(212,175,55,.12);border-radius:10px}
+
+/* ===== DESKTOP RESPONSIVE ===== */
+@media(min-width:768px){
+  .page{padding:40px;padding-bottom:80px}
+  .page .content,.merchant-page .section{max-width:600px;margin-left:auto;margin-right:auto}
+  #cover h1{font-size:4rem;letter-spacing:16px}
+  #cover .subtitle{font-size:1.8rem}
+  #cover .quote{font-size:1.05rem;max-width:480px}
+  #cover .tap-hint{font-size:1rem;padding:16px 48px}
+  #mapPage .map-title{font-size:2rem;top:70px}
+  #mapPage .back-btn{width:48px;height:48px;font-size:22px;top:66px}
+  .merchant-page .hero h2{font-size:2.2rem}
+  .merchant-page .section{max-width:560px}
+  .merchant-page .section-title{font-size:1.4rem}
+  .merchant-page .quote-text{font-size:1rem}
+  .merchant-page .back-top{width:48px;height:48px;font-size:22px}
+  .music-toggle{width:52px;height:52px;top:20px;right:20px}
+  .music-toggle .icon{font-size:20px}
+  .challenge-display{font-size:4.5rem;height:140px}
+  .challenge-options button{padding:18px;font-size:1.4rem}
+  .translate-demo .glasses-view{aspect-ratio:16/9}
+  .translate-demo .lens-left .cn-text{font-size:1.1rem}
+  .translate-demo .lens-right .en-text{font-size:.9rem}
+  .translate-demo .trans-btn{padding:14px 44px;font-size:1.1rem}
+  .product-card{padding:20px}
+  .product-card .emoji{font-size:52px}
+  .product-card .emoji img{width:100px;height:100px}
+  .product-card .p-name{font-size:1rem}
+  .video-box{max-width:640px;margin:0 auto}
+  .chat-msg{font-size:.9rem;padding:12px 16px}
+  .match-card{font-size:.7rem;padding:8px 3px}.match-grid{gap:8px}
+  /* Signboards larger on desktop */
+  .marker .signboard{padding:12px 8px 14px}
+  .marker.mao .signboard{width:56px}
+  .marker.zhu .signboard{width:70px}
+  .marker.fang .signboard{width:58px}
+  .marker .signboard .brand{font-size:1.2rem}
+  .marker .signboard .year{font-size:.75rem}
+}
+/* Extra large screens */
+@media(min-width:1200px){
+  .page .content,.merchant-page .section{max-width:680px}
+  #cover h1{font-size:4.5rem}
+  .merchant-page .hero{min-height:50vh}
+  .merchant-page .hero h2{font-size:2.5rem}
+}
+
+/* ===== 响应式增强：适配各种屏幕 ===== */
+/* 小屏手机 (<=375px) */
+@media(max-width:375px){
+  html,body{font-size:15px}
+  #cover h1{font-size:clamp(1.8rem,8vw,3.8rem);letter-spacing:6px}
+  #cover .subtitle{font-size:clamp(1rem,4.5vw,1.7rem);letter-spacing:8px}
+  #cover .quote{font-size:.9rem;max-width:280px}
+  #cover .tap-hint{font-size:.9rem;padding:10px 28px;letter-spacing:4px}
+  .merchant-page .hero h2{font-size:1.5rem}
+  .merchant-page .section{padding:20px 16px}
+  .merchant-page .section-title{font-size:1.2rem}
+  .product-card .emoji img{width:60px;height:60px}
+  .product-card{min-width:90px;padding:12px}
+  .camera-area{max-width:220px}
+  .challenge-display{font-size:2.5rem;height:90px}
+  .translate-demo{padding:16px}
+  .translate-demo .lens-left .cn-text{font-size:.85rem}
+  .translate-demo .lens-right .en-text{font-size:.75rem}
+  .tcm-chat{padding:14px}
+  .chat-input-row input{font-size:.85rem;padding:8px 12px}
+  .match-card{font-size:.55rem;padding:4px 1px}.match-grid{gap:4px}
+  .ai-design-box{padding:16px}
+  .signboards{bottom:60px;gap:8px}
+  .sign{font-size:.65rem;padding:5px 8px}
+}
+
+/* 中等手机 (376-414px) */
+@media(min-width:376px) and (max-width:414px){
+  #cover h1{font-size:clamp(2.2rem,9vw,3.8rem);letter-spacing:8px}
+  #cover .subtitle{font-size:clamp(1.1rem,5vw,1.7rem);letter-spacing:10px}
+}
+
+/* 大屏手机/小平板 (415-767px) */
+@media(min-width:415px) and (max-width:767px){
+  #cover h1{font-size:clamp(2.8rem,10vw,3.8rem);letter-spacing:10px}
+  #cover .subtitle{font-size:clamp(1.3rem,5.5vw,1.7rem);letter-spacing:12px}
+}
+
+/* 桌面端增强 (>=768px) */
+@media(min-width:768px){
+  .merchant-page .section{max-width:600px}
+  .camera-area{max-width:320px}
+  .ai-design-box{max-width:500px;margin:0 auto}
+  .tcm-chat{max-width:500px;margin:0 auto}
+  .wellness-game{max-width:500px;margin:0 auto}
+}
+
+/* 超大屏 (>=1400px) */
+@media(min-width:1400px){
+  .page .content,.merchant-page .section{max-width:760px}
+  #cover h1{font-size:5rem;letter-spacing:20px}
+  .merchant-page .hero h2{font-size:2.8rem}
+  .merchant-page .section-title{font-size:1.6rem}
+}
+
+/* 通用响应式工具 */
+.page{padding:clamp(12px,3vw,40px);padding-bottom:clamp(40px,8vw,80px)}
+.merchant-page .hero{min-height:clamp(35vh,44vh,50vh)}
+.merchant-page .hero h2{font-size:clamp(1.5rem,5vw,2.6rem)}
+.merchant-page .section-title{font-size:clamp(1.2rem,3.5vw,1.4rem)}
+.music-toggle{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px)}
+
+</style>
+</head>
+<body>
+
+<canvas id="ripple-canvas"></canvas>
+
+<!-- 音乐开关 -->
+<div class="music-toggle muted" id="musicToggle" onclick="toggleMusic()">
+  <span class="icon">♫</span>
+  <div class="bar"><span style="height:4px"></span><span style="height:7px"></span><span style="height:5px"></span></div>
+</div>
+<audio id="bgm1" preload="auto"><source src="audio/水龙吟-关大洲.mp3" type="audio/mpeg"></audio>
+<audio id="bgm2" preload="auto"><source src="audio/破阵乐(特别版)-关大洲.mp3" type="audio/mpeg"></audio>
+
+<!-- ====== 封面 ====== -->
+<div id="cover" class="page active" onclick="goToMap()">
+  <div class="bg-img"></div>
+  <div class="bg-overlay"></div>
+  <div class="stars-container" id="starsContainer"></div>
+  <div class="content">
+    <h1>百年杭字号</h1>
+    <div class="subtitle">AI 新本事</div>
+    <div class="quote">
+      真正的"老字号"，永远是活在当下——<br>
+      它攒着百年的底气，<br>
+      敢接最前沿的变化，<br>
+      也守得住最本真的初心。
+    </div>
+    <div class="tap-hint">一 起 出 发</div>
+  </div>
+</div>
+
+<!-- ====== 地图页 ====== -->
+<div id="mapPage" class="page" style="padding:0">
+  <button class="back-btn" onclick="goToCover()">←</button>
+  <div class="map-title">百年杭字号 · 探索地图</div>
+  <div class="map-container" id="mapContainer">
+    <div class="map-bg grayscale" id="mapBg">
+      <img src="images/河坊街2.png" alt="雷峰塔" draggable="false">
+    <!-- 毛源昌：蓝色胶囊招牌 -->
+    <div class="marker mao" style="left:62%;top:30%" onclick="goToMao(event)" data-draggable>
+      <div class="lantern">
+        <svg viewBox="0 0 30 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="lGlow" cx="50%" cy="42%" r="55%">
+              <stop offset="0%" stop-color="#ffe066" stop-opacity="1"/>
+              <stop offset="35%" stop-color="#ffcc33" stop-opacity=".95"/>
+              <stop offset="65%" stop-color="#ff9922" stop-opacity=".7"/>
+              <stop offset="100%" stop-color="#cc5500" stop-opacity=".15"/>
+            </radialGradient>
+            <filter id="lBlur"><feGaussianBlur stdDeviation="2"/></filter>
+          </defs>
+          <!-- 外围柔光 -->
+          <ellipse cx="15" cy="18" rx="13" ry="17" fill="rgba(255,170,50,.1)" filter="url(#lBlur)"/>
+          <!-- 灯体：竖长圆角矩形纸灯 -->
+          <rect x="5" y="3" width="20" height="30" rx="7" ry="7" fill="url(#lGlow)" stroke="rgba(180,80,10,.35)" stroke-width=".7"/>
+          <!-- 内层光晕层次 -->
+          <rect x="8" y="6" width="14" height="24" rx="5" fill="rgba(255,230,120,.3)"/>
+          <rect x="11" y="10" width="8" height="16" rx="4" fill="rgba(255,250,180,.45)"/>
+          <!-- 底部暗框 -->
+          <rect x="6" y="32" width="18" height="2.5" rx="1.2" fill="rgba(140,50,5,.35)"/>
+          <!-- 火焰 -->
+          <ellipse cx="15" cy="38" rx="3" ry="4" fill="rgba(255,120,20,.6)"/>
+          <ellipse cx="15" cy="37" rx="1.5" ry="2.5" fill="rgba(255,220,100,.85)"/>
+        </svg>
+      </div>
+      <div class="signboard">
+        <span class="brand">毛源昌眼镜</span>
+        <span class="year">一八六二年</span>
+      </div>
+      <div class="chinese-knot">
+        <svg viewBox="0 0 24 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- 顶部挂绳 -->
+          <path d="M12 0 L12 6" stroke="#cc0000" stroke-width="1.2"/>
+          <circle cx="12" cy="3" r="1.5" fill="none" stroke="#cc0000" stroke-width="1"/>
+          <!-- 四个环 (左右各两个) -->
+          <circle cx="5" cy="12" r="3" fill="none" stroke="#cc0000" stroke-width="1.2"/>
+          <circle cx="5" cy="20" r="3" fill="none" stroke="#cc0000" stroke-width="1.2"/>
+          <circle cx="19" cy="12" r="3" fill="none" stroke="#cc0000" stroke-width="1.2"/>
+          <circle cx="19" cy="20" r="3" fill="none" stroke="#cc0000" stroke-width="1.2"/>
+          <!-- 中间交叉横条 -->
+          <rect x="7" y="11" width="10" height="2" rx="0.5" fill="#cc0000"/>
+          <rect x="7" y="19" width="10" height="2" rx="0.5" fill="#cc0000"/>
+          <!-- 中心竖线 -->
+          <path d="M12 8 L12 24" stroke="#cc0000" stroke-width="1.2"/>
+          <!-- 福字牌 -->
+          <rect x="9" y="25" width="6" height="8" rx="1" fill="none" stroke="#cc0000" stroke-width="1"/>
+          <text x="12" y="31" text-anchor="middle" fill="#cc0000" font-size="5" font-family="Ma Shan Zheng">福</text>
+          <!-- 三根流苏 -->
+          <path d="M10 33 L10 39" stroke="#cc0000" stroke-width="1"/>
+          <path d="M12 33 L12 39" stroke="#cc0000" stroke-width="1"/>
+          <path d="M14 33 L14 39" stroke="#cc0000" stroke-width="1"/>
+        </svg>
+      </div>
+      <div class="tap-hint">点击了解新本事</div>
+    </div>
+
+    <!-- 朱炳仁：深木宽匾 -->
+    <div class="marker zhu" style="left:22%;top:38%" onclick="goToZhu(event)" data-draggable>
+      <div class="lantern">
+        <svg viewBox="0 0 30 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="lGlow" cx="50%" cy="42%" r="55%">
+              <stop offset="0%" stop-color="#ffe066" stop-opacity="1"/>
+              <stop offset="35%" stop-color="#ffcc33" stop-opacity=".95"/>
+              <stop offset="65%" stop-color="#ff9922" stop-opacity=".7"/>
+              <stop offset="100%" stop-color="#cc5500" stop-opacity=".15"/>
+            </radialGradient>
+            <filter id="lBlur"><feGaussianBlur stdDeviation="2"/></filter>
+          </defs>
+          <!-- 外围柔光 -->
+          <ellipse cx="15" cy="18" rx="13" ry="17" fill="rgba(255,170,50,.1)" filter="url(#lBlur)"/>
+          <!-- 灯体：竖长圆角矩形纸灯 -->
+          <rect x="5" y="3" width="20" height="30" rx="7" ry="7" fill="url(#lGlow)" stroke="rgba(180,80,10,.35)" stroke-width=".7"/>
+          <!-- 内层光晕层次 -->
+          <rect x="8" y="6" width="14" height="24" rx="5" fill="rgba(255,230,120,.3)"/>
+          <rect x="11" y="10" width="8" height="16" rx="4" fill="rgba(255,250,180,.45)"/>
+          <!-- 底部暗框 -->
+          <rect x="6" y="32" width="18" height="2.5" rx="1.2" fill="rgba(140,50,5,.35)"/>
+          <!-- 火焰 -->
+          <ellipse cx="15" cy="38" rx="3" ry="4" fill="rgba(255,120,20,.6)"/>
+          <ellipse cx="15" cy="37" rx="1.5" ry="2.5" fill="rgba(255,220,100,.85)"/>
+        </svg>
+      </div>
+      <div class="signboard">
+        <span class="brand">朱炳仁铜</span>
+        <span class="year">一八七五年</span>
+      </div>
+      <div class="chinese-knot">
+        <svg viewBox="0 0 24 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 0 L12 6" stroke="#cc0000" stroke-width="1.2"/>
+          <circle cx="12" cy="3" r="1.5" fill="none" stroke="#cc0000" stroke-width="1"/>
+          <circle cx="5" cy="12" r="3" fill="none" stroke="#cc0000" stroke-width="1.2"/>
+          <circle cx="5" cy="20" r="3" fill="none" stroke="#cc0000" stroke-width="1.2"/>
+          <circle cx="19" cy="12" r="3" fill="none" stroke="#cc0000" stroke-width="1.2"/>
+          <circle cx="19" cy="20" r="3" fill="none" stroke="#cc0000" stroke-width="1.2"/>
+          <rect x="7" y="11" width="10" height="2" rx="0.5" fill="#cc0000"/>
+          <rect x="7" y="19" width="10" height="2" rx="0.5" fill="#cc0000"/>
+          <path d="M12 8 L12 24" stroke="#cc0000" stroke-width="1.2"/>
+          <rect x="9" y="25" width="6" height="8" rx="1" fill="none" stroke="#cc0000" stroke-width="1"/>
+          <text x="12" y="31" text-anchor="middle" fill="#cc0000" font-size="5" font-family="Ma Shan Zheng">福</text>
+          <path d="M10 33 L10 39" stroke="#cc0000" stroke-width="1"/>
+          <path d="M12 33 L12 39" stroke="#cc0000" stroke-width="1"/>
+          <path d="M14 33 L14 39" stroke="#cc0000" stroke-width="1"/>
+        </svg>
+      </div>
+      <div class="tap-hint">点击了解新本事</div>
+    </div>
+
+    <!-- 方回春堂：朱红拱顶招牌 -->
+    <div class="marker fang" style="left:78%;top:42%" onclick="goToFang(event)" data-draggable>
+      <div class="lantern">
+        <svg viewBox="0 0 30 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="lGlow" cx="50%" cy="42%" r="55%">
+              <stop offset="0%" stop-color="#ffe066" stop-opacity="1"/>
+              <stop offset="35%" stop-color="#ffcc33" stop-opacity=".95"/>
+              <stop offset="65%" stop-color="#ff9922" stop-opacity=".7"/>
+              <stop offset="100%" stop-color="#cc5500" stop-opacity=".15"/>
+            </radialGradient>
+            <filter id="lBlur"><feGaussianBlur stdDeviation="2"/></filter>
+          </defs>
+          <!-- 外围柔光 -->
+          <ellipse cx="15" cy="18" rx="13" ry="17" fill="rgba(255,170,50,.1)" filter="url(#lBlur)"/>
+          <!-- 灯体：竖长圆角矩形纸灯 -->
+          <rect x="5" y="3" width="20" height="30" rx="7" ry="7" fill="url(#lGlow)" stroke="rgba(180,80,10,.35)" stroke-width=".7"/>
+          <!-- 内层光晕层次 -->
+          <rect x="8" y="6" width="14" height="24" rx="5" fill="rgba(255,230,120,.3)"/>
+          <rect x="11" y="10" width="8" height="16" rx="4" fill="rgba(255,250,180,.45)"/>
+          <!-- 底部暗框 -->
+          <rect x="6" y="32" width="18" height="2.5" rx="1.2" fill="rgba(140,50,5,.35)"/>
+          <!-- 火焰 -->
+          <ellipse cx="15" cy="38" rx="3" ry="4" fill="rgba(255,120,20,.6)"/>
+          <ellipse cx="15" cy="37" rx="1.5" ry="2.5" fill="rgba(255,220,100,.85)"/>
+        </svg>
+      </div>
+      <div class="signboard">
+        <span class="brand">方回春堂</span>
+        <span class="year">一六四九年</span>
+      </div>
+      <div class="chinese-knot">
+        <svg viewBox="0 0 24 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 0 L12 6" stroke="#cc0000" stroke-width="1.2"/>
+          <circle cx="12" cy="3" r="1.5" fill="none" stroke="#cc0000" stroke-width="1"/>
+          <circle cx="5" cy="12" r="3" fill="none" stroke="#cc0000" stroke-width="1.2"/>
+          <circle cx="5" cy="20" r="3" fill="none" stroke="#cc0000" stroke-width="1.2"/>
+          <circle cx="19" cy="12" r="3" fill="none" stroke="#cc0000" stroke-width="1.2"/>
+          <circle cx="19" cy="20" r="3" fill="none" stroke="#cc0000" stroke-width="1.2"/>
+          <rect x="7" y="11" width="10" height="2" rx="0.5" fill="#cc0000"/>
+          <rect x="7" y="19" width="10" height="2" rx="0.5" fill="#cc0000"/>
+          <path d="M12 8 L12 24" stroke="#cc0000" stroke-width="1.2"/>
+          <rect x="9" y="25" width="6" height="8" rx="1" fill="none" stroke="#cc0000" stroke-width="1"/>
+          <text x="12" y="31" text-anchor="middle" fill="#cc0000" font-size="5" font-family="Ma Shan Zheng">福</text>
+          <path d="M10 33 L10 39" stroke="#cc0000" stroke-width="1"/>
+          <path d="M12 33 L12 39" stroke="#cc0000" stroke-width="1"/>
+          <path d="M14 33 L14 39" stroke="#cc0000" stroke-width="1"/>
+        </svg>
+      </div>
+      <div class="tap-hint">点击了解新本事</div>
+    </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== 毛源昌 ====== -->
+<div id="maoPage" class="page merchant-page">
+  <button class="back-top" onclick="goToMap()">←</button>
+  <div class="hero"><div class="brand-tag">毛源昌眼镜 · 始于1862</div><h2>【毛源昌眼镜】<br>用AI给老字号配幅新眼镜</h2><div class="desc">164年的时间，毛源昌把一副眼镜做成了"数字之眼"</div></div>
+  <div class="section"><div class="section-title">点击看视频</div><div class="video-box" id="maoVideo" onclick="playMaoVideo()"><div class="flash-glasses">👓</div><div class="play-icon"></div></div></div>
+  <!-- 3D floating glasses overlay (page-level) -->
+  <div class="glasses-overlay-3d" id="glassesOverlay">
+    <img id="glassesImg" src="images/AI眼镜_抠图.png" alt="AI眼镜">
+  </div>
+  <div class="section"><div class="quote-text">父辈带着毛源昌眼镜看清过青石板路的回家方向，<br>我们带着毛源昌AI眼镜，看见更便捷的生活。</div></div>
+  <div class="section"><div class="section-title">【互动】AI翻译体验</div><div class="translate-demo"><div class="glasses-view"><div class="glasses-bg"><img src="images/AI眼镜2.webp" alt="AI眼镜"></div><div class="lens-left"><div class="cn-text" id="cnText">你好，欢迎来到杭州</div></div><div class="lens-right"><div class="en-text" id="enText">Hello, welcome to Hangzhou</div></div></div><button class="trans-btn" onclick="doTranslate()">翻 译</button><div class="voice-indicator" id="voiceIndicator" style="visibility:hidden"><span class="voice-dot"></span><span class="voice-dot"></span><span class="voice-dot"></span><span>实时语音播报中...</span></div></div><p style="font-size:.7rem;color:rgba(201,178,139,.35);margin-top:10px;text-align:center;line-height:1.8;letter-spacing:1px">左边镜片显示中文，点击"翻译"后右边镜片读出英文——<br>就像毛源昌AI眼镜的实时翻译功能一样。加入语音技术，实时播报。</p></div>
+  <div class="section"><div class="quote-text" style="font-size:1.05rem;font-weight:700;color:#c9b28b">把每一段普通人的日子，<br>都看得清清楚楚、亮亮堂堂。</div></div>
+  <div class="section"><div class="section-title">【互动】视力挑战</div><div class="challenge-box"><p style="font-size:.8rem;color:rgba(201,178,139,.45);margin-bottom:16px;line-height:1.8;letter-spacing:1px">屏幕快速闪过一串数字或图案，<br>你需要在3秒内记住并选择正确答案。</p><div class="challenge-display" id="challengeDisplay"><span id="challengeContent">准备好了吗？</span><div class="timer-bar" id="timerBar" style="width:0%"></div></div><button class="challenge-start-btn" id="challengeStartBtn" onclick="startChallenge()">开始挑战</button><div class="challenge-options" id="challengeOptions" style="display:none"></div><div class="challenge-result" id="challengeResult"><p>恭喜！看的清清楚楚。</p></div></div></div>
+  <div style="height:80px"></div>
+</div>
+
+<!-- ====== 朱炳仁 ====== -->
+<div id="zhuPage" class="page merchant-page">
+  <button class="back-top" onclick="goToMap()">←</button>
+  <div class="hero"><div class="brand-tag">朱炳仁·铜 · 始于1875</div><h2>【朱炳仁·铜】<br>让千年铜艺，永远有新鲜的故事</h2><div class="desc">151年的老字号的智慧，不是依靠辈分等年轻人来朝圣，<br>是主动走到年轻人的语境里当朋友。</div></div>
+  <div class="section"><div class="desc" style="text-align:center;margin:0 auto;font-size:.9rem;line-height:2.2;color:rgba(201,178,139,.65);letter-spacing:1px">从传统铜的制作到AI漫剧的传播。<br>百年铜艺，用科技重新定义中国审美。</div></div>
+  <div class="section"><div class="section-title">'铜'我一起看剧</div><div class="video-box" onclick="playZhuVideo()" style="border-color:rgba(196,154,60,.1)"><div class="flash-glasses" style="font-size:30px">🎬</div><div class="play-icon" style="border-color:rgba(196,154,60,.25);background:rgba(196,154,60,.12)"></div></div><p style="font-size:.7rem;color:rgba(201,178,139,.3);margin-top:8px;text-align:center;letter-spacing:1px">【短视频】</p></div>
+  <div class="section"><div class="section-title">三个铜艺宝贝 · 点击听它们说话</div><div class="products-grid"><div class="product-card" onclick="speakProduct(0)"><span class="emoji"><img src="images/铜狮.png" alt="铜狮"></span><div class="p-name">铜狮</div><div class="p-desc">镇宅瑞兽</div></div><div class="product-card" onclick="speakProduct(1)"><span class="emoji"><img src="images/孙悟空.jpg" alt="齐天大圣"></span><div class="p-name">齐天大圣</div><div class="p-desc">伴你闯关</div></div><div class="product-card" onclick="speakProduct(2)"><span class="emoji"><img src="images/铜葫芦.jpg" alt="铜葫芦"></span><div class="p-name">铜葫芦</div><div class="p-desc">盛满福气</div></div></div><div class="product-speech" id="productSpeech"><p id="productSpeechText"></p></div><p style="font-size:.7rem;color:rgba(201,178,139,.25);margin-top:8px;text-align:center;letter-spacing:1px">三个产品，闪，一点，它就说话了。会动。</p></div>
+  <div class="section"><div class="quote-text" style="color:#e8c86a;font-size:1rem">老字号的根脉长在当代生活里，<br>做和你一起生活的"老朋友"</div></div>
+  <div class="section"><div class="section-title">【点击进入，为你设计铜艺品】</div><div class="ai-design-box"><div class="upload-area" id="uploadArea" onclick="document.getElementById('copperFileInput').click()"><div class="upload-icon">📷</div><p>点击选择照片（相册/拍照）</p><p style="font-size:.7rem;margin-top:4px;opacity:.45">AI将为你生成铜艺风格设计</p></div><input type="file" id="copperFileInput" accept="image/*" style="display:none" onchange="handleCopperFile(this)"><button class="gen-btn" id="genBtn" onclick="generateCopper()" style="display:none">生成铜艺品</button><div class="ai-design-result" id="aiDesignResult"><div class="result-img"><canvas id="copperCanvas" style="width:100%;height:100%;border-radius:16px;display:none"></canvas><div class="placeholder-art" id="copperPlaceholder">🏺</div></div><p style="font-size:.85rem;color:#e8c86a;font-family:'Ma Shan Zheng',serif;letter-spacing:2px">你的专属铜艺品已生成</p><p style="font-size:.7rem;color:rgba(201,178,139,.35);margin-top:6px;letter-spacing:1px">AI根据照片融合千年铜艺风格创作</p><button onclick="resetCopperDesign()" style="margin-top:10px;padding:8px 20px;border-radius:20px;background:rgba(196,154,60,.15);border:1px solid rgba(196,154,60,.3);color:#e8c86a;font-size:.85rem;letter-spacing:2px;cursor:pointer">🔄 重新选择照片</button></div></div></div>
+  <div style="height:80px"></div>
+</div>
+
+<!-- ====== 方回春堂 ====== -->
+<div id="fangPage" class="page merchant-page">
+  <button class="back-top" onclick="goToMap()">←</button>
+  <div class="hero"><div class="brand-tag">方回春堂 · 始于1649</div><h2>【方回春堂】<br>河坊街的老中医，<br>收了个AI小徒弟</h2></div>
+  <div class="section"><div class="desc" style="font-size:.9rem;line-height:2.2;color:rgba(201,178,139,.65);text-align:center;margin:0 auto;letter-spacing:1px">377年的老字号，在2026年，<br>把中医的哲学和当代人的情绪打通了，<br>在忙忙碌碌的日常里，<br>方回春堂的AI助手，<br>做日常健康的"提醒器"！<br>做中医科普的"翻译器"！</div></div>
+  <div class="section"><div class="section-title">最近状态怎么样？让小徒弟给你看看</div><div class="tcm-chat"><div class="chat-messages" id="chatMessages"><div class="chat-msg bot">你好呀，我是方回春堂的AI小徒弟，最近状态怎么样？跟我说说吧~</div></div><div class="chat-input-row"><input type="text" id="chatInput" placeholder="说说你的状态..." onkeydown="if(event.key==='Enter')sendChat()"><button onclick="sendChat()">发送</button></div></div></div>
+  <div class="section"><div class="quote-text" style="font-size:.85rem;line-height:2.4;color:rgba(201,178,139,.7)">AI读得懂舌头上的寒热纹路，<br>但读不懂的是老药铺"但愿世间人无病"的初心。<br>它永远是帮着老药铺照顾百姓日常的"小徒弟"，<br>不是高高在上的"神医"：<br>不神化技术，不夸大效果，<br>这才是370年的老牌子最金贵的靠谱。</div></div>
+  <div class="section"><div class="section-title">AI舌诊 · 体质检测</div><div class="tongue-box"><p style="font-size:.8rem;color:rgba(201,178,139,.45);margin-bottom:16px;line-height:1.8;letter-spacing:1px">用户授权摄像头后，对准自己的舌头拍摄一张照片。<br>页面模拟方回春堂的AI舌诊技术，<br>通过智能图像识别分析舌象特征。</p><div id="tongueContent"><div class="camera-area" id="cameraArea">
+      <div class="cam-icon">📸</div>
+      <p>拍照或从相册选择舌象照片</p>
+      <div style="display:flex;gap:10px;margin-top:12px;justify-content:center;position:relative;z-index:5;flex-wrap:wrap">
+        <button onclick="tryOpenCamera('environment')" style="padding:8px 16px;border-radius:20px;background:rgba(76,139,90,.15);border:1px solid rgba(76,139,90,.3);color:#7ac08a;font-size:.85rem;letter-spacing:1px;cursor:pointer">📷 后置</button>
+        <button onclick="tryOpenCamera('user')" style="padding:8px 16px;border-radius:20px;background:rgba(76,139,90,.15);border:1px solid rgba(76,139,90,.3);color:#7ac08a;font-size:.85rem;letter-spacing:1px;cursor:pointer">🤳 前置</button>
+        <label style="padding:8px 16px;border-radius:20px;background:rgba(76,139,90,.15);border:1px solid rgba(76,139,90,.3);color:#7ac08a;font-size:.85rem;letter-spacing:1px;cursor:pointer">🖼️ 相册<input type="file" id="tongueFileAlbum" accept="image/*" style="display:none" onchange="handleTongueFile(this)"></label>
+      </div>
+      <div class="scan-line"></div>
+    </div><button class="tongue-btn" id="tongueBtn" onclick="generateReport()" style="display:none">生成AI体质报告</button></div><div id="tongueClosed" style="display:none;text-align:center;padding:20px 0"><button onclick="openTongueCamera()" style="padding:12px 28px;border-radius:24px;background:rgba(76,139,90,.15);border:1px solid rgba(76,139,90,.3);color:#7ac08a;font-size:.95rem;letter-spacing:2px;cursor:pointer;font-family:'Ma Shan Zheng',serif">📸 开启AI舌诊</button></div><div style="text-align:right;margin-top:8px"><button id="tongueCloseBtn" onclick="closeTongueCamera()" style="padding:4px 14px;border-radius:16px;background:rgba(76,139,90,.08);border:1px solid rgba(76,139,90,.15);color:rgba(122,192,138,.5);font-size:.75rem;letter-spacing:1px;cursor:pointer">✕ 关闭舌诊</button></div></div>
+  <div class="report-card" id="reportCard"><h4>AI 体质报告</h4><div class="report-item"><span class="r-label">体质类型</span><span class="r-value" id="reportType">平和质</span></div><div class="report-item"><span class="r-label">舌象分析</span><span class="r-value" id="reportTongue">舌淡红，苔薄白</span></div><div class="report-item"><span class="r-label">气血状态</span><span class="r-value" id="reportQi">良好</span></div><div class="report-item"><span class="r-label">建议</span><span class="r-value" id="reportAdvice">保持规律作息</span></div><div class="report-advice"><p id="reportDetail">您的体质属于平和质，整体状态良好。建议保持规律作息，适当运动，饮食均衡。方回春堂AI小徒弟提醒您：养生不在于复杂，贵在坚持。</p></div><p style="font-size:.7rem;color:rgba(201,178,139,.25);margin-top:12px;text-align:center;letter-spacing:1px">----- 提供一种更便利的养生参考 -----</p></div></div>
+  <div class="section"><div class="section-title">【互动】养生消消乐</div><p style="font-size:.8rem;color:rgba(201,178,139,.45);margin-bottom:8px;line-height:1.7;letter-spacing:1px">点选两个配对的养生知识，连对即消除！</p><div class="wellness-game"><div class="match-score" id="matchScore">得分：0</div><div class="match-pairs-left" id="matchPairsLeft">剩余配对：16</div><div class="match-grid" id="matchGrid"></div><div id="matchResult" style="margin-top:12px;display:none;text-align:center"><p style="color:#7ac08a;font-size:.9rem;font-family:'Ma Shan Zheng',serif;letter-spacing:2px">全部消除！养生达人就是你~</p></div></div></div>
+  <div style="height:80px"></div>
+</div>
+
+<script>
+// ===== 招牌拖动功能已由initMarkerDrag()统一处理 =====
+
+// ===== 导航 =====
+let currentPage='cover',mapColorized=false;
+function switchPage(id){document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active')});document.getElementById(id).classList.add('active');currentPage=id;if(['maoPage','zhuPage','fangPage'].includes(id))document.getElementById(id).scrollTop=0}
+function goToCover(){switchPage('cover')}
+function goToMap(){switchPage('mapPage');initMapDrag();initMarkerDrag()}
+
+// ===== 地图拖动/缩放 =====
+let mapDrag=null;
+function initMapDrag(){
+  const bg=document.getElementById('mapBg');
+  const container=document.getElementById('mapContainer');
+  if(!bg||!container)return;
+  const img=bg.querySelector('img');
+  if(!img)return;
+  // 初始化：图片填满容器
+  const cw=container.clientWidth,ch=container.clientHeight;
+  // 计算合适的初始缩放（让图片cover整个容器）
+  const iw=img.naturalWidth||cw*2,ih=img.naturalHeight||ch*2;
+  const scale=Math.max(cw/iw,ch/ih);
+  // 初始偏移居中
+  const ox=-(iw*scale-cw)/2, oy=-(ih*scale-ch)/2;
+  mapDrag={scale,ox,oy,tx:ox,ty:oy,startX:0,startY:0,startTx:0,startTy:0,
+    dist0:0,scale0:1,pinch:false,dragging:false};
+  applyMapTransform();
+  // 移除旧监听器标记
+  if(container._mapDragInit)return;
+  container._mapDragInit=true;
+  container.addEventListener('mousedown',mapPointerDown);
+  container.addEventListener('touchstart',mapTouchStart,{passive:false});
+  container.addEventListener('wheel',mapWheel,{passive:false});
+}
+function applyMapTransform(){
+  if(!mapDrag)return;
+  const bg=document.getElementById('mapBg');
+  bg.style.transform=`translate(${mapDrag.tx}px,${mapDrag.ty}px) scale(${mapDrag.scale})`;
+  bg.style.width='';bg.style.height='';
+}
+function clampMap(){
+  if(!mapDrag)return;
+  const bg=document.getElementById('mapBg'),container=document.getElementById('mapContainer');
+  const img=bg.querySelector('img');
+  if(!img||!container)return;
+  const cw=container.clientWidth,ch=container.clientHeight;
+  const iw=(img.naturalWidth||cw*2)*mapDrag.scale,ih=(img.naturalHeight||ch*2)*mapDrag.scale;
+  // 限制缩放范围
+  mapDrag.scale=Math.max(.5,Math.min(4,mapDrag.scale));
+  // 允许自由拖动，但限制不要拖太远
+  const margin=100;
+  mapDrag.tx=Math.max(cw-iw-margin,Math.min(margin,mapDrag.tx));
+  mapDrag.ty=Math.max(ch-ih-margin,Math.min(margin,mapDrag.ty));
+}
+function mapPointerDown(e){
+  if(e.target.closest('.marker')||e.target.closest('.back-btn'))return;
+  mapDrag.dragging=true;
+  mapDrag.startX=e.clientX;mapDrag.startY=e.clientY;
+  mapDrag.startTx=mapDrag.tx;mapDrag.startTy=mapDrag.ty;
+  const onMove=ev=>{
+    if(!mapDrag.dragging)return;
+    mapDrag.tx=mapDrag.startTx+(ev.clientX-mapDrag.startX);
+    mapDrag.ty=mapDrag.startTy+(ev.clientY-mapDrag.startY);
+    clampMap();applyMapTransform();
+  };
+  const onUp=()=>{mapDrag.dragging=false;document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp)};
+  document.addEventListener('mousemove',onMove);
+  document.addEventListener('mouseup',onUp);
+}
+function mapTouchStart(e){
+  if(e.target.closest('.marker')||e.target.closest('.back-btn'))return;
+  if(e.touches.length===1){
+    mapDrag.dragging=true;
+    mapDrag.startX=e.touches[0].clientX;mapDrag.startY=e.touches[0].clientY;
+    mapDrag.startTx=mapDrag.tx;mapDrag.startTy=mapDrag.ty;
+  }else if(e.touches.length===2){
+    mapDrag.dragging=false;mapDrag.pinch=true;
+    const dx=e.touches[1].clientX-e.touches[0].clientX;
+    const dy=e.touches[1].clientY-e.touches[0].clientY;
+    mapDrag.dist0=Math.hypot(dx,dy);mapDrag.scale0=mapDrag.scale;
+    mapDrag.pinchCx=(e.touches[0].clientX+e.touches[1].clientX)/2;
+    mapDrag.pinchCy=(e.touches[0].clientY+e.touches[1].clientY)/2;
+  }
+  const onMove=ev=>{
+    ev.preventDefault();
+    if(mapDrag.pinch&&ev.touches.length===2){
+      const dx=ev.touches[1].clientX-ev.touches[0].clientX;
+      const dy=ev.touches[1].clientY-ev.touches[0].clientY;
+      const dist=Math.hypot(dx,dy);
+      const newScale=mapDrag.scale0*(dist/mapDrag.dist0);
+      mapDrag.scale=newScale;
+      clampMap();applyMapTransform();
+    }else if(mapDrag.dragging&&ev.touches.length===1){
+      mapDrag.tx=mapDrag.startTx+(ev.touches[0].clientX-mapDrag.startX);
+      mapDrag.ty=mapDrag.startTy+(ev.touches[0].clientY-mapDrag.startY);
+      clampMap();applyMapTransform();
+    }
+  };
+  const onEnd=()=>{mapDrag.dragging=false;mapDrag.pinch=false;container.removeEventListener('touchmove',onMove);container.removeEventListener('touchend',onEnd)};
+  const container=document.getElementById('mapContainer');
+  container.addEventListener('touchmove',onMove,{passive:false});
+  container.addEventListener('touchend',onEnd);
+}
+function mapWheel(e){
+  if(e.target.closest('.marker')||e.target.closest('.back-btn'))return;
+  e.preventDefault();
+  const delta=e.deltaY>0?0.9:1.1;
+  mapDrag.scale*=delta;
+  clampMap();applyMapTransform();
+}
+
+// ===== Marker单独拖动 =====
+let markerDrag=null;
+function initMarkerDrag(){
+  const markers=document.querySelectorAll('.marker[data-draggable]');
+  markers.forEach(m=>{
+    if(m._markerDragInit)return;
+    m._markerDragInit=true;
+    m.addEventListener('mousedown',markerPointerDown);
+    m.addEventListener('touchstart',markerTouchStart,{passive:false});
+  });
+}
+function markerPointerDown(e){
+  e.stopPropagation(); // 阻止冒泡到背景拖动
+  const m=e.currentTarget;
+  const bg=document.getElementById('mapBg');
+  const bgRect=bg.getBoundingClientRect();
+  markerDrag={el:m,startX:e.clientX,startY:e.clientY,
+    startLeft:parseFloat(m.style.left)/100,startTop:parseFloat(m.style.top)/100,
+    bgW:bgRect.width,bgH:bgRect.height,moved:false};
+  const onMove=ev=>{
+    if(!markerDrag)return;
+    const dx=ev.clientX-markerDrag.startX;
+    const dy=ev.clientY-markerDrag.startY;
+    if(Math.abs(dx)>3||Math.abs(dy)>3)markerDrag.moved=true;
+    if(!markerDrag.moved)return;
+    // 计算新位置（相对于map-bg的百分比）
+    const newLeft=markerDrag.startLeft+dx/markerDrag.bgW;
+    const newTop=markerDrag.startTop+dy/markerDrag.bgH;
+    m.style.left=Math.max(0,Math.min(95,newLeft*100))+'%';
+    m.style.top=Math.max(0,Math.min(90,newTop*100))+'%';
+  };
+  const onUp=()=>{
+    const wasMoved=markerDrag&&markerDrag.moved;
+    markerDrag=null;
+    document.removeEventListener('mousemove',onMove);
+    document.removeEventListener('mouseup',onUp);
+    if(wasMoved){
+      // 拖动了，阻止点击跳转
+      m._skipClick=true;
+      setTimeout(()=>{m._skipClick=false},300);
+    }
+  };
+  document.addEventListener('mousemove',onMove);
+  document.addEventListener('mouseup',onUp);
+}
+function markerTouchStart(e){
+  e.stopPropagation(); // 阻止冒泡到背景拖动
+  const m=e.currentTarget;
+  const bg=document.getElementById('mapBg');
+  const bgRect=bg.getBoundingClientRect();
+  const touch=e.touches[0];
+  markerDrag={el:m,startX:touch.clientX,startY:touch.clientY,
+    startLeft:parseFloat(m.style.left)/100,startTop:parseFloat(m.style.top)/100,
+    bgW:bgRect.width,bgH:bgRect.height,moved:false};
+  const onMove=ev=>{
+    if(!markerDrag)return;
+    const t=ev.touches[0];
+    const dx=t.clientX-markerDrag.startX;
+    const dy=t.clientY-markerDrag.startY;
+    if(Math.abs(dx)>3||Math.abs(dy)>3)markerDrag.moved=true;
+    if(!markerDrag.moved)return;
+    ev.preventDefault(); // 只在真正拖动时阻止默认行为，否则允许click触发
+    const newLeft=markerDrag.startLeft+dx/markerDrag.bgW;
+    const newTop=markerDrag.startTop+dy/markerDrag.bgH;
+    m.style.left=Math.max(0,Math.min(95,newLeft*100))+'%';
+    m.style.top=Math.max(0,Math.min(90,newTop*100))+'%';
+  };
+  const onEnd=()=>{
+    const wasMoved=markerDrag&&markerDrag.moved;
+    markerDrag=null;
+    const container=document.getElementById('mapContainer');
+    container.removeEventListener('touchmove',onMove);
+    container.removeEventListener('touchend',onEnd);
+    if(wasMoved){
+      // 阻止点击跳转
+      m._skipClick=true;
+      setTimeout(()=>{m._skipClick=false},300);
+    }
+  };
+  const container=document.getElementById('mapContainer');
+  container.addEventListener('touchmove',onMove,{passive:false});
+  container.addEventListener('touchend',onEnd);
+}
+function goToMao(e){if(e&&e.currentTarget&&e.currentTarget._skipClick)return;createRipple(e);setTimeout(()=>switchPage('maoPage'),500)}
+function goToZhu(e){if(e&&e.currentTarget&&e.currentTarget._skipClick)return;createRipple(e);setTimeout(()=>switchPage('zhuPage'),500)}
+function goToFang(e){if(e&&e.currentTarget&&e.currentTarget._skipClick)return;createRipple(e);setTimeout(()=>switchPage('fangPage'),500)}
+
+// ===== 精美Canvas涟漪 =====
+const RC=document.getElementById('ripple-canvas'),rx=RC.getContext('2d');
+let ripples=[],animating=false;
+function resizeRC(){const d=window.devicePixelRatio||1;RC.width=innerWidth*d;RC.height=innerHeight*d;RC.style.width=innerWidth+'px';RC.style.height=innerHeight+'px'}
+addEventListener('resize',resizeRC);resizeRC();
+
+function addRipple(x,y){
+  const d=devicePixelRatio||1,cx=x*d,cy=y*d,now=performance.now();
+  const maxR=Math.max(280,Math.min(innerWidth,innerHeight)*.8)*d;
+  ripples.push({cx,cy,r:4*d,maxR,t:now,dur:2000,a:1,rings:5});
+  // 金色粒子
+  for(let i=0;i<10;i++){
+    const ang=(Math.PI*2/10)*i+Math.random()*.5,spd=1.2+Math.random()*2.5;
+    ripples.push({cx,cy,particle:true,ang,spd,t:now,dur:900+Math.random()*500,a:.75,r:(1.5+Math.random()*2)*d});
+  }
+  if(ripples.length>80)ripples.splice(0,ripples.length-80);
+  if(!animating){animating=true;requestAnimationFrame(drawR)}
+}
+
+function easeOut(t){return 1-Math.pow(1-t,3)}
+
+function drawR(ts){
+  if(!ts)ts=performance.now();
+  rx.clearRect(0,0,RC.width,RC.height);
+  const d=devicePixelRatio||1;
+  ripples=ripples.filter(r=>ts-r.t<r.dur);
+  for(const r of ripples){
+    const p=(ts-r.t)/r.dur;
+    if(r.particle){
+      const dist=r.spd*p*130*d;
+      const px=r.cx+Math.cos(r.ang)*dist,py=r.cy+Math.sin(r.ang)*dist;
+      const a=r.a*(1-p)*.65,sz=r.r*(1-p*.4);
+      // 粒子光晕
+      const pg=rx.createRadialGradient(px,py,0,px,py,sz*3);
+      pg.addColorStop(0,`rgba(212,175,55,${a*.3})`);pg.addColorStop(1,'rgba(212,175,55,0)');
+      rx.fillStyle=pg;rx.beginPath();rx.arc(px,py,sz*3,0,Math.PI*2);rx.fill();
+      rx.beginPath();rx.arc(px,py,sz,0,Math.PI*2);rx.fillStyle=`rgba(255,220,120,${a})`;rx.fill();
+      continue;
+    }
+    const rad=r.r+(r.maxR-r.r)*easeOut(Math.min(1,p));
+    const a=r.a*(1-p);
+    // 中心光晕
+    const gr=rad*.3;
+    const g=rx.createRadialGradient(r.cx,r.cy,0,r.cx,r.cy,gr);
+    g.addColorStop(0,`rgba(212,175,55,${a*.1})`);g.addColorStop(.4,`rgba(212,175,55,${a*.04})`);g.addColorStop(1,'rgba(212,175,55,0)');
+    rx.fillStyle=g;rx.beginPath();rx.arc(r.cx,r.cy,gr,0,Math.PI*2);rx.fill();
+    // 多层涟漪环（5层，依次延迟展开）
+    for(let i=0;i<r.rings;i++){
+      const delay=i*.1,rp=Math.max(0,(p-delay)/(1-delay));
+      if(rp<=0)continue;
+      const rr=r.r+(r.maxR-r.r)*easeOut(Math.min(1,rp));
+      const ra=a*(1-rp)*(1-i*.18);
+      const lw=Math.max(.5,(3.5-i*.55)*(1-rp*.65))*d;
+      rx.beginPath();rx.arc(r.cx,r.cy,rr,0,Math.PI*2);
+      rx.strokeStyle=`rgba(212,175,55,${ra*.5})`;rx.lineWidth=lw;rx.stroke();
+    }
+    // 中心高光
+    if(p<.25){
+      const ia=a*(1-p/.25)*.5;
+      rx.beginPath();rx.arc(r.cx,r.cy,8*d*(1-p),0,Math.PI*2);
+      rx.fillStyle=`rgba(255,235,180,${ia})`;rx.fill();
+    }
+  }
+  if(ripples.length>0)requestAnimationFrame(drawR);
+  else{animating=false;rx.clearRect(0,0,RC.width,RC.height)}
+}
+
+function createRipple(e){
+  let x,y;
+  if(e.touches){x=e.touches[0].clientX;y=e.touches[0].clientY}
+  else{x=e.clientX||e.pageX;y=e.clientY||e.pageY}
+  addRipple(x,y);
+  // 水滴音效
+  try{const c=new(AudioContext||webkitAudioContext)(),o=c.createOscillator(),g=c.createGain();
+  o.connect(g);g.connect(c.destination);o.frequency.setValueAtTime(900+Math.random()*300,c.currentTime);
+  o.frequency.exponentialRampToValueAtTime(350,c.currentTime+.18);
+  g.gain.setValueAtTime(.045,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.22);
+  o.start(c.currentTime);o.stop(c.currentTime+.22)}catch(_){}
+}
+
+// 地图页点击
+const mapC=document.getElementById('mapContainer'),mapBg=document.getElementById('mapBg');
+mapC.addEventListener('click',function(e){if(e.target.closest('.marker'))return;createRipple(e);
+  if(!mapColorized){mapColorized=true;mapBg.classList.remove('grayscale');mapBg.classList.add('color')}});
+// 全局涟漪
+document.addEventListener('click',function(e){
+  if(currentPage==='mapPage')return;
+  if(e.target.closest('.music-toggle')||e.target.closest('button')||e.target.closest('input'))return;
+  createRipple(e)});
+
+// ===== 音乐 =====
+const bgm1=document.getElementById('bgm1'),bgm2=document.getElementById('bgm2'),mt=document.getElementById('musicToggle');
+let musicOn=false,bgmIdx=0;const bgmVol=.45;
+const bgms=[bgm1,bgm2];
+bgms.forEach(b=>{b.volume=bgmVol;b.loop=false});
+// 一首播完切下一首
+bgm1.addEventListener('ended',()=>{bgmIdx=1;bgms[1].currentTime=0;bgms[1].play().catch(()=>{})});
+bgm2.addEventListener('ended',()=>{bgmIdx=0;bgms[0].currentTime=0;bgms[0].play().catch(()=>{})});
+function toggleMusic(){
+  const cur=bgms[bgmIdx];
+  if(musicOn){cur.pause();mt.classList.remove('playing');mt.classList.add('muted');musicOn=false}
+  else{cur.volume=bgmVol;cur.play().then(()=>{mt.classList.add('playing');mt.classList.remove('muted');musicOn=true}).catch(()=>{mt.classList.add('playing');mt.classList.remove('muted');musicOn=true})}
+}
+document.addEventListener('click',function(){if(!musicOn){const c=bgms[bgmIdx];c.volume=bgmVol;c.play().then(()=>{mt.classList.add('playing');mt.classList.remove('muted');musicOn=true}).catch(()=>{})}},{once:true});
+
+// 星星 (multicolor)
+(function(){const c=document.getElementById('starsContainer');if(!c)return;
+  const colors=['#ffd700','#ff6b6b','#c084fc','#60a5fa','#fff','#a7f3d0','#f472b6'];
+  for(let i=0;i<35;i++){const s=document.createElement('div');s.className='star';
+  const sz=1+Math.random()*3;s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-delay:${Math.random()*3}s;animation-duration:${2+Math.random()*3}s`;c.appendChild(s)}})();
+
+// 封面招牌亮起
+setTimeout(()=>{document.querySelectorAll('#cover .sign').forEach((s,i)=>{setTimeout(()=>s.classList.add('lit'),i*800)})},600);
+
+// ===== 毛源昌 =====
+let glassesShown=false;
+function playMaoVideo(){
+  const box=document.getElementById('maoVideo'),img=document.getElementById('glassesImg');
+  // Replace with video content
+  const fg=box.querySelector('.flash-glasses'),pi=box.querySelector('.play-icon');
+  if(fg)fg.style.display='none';if(pi)pi.style.display='none';
+  // Only add video area once
+  if(!box.querySelector('.video-area')){
+    const videoArea=document.createElement('div');
+    videoArea.className='video-area';
+    videoArea.style.cssText='width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#0c1929,#1a3a5c);position:absolute;inset:0;z-index:1';
+    videoArea.innerHTML='<div style="font-size:48px;margin-bottom:12px">👓</div><div style="font-family:Ma Shan Zheng,serif;font-size:1rem;color:#c9b28b;text-align:center;line-height:1.8;letter-spacing:2px">【视频播放中】<br>164年，毛源昌把一副眼镜<br>做成了"数字之眼"</div>';
+    box.appendChild(videoArea);
+  }
+  // Spin in the 3D glasses on the page
+  if(!glassesShown){
+    glassesShown=true;
+    setTimeout(()=>{img.classList.add('spin-in');
+      img.addEventListener('animationend',function handler(){
+        img.classList.remove('spin-in');img.classList.add('settled');
+        img.removeEventListener('animationend',handler);
+      });
+    },600);
+  }
+}
+let tIdx=0;const tPairs=[{cn:'你好，欢迎来到杭州',en:'Hello, welcome to Hangzhou'},{cn:'百年老字号，AI新本事',en:'Century-old brands, new AI capabilities'},{cn:'今天天气真好',en:'The weather is really nice today'},{cn:'毛源昌，看清世界',en:'Mao Yuanchang, see the world clearly'}];
+function doTranslate(){
+  const c=document.getElementById('cnText'),e=document.getElementById('enText'),v=document.getElementById('voiceIndicator');
+  c.classList.remove('show');e.classList.remove('show');
+  const p=tPairs[tIdx%tPairs.length];tIdx++;
+  setTimeout(()=>{
+    c.textContent=p.cn;c.classList.add('show');
+    setTimeout(()=>{
+      e.textContent=p.en;e.classList.add('show');v.style.visibility='visible';
+      if('speechSynthesis'in window){const u=new SpeechSynthesisUtterance(p.en);u.lang='en-US';u.rate=.9;speechSynthesis.speak(u)}
+      setTimeout(()=>{v.style.visibility='hidden'},3000);
+    },500);
+  },200);
+}
+let chActive=false;
+function startChallenge(){const d=document.getElementById('challengeDisplay'),c=document.getElementById('challengeContent'),o=document.getElementById('challengeOptions'),r=document.getElementById('challengeResult'),b=document.getElementById('challengeStartBtn'),t=document.getElementById('timerBar');r.classList.remove('show');r.innerHTML='<p>恭喜！看的清清楚楚。</p>';o.style.display='none';b.style.display='none';chActive=true;const n=6;let s='';for(let i=0;i<n;i++)s+=Math.floor(Math.random()*10);c.textContent=s;c.style.color='#d4af37';let el=0;const tm=setInterval(()=>{el+=50;t.style.width=(el/3000*100)+'%';if(el>=3000){clearInterval(tm);c.textContent='？';c.style.color='rgba(201,178,139,.25)';t.style.width='0%';showChOpt(s)}},50)}
+function showChOpt(correct){const o=document.getElementById('challengeOptions');o.style.display='grid';let ch=[correct];while(ch.length<4){let w='';for(let i=0;i<correct.length;i++)w+=Math.floor(Math.random()*10);if(!ch.includes(w))ch.push(w)}ch.sort(()=>Math.random()-.5);o.innerHTML=ch.map(c=>`<button onclick="checkAns('${c}','${correct}',this)">${c}</button>`).join('')}
+function checkAns(s,c,b){if(!chActive)return;chActive=false;const r=document.getElementById('challengeResult');if(s===c){b.classList.add('correct');r.classList.add('show')}else{b.classList.add('wrong');document.querySelectorAll('.challenge-options button').forEach(x=>{if(x.textContent===c)x.classList.add('correct')});r.innerHTML='<p style="color:#d4af37">没关系，再来一次吧！</p>';r.classList.add('show')}setTimeout(()=>{document.getElementById('challengeStartBtn').style.display='';document.getElementById('challengeStartBtn').textContent='再来一次'},1500)}
+
+// ===== 朱炳仁 =====
+const pSpeech=['昔守朱门镇百瑞，今蹲案头稳日常','熔铜铸就齐天骨，陪你闯过生活八十一关','铜葫盛过千年福，为你攒满日常甜'];
+const pVoice=[{pitch:0.4,rate:0.7,label:'雄浑'},{pitch:1.0,rate:0.9,label:'活力'},{pitch:1.3,rate:1.0,label:'喜庆'}];
+function speakProduct(i){document.getElementById('productSpeechText').textContent=pSpeech[i];document.getElementById('productSpeech').classList.add('show');if('speechSynthesis'in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(pSpeech[i]);u.lang='zh-CN';u.pitch=pVoice[i].pitch;u.rate=pVoice[i].rate;u.volume=1;speechSynthesis.speak(u);if(speechSynthesis.paused)speechSynthesis.resume()}else{console.log('speechSynthesis不可用')}}
+function playZhuVideo(){event.currentTarget.innerHTML='<div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a1207,#3d2b0f)"><div style="font-size:40px;margin-bottom:16px">🎬</div><div style="font-family:Ma Shan Zheng,serif;font-size:.95rem;color:#c9b28b;text-align:center;line-height:1.8;letter-spacing:2px">【短视频播放中】<br>从传统铜的制作到AI漫剧的传播<br>百年铜艺，用科技重新定义中国审美</div></div>'}
+let copperImageData=null;
+function handleCopperFile(input){
+  const file=input.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    copperImageData=e.target.result;
+    const a=document.getElementById('uploadArea');
+    // 显示选择的图片预览
+    a.innerHTML='<img src="'+e.target.result+'" style="width:100%;height:100%;object-fit:cover;border-radius:16px">'
+      +'<div style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:.8rem;color:#e8c86a;letter-spacing:1px;background:rgba(0,0,0,.5);padding:4px 12px;border-radius:12px;white-space:nowrap">✅ 照片已选择</div>';
+    a.style.borderColor='rgba(196,154,60,.35)';
+    a.style.overflow='hidden';
+    const genBtn=document.getElementById('genBtn');genBtn.style.display='';genBtn.style.opacity='1';genBtn.style.pointerEvents='auto';genBtn.textContent='生成铜艺品';
+    document.getElementById('aiDesignResult').classList.remove('show');
+    document.getElementById('copperCanvas').style.display='none';
+    document.getElementById('copperPlaceholder').style.display='';
+  };
+  reader.readAsDataURL(file);
+  // 重置input以便再次选择同一文件
+  input.value='';
+}
+
+function generateCopper(){
+  if(!copperImageData){
+    // 没有真实图片时回退模拟
+    const a=document.getElementById('uploadArea');
+    a.innerHTML='<div style="font-size:40px;margin-bottom:8px">🖼️</div><p style="font-size:.8rem;color:#e8c86a;letter-spacing:1px">照片已选择</p><p style="font-size:.7rem;color:rgba(201,178,139,.3);margin-top:4px">点击下方按钮生成铜艺品</p>';
+    a.style.borderColor='rgba(196,154,60,.35)';
+    const b=document.getElementById('genBtn');b.textContent='生成中...';b.style.opacity='.6';b.style.pointerEvents='none';
+    setTimeout(()=>{b.style.display='none';document.getElementById('aiDesignResult').classList.add('show')},2000);
+    return;
+  }
+  const b=document.getElementById('genBtn');b.textContent='生成中...';b.style.opacity='.6';b.style.pointerEvents='none';
+  // 用Canvas做铜质感滤镜
+  const img=new Image();
+  img.onload=function(){
+    const canvas=document.getElementById('copperCanvas');
+    const ctx=canvas.getContext('2d');
+    // 设置canvas尺寸
+    const size=Math.min(img.width,img.height,800);
+    const ratio=size/Math.max(img.width,img.height);
+    canvas.width=Math.round(img.width*ratio);
+    canvas.height=Math.round(img.height*ratio);
+    // 绘制原图
+    ctx.drawImage(img,0,0,canvas.width,canvas.height);
+    // 铜质感滤镜处理
+    const imageData=ctx.getImageData(0,0,canvas.width,canvas.height);
+    const data=imageData.data;
+    for(let i=0;i<data.length;i+=4){
+      const r=data[i],g=data[i+1],b=data[i+2];
+      // 铜色调映射：偏暖偏铜色
+      // 铜色参考: R~184, G~115, B~51
+      const gray=0.299*r+0.587*g+0.114*b;
+      // 增加对比度
+      const contrast=1.3;
+      const adjusted=((gray-128)*contrast+128);
+      // 铜色混合
+      const copperR=Math.min(255,adjusted*0.85+50);
+      const copperG=Math.min(255,adjusted*0.55+20);
+      const copperB=Math.min(255,adjusted*0.3+5);
+      // 与原色混合，保留部分细节
+      const mix=0.7; // 铜色混合比例
+      data[i]=Math.round(r*(1-mix)+copperR*mix);
+      data[i+1]=Math.round(g*(1-mix)+copperG*mix);
+      data[i+2]=Math.round(b*(1-mix)+copperB*mix);
+    }
+    ctx.putImageData(imageData,0,0);
+    // 添加金属高光渐变叠加
+    const grad=ctx.createLinearGradient(0,0,canvas.width,canvas.height);
+    grad.addColorStop(0,'rgba(255,220,150,0.15)');
+    grad.addColorStop(0.3,'rgba(255,200,100,0.05)');
+    grad.addColorStop(0.5,'rgba(255,240,200,0.2)');
+    grad.addColorStop(0.7,'rgba(200,150,80,0.05)');
+    grad.addColorStop(1,'rgba(255,220,150,0.15)');
+    ctx.fillStyle=grad;
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    // 添加暗角效果增强金属感
+    const vignette=ctx.createRadialGradient(canvas.width/2,canvas.height/2,canvas.width*0.3,canvas.width/2,canvas.height/2,canvas.width*0.7);
+    vignette.addColorStop(0,'rgba(0,0,0,0)');
+    vignette.addColorStop(1,'rgba(0,0,0,0.35)');
+    ctx.fillStyle=vignette;
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    // 显示结果
+    canvas.style.display='block';
+    document.getElementById('copperPlaceholder').style.display='none';
+    b.style.display='none';
+    document.getElementById('aiDesignResult').classList.add('show');
+  };
+  img.src=copperImageData;
+}
+
+function resetCopperDesign(){
+  // 重置为初始状态
+  copperImageData=null;
+  const a=document.getElementById('uploadArea');
+  a.innerHTML='<div class="upload-icon">📷</div><p>点击选择照片（相册/拍照）</p><p style="font-size:.7rem;margin-top:4px;opacity:.45">AI将为你生成铜艺风格设计</p>';
+  a.style.borderColor='';a.style.overflow='';
+  document.getElementById('genBtn').style.display='none';
+  document.getElementById('aiDesignResult').classList.remove('show');
+  document.getElementById('copperCanvas').style.display='none';
+  document.getElementById('copperPlaceholder').style.display='';
+}
+
+// ===== 方回春堂 =====
+const cRep=['听起来你最近比较忙碌呢。中医讲究"劳逸结合"，记得给自己留点休息的时间哦~','睡眠是最好的"补药"！试试睡前泡泡脚，按揉涌泉穴，帮助安神入眠。','春天肝气升发，容易心烦气躁。可以喝点菊花枸杞茶，疏肝解郁~','适当的运动能帮助气血流通，推荐太极拳或八段锦，动作舒缓，很适合日常养生。','情绪和身体是相通的。"心宽体胖"不是没道理的，保持好心情比什么都重要！','久坐伤肉，久站伤骨。动静结合才是养生之道。每隔一小时起来活动活动吧~'];let cI=0;
+function sendChat(){const inp=document.getElementById('chatInput'),m=inp.value.trim();if(!m)return;const ms=document.getElementById('chatMessages'),u=document.createElement('div');u.className='chat-msg user';u.textContent=m;ms.appendChild(u);inp.value='';ms.scrollTop=ms.scrollHeight;setTimeout(()=>{const b=document.createElement('div');b.className='chat-msg bot';b.textContent=cRep[cI%cRep.length];cI++;ms.appendChild(b);ms.scrollTop=ms.scrollHeight},800+Math.random()*600)}
+let tongueStream=null,tongueFacing='environment';
+function retakeTongue(){
+  if(tongueStream){tongueStream.getTracks().forEach(t=>t.stop());tongueStream=null}
+  const a=document.getElementById('cameraArea');
+  a.classList.remove('scanning');
+  a.innerHTML='<div class="cam-icon">📸</div>'
+    +'<p>拍照或从相册选择舌象照片</p>'
+    +'<div style="display:flex;gap:10px;margin-top:12px;justify-content:center;position:relative;z-index:5;flex-wrap:wrap">'
+    +'<button onclick="tryOpenCamera(\'environment\')" style="padding:8px 16px;border-radius:20px;background:rgba(76,139,90,.15);border:1px solid rgba(76,139,90,.3);color:#7ac08a;font-size:.85rem;letter-spacing:1px;cursor:pointer">📷 后置</button>'
+    +'<button onclick="tryOpenCamera(\'user\')" style="padding:8px 16px;border-radius:20px;background:rgba(76,139,90,.15);border:1px solid rgba(76,139,90,.3);color:#7ac08a;font-size:.85rem;letter-spacing:1px;cursor:pointer">🤳 前置</button>'
+    +'<label style="padding:8px 16px;border-radius:20px;background:rgba(76,139,90,.15);border:1px solid rgba(76,139,90,.3);color:#7ac08a;font-size:.85rem;letter-spacing:1px;cursor:pointer">🖼️ 相册<input type="file" accept="image/*" style="display:none" onchange="handleTongueFile(this)"></label>'
+    +'</div>'
+    +'<div class="scan-line"></div>';
+  document.getElementById('tongueBtn').style.display='none';
+  document.getElementById('reportCard').classList.remove('show');
+}
+function handleTongueFile(input){
+  const file=input.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    tonguePhotoDataURL=e.target.result;
+    const a=document.getElementById('cameraArea');
+    a.classList.remove('scanning');
+    a.innerHTML='<img src="'+e.target.result+'" style="width:100%;height:100%;object-fit:cover;border-radius:20px">'
+      +'<div style="position:absolute;bottom:50px;left:50%;transform:translateX(-50%);font-size:.85rem;color:#7ac08a;letter-spacing:2px;background:rgba(0,0,0,.5);padding:4px 14px;border-radius:12px;white-space:nowrap">✅ 照片已选择</div>'
+      +'<div style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:8px">'
+      +'<button onclick="retakeTongue()" style="padding:6px 16px;border-radius:20px;background:rgba(76,139,90,.2);border:1px solid rgba(76,139,90,.4);color:#7ac08a;font-size:.8rem;letter-spacing:2px;cursor:pointer;white-space:nowrap">🔄 重新选择</button>'
+      +'<button onclick="saveTonguePhoto()" style="padding:6px 16px;border-radius:20px;background:rgba(76,139,90,.25);border:1px solid rgba(76,139,90,.5);color:#7ac08a;font-size:.8rem;letter-spacing:2px;cursor:pointer;white-space:nowrap">💾 保存到相册</button>'
+      +'</div>';
+    document.getElementById('tongueBtn').style.display='';
+  };
+  reader.readAsDataURL(file);
+  input.value='';
+}
+// 统一相机入口：优先getUserMedia实时预览，否则回退file input
+function tryOpenCamera(facing){
+  tongueFacing=facing;
+  const facingLabel=facing==='environment'?'后置':'前置';
+  // 直接尝试getUserMedia（不限制协议，某些浏览器/环境可能允许）
+  if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){
+    if(tongueStream){tongueStream.getTracks().forEach(t=>t.stop());tongueStream=null}
+    navigator.mediaDevices.getUserMedia({video:{facingMode:facing,width:{ideal:640},height:{ideal:640}}}).then(stream=>{
+      tongueStream=stream;
+      const a=document.getElementById('cameraArea');
+      a.innerHTML='<video id="tongueVideo" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover;border-radius:20px"></video>'
+        +'<div class="cam-switch" onclick="switchCamera()" title="切换摄像头">🔄</div>'
+        +'<div class="cam-capture" onclick="captureTongue()"></div>'
+        +'<div class="scan-line"></div>';
+      document.getElementById('tongueVideo').srcObject=stream;
+      a.classList.add('scanning');
+    }).catch(err=>{
+      const a=document.getElementById('cameraArea');
+      let msg='',sub='';
+      if(err.name==='NotFoundError'||err.name==='DevicesNotFoundError'){
+        msg='未检测到'+facingLabel+'相机';sub='该设备没有'+facingLabel+'摄像头，请使用其他方式';
+      }else if(err.name==='NotAllowedError'||err.name==='PermissionDeniedError'){
+        msg='相机权限被拒绝';sub='请在浏览器设置中允许访问摄像头';
+      }else if(err.name==='NotReadableError'||err.name==='TrackStartError'){
+        msg='相机被其他应用占用';sub='请关闭其他使用摄像头的应用后重试';
+      }else if(err.name==='OverconstrainedError'){
+        msg='无'+facingLabel+'相机';sub='该设备不支持'+facingLabel+'摄像头，请使用其他方式';
+      }else{
+        msg='相机不可用';sub='请使用相册选择照片';
+      }
+      a.innerHTML='<div class="cam-icon" style="opacity:.5">📸</div>'
+        +'<p style="color:#d4af37;letter-spacing:2px">'+msg+'</p>'
+        +'<p style="font-size:.7rem;color:rgba(201,178,139,.3);margin-top:4px">'+sub+'</p>'
+        +'<button onclick="retakeTongue()" style="margin-top:12px;padding:6px 18px;border-radius:20px;background:rgba(76,139,90,.2);border:1px solid rgba(76,139,90,.4);color:#7ac08a;font-size:.8rem;letter-spacing:2px;cursor:pointer">返回重选</button>';
+    });
+  }else{
+    // getUserMedia不可用（file://等环境）
+    const isMobile=/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+    if(isMobile){
+      // 手机：用file input + capture触发系统相机
+      const capture=facing==='environment'?'environment':'user';
+      const input=document.createElement('input');
+      input.type='file';input.accept='image/*';input.capture=capture;
+      input.style.display='none';
+      input.onchange=function(){handleTongueFile(this)};
+      document.body.appendChild(input);input.click();
+      setTimeout(()=>{if(input.parentNode)input.parentNode.removeChild(input)},3000);
+    }else{
+      // 电脑file://环境：提示用户通过localhost访问以启用摄像头，同时提供文件选择
+      const a=document.getElementById('cameraArea');
+      a.innerHTML='<div class="cam-icon" style="opacity:.5">📸</div>'
+        +'<p style="color:#d4af37;letter-spacing:2px">当前环境无法直接打开摄像头</p>'
+        +'<p style="font-size:.7rem;color:rgba(201,178,139,.3);margin-top:4px;line-height:1.6">file:// 协议下浏览器禁止访问摄像头<br>请通过本地服务器访问：<br><span style="color:#7ac08a;font-family:monospace;font-size:.65rem">python3 -m http.server 8080</span><br>然后访问 localhost:8080</p>'
+        +'<div style="display:flex;gap:10px;margin-top:14px;justify-content:center;flex-wrap:wrap">'
+        +'<label style="padding:8px 16px;border-radius:20px;background:rgba(76,139,90,.15);border:1px solid rgba(76,139,90,.3);color:#7ac08a;font-size:.85rem;letter-spacing:1px;cursor:pointer">🖼️ 选择图片文件<input type="file" accept="image/*" style="display:none" onchange="handleTongueFile(this)"></label>'
+        +'<button onclick="retakeTongue()" style="padding:8px 16px;border-radius:20px;background:rgba(76,139,90,.2);border:1px solid rgba(76,139,90,.4);color:#7ac08a;font-size:.85rem;letter-spacing:1px;cursor:pointer">返回</button>'
+        +'</div>';
+    }
+  }
+}
+function switchCamera(){
+  tongueFacing=tongueFacing==='environment'?'user':'environment';
+  tryOpenCamera(tongueFacing);
+}
+function captureTongue(){
+  const a=document.getElementById('cameraArea');
+  const video=document.getElementById('tongueVideo');
+  if(video&&tongueStream){
+    try{const c=new(AudioContext||webkitAudioContext)(),o=c.createOscillator(),g=c.createGain();
+    o.connect(g);g.connect(c.destination);o.frequency.setValueAtTime(1200,c.currentTime);
+    o.frequency.exponentialRampToValueAtTime(200,c.currentTime+.1);
+    g.gain.setValueAtTime(.08,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.15);
+    o.start(c.currentTime);o.stop(c.currentTime+.15)}catch(_){}
+    const canvas=document.createElement('canvas');
+    canvas.width=video.videoWidth;canvas.height=video.videoHeight;
+    canvas.getContext('2d').drawImage(video,0,0);
+    tongueStream.getTracks().forEach(t=>t.stop());tongueStream=null;
+    const dataURL=canvas.toDataURL('image/jpeg',.85);
+    tonguePhotoDataURL=dataURL;
+    a.classList.remove('scanning');
+    a.innerHTML='<img src="'+dataURL+'" style="width:100%;height:100%;object-fit:cover;border-radius:20px">'
+      +'<div style="position:absolute;bottom:50px;left:50%;transform:translateX(-50%);font-size:.85rem;color:#7ac08a;letter-spacing:2px;background:rgba(0,0,0,.5);padding:4px 14px;border-radius:12px">✅ 拍摄完成</div>'
+      +'<div style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:8px">'
+      +'<button onclick="retakeTongue()" style="padding:6px 16px;border-radius:20px;background:rgba(76,139,90,.2);border:1px solid rgba(76,139,90,.4);color:#7ac08a;font-size:.8rem;letter-spacing:2px;cursor:pointer;white-space:nowrap">🔄 重新拍照</button>'
+      +'<button onclick="saveTonguePhoto()" style="padding:6px 16px;border-radius:20px;background:rgba(76,139,90,.25);border:1px solid rgba(76,139,90,.5);color:#7ac08a;font-size:.8rem;letter-spacing:2px;cursor:pointer;white-space:nowrap">💾 保存到相册</button>'
+      +'</div>';
+    document.getElementById('tongueBtn').style.display='';
+  }
+}
+function simulateTongueScan(){
+  const a=document.getElementById('cameraArea');
+  a.classList.add('scanning');
+  a.innerHTML='<div class="cam-icon" style="opacity:.5">📸</div><p style="color:#7ac08a;letter-spacing:2px">AI舌象分析中...</p><div class="scan-line"></div>';
+  setTimeout(()=>{a.classList.remove('scanning');a.innerHTML='<div style="font-size:40px;margin-bottom:12px">✅</div><p style="color:#7ac08a;letter-spacing:2px">舌象采集完成</p><p style="font-size:.7rem;color:rgba(201,178,139,.3);margin-top:4px">点击下方按钮生成体质报告</p><button onclick="retakeTongue()" style="margin-top:12px;padding:8px 20px;border-radius:20px;background:rgba(76,139,90,.2);border:1px solid rgba(76,139,90,.4);color:#7ac08a;font-size:.85rem;letter-spacing:2px;cursor:pointer">🔄 重新拍照</button>';document.getElementById('tongueBtn').style.display=''},2500);
+}
+function startTongueScan(){tryOpenCamera('environment')}
+// 关闭/开启舌诊拍照
+function closeTongueCamera(){
+  if(tongueStream){tongueStream.getTracks().forEach(t=>t.stop());tongueStream=null}
+  document.getElementById('tongueContent').style.display='none';
+  document.getElementById('tongueClosed').style.display='';
+  document.getElementById('tongueCloseBtn').style.display='none';
+}
+function openTongueCamera(){
+  document.getElementById('tongueContent').style.display='';
+  document.getElementById('tongueClosed').style.display='none';
+  document.getElementById('tongueCloseBtn').style.display='';
+  retakeTongue();
+}
+// 保存舌象照片到相册（下载）
+let tonguePhotoDataURL=null;
+function saveTonguePhoto(){
+  if(!tonguePhotoDataURL){return}
+  const a=document.createElement('a');
+  a.href=tonguePhotoDataURL;
+  a.download='舌象照片_'+new Date().toISOString().slice(0,10)+'.jpg';
+  document.body.appendChild(a);a.click();
+  setTimeout(()=>{document.body.removeChild(a)},100);
+}
+function generateReport(){const b=document.getElementById('tongueBtn');b.textContent='AI分析中...';b.style.opacity='.6';const T=['平和质','气虚质','湿热质','阳虚质','阴虚质','痰湿质'],G=['舌淡红，苔薄白','舌淡胖，苔白腻','舌红，苔黄腻','舌淡胖，苔白滑','舌红少苔','舌胖大，苔白腻'],Q=['良好','偏弱','偏旺','不足','偏虚','阻滞'],A=['保持规律作息','适当补气养血','清淡饮食多运动','注意保暖温补','滋阴润燥','健脾祛湿'],i=Math.floor(Math.random()*T.length);setTimeout(()=>{document.getElementById('reportType').textContent=T[i];document.getElementById('reportTongue').textContent=G[i];document.getElementById('reportQi').textContent=Q[i];document.getElementById('reportAdvice').textContent=A[i];const D=['您的体质整体状态良好，气血运行通畅。建议继续保持规律作息，饮食均衡，适当运动。方回春堂AI小徒弟提醒您：养生在于日常坚持，不在一朝一夕。','您的气机稍有不足，建议适当补气。推荐黄芪泡水、山药粥等食疗。日常避免过度劳累，保证充足睡眠。方回春堂AI小徒弟提醒您：慢养才是真养生。','您的体内湿热偏重，建议清淡饮食，少食辛辣油腻。推荐薏米红豆水、绿豆汤等清热利湿。方回春堂AI小徒弟提醒您：管住嘴，迈开腿~'];document.getElementById('reportDetail').textContent=D[Math.floor(Math.random()*D.length)];document.getElementById('reportCard').classList.add('show');b.style.display='none'},1500)}
+// ===== 养生消消乐 8x8 =====
+const wellnessPairs=[
+  {id:1,q:'春季养肝',a:'食荠菜香椿'},
+  {id:2,q:'夏季清热',a:'枸杞菊花茶'},
+  {id:3,q:'冬病夏治',a:'三伏贴敷'},
+  {id:4,q:'秋季润燥',a:'百合雪梨'},
+  {id:5,q:'养心安神',a:'酸枣仁汤'},
+  {id:6,q:'健脾祛湿',a:'薏米红豆'},
+  {id:7,q:'疏肝解郁',a:'玫瑰花茶'},
+  {id:8,q:'温阳补肾',a:'杜仲煲汤'},
+  {id:9,q:'滋阴润肺',a:'麦冬沙参'},
+  {id:10,q:'活血化瘀',a:'丹参三七'},
+  {id:11,q:'补气养血',a:'黄芪当归'},
+  {id:12,q:'清肝明目',a:'决明子茶'},
+  {id:13,q:'理气和胃',a:'陈皮砂仁'},
+  {id:14,q:'清热解毒',a:'金银花露'},
+  {id:15,q:'固表止汗',a:'浮小麦汤'},
+  {id:16,q:'通络止痛',a:'川芎天麻'}
+];
+let mSel=null,mScore=0,mPairsLeft=16,mChecking=false;
+
+function initWellnessGame(){
+  const grid=document.getElementById('matchGrid');
+  if(!grid)return;
+  grid.innerHTML='';
+  mSel=null;mScore=0;mPairsLeft=16;mChecking=false;
+  // 生成8x8格子：16对(32个有内容) + 32个空格
+  let cells=[];
+  wellnessPairs.forEach(p=>{
+    cells.push({pair:p.id,side:'q',text:p.q});
+    cells.push({pair:p.id,side:'a',text:p.a});
+  });
+  // 填充空格到64个
+  while(cells.length<64){
+    cells.push({pair:0,side:'',text:''});
+  }
+  // 洗牌
+  for(let i=cells.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [cells[i],cells[j]]=[cells[j],cells[i]];
+  }
+  // 渲染
+  cells.forEach(c=>{
+    const div=document.createElement('div');
+    div.className='match-card';
+    div.dataset.pair=c.pair;
+    div.dataset.side=c.side;
+    if(c.pair===0){
+      // 空格：不可点击，半透明
+      div.style.opacity='.15';
+      div.style.cursor='default';
+      div.style.background='rgba(255,255,255,.01)';
+      div.style.borderColor='rgba(76,139,90,.03)';
+    }else{
+      div.onclick=function(){matchClick(this)};
+    }
+    div.textContent=c.text;
+    grid.appendChild(div);
+  });
+  updateMatchUI();
+}
+
+function matchClick(el){
+  if(mChecking)return;
+  if(!el.dataset.pair||el.dataset.pair==='0')return;
+  if(el.classList.contains('matched')||el.classList.contains('cleared'))return;
+  if(!mSel){mSel=el;el.classList.add('selected');return}
+  if(mSel===el){el.classList.remove('selected');mSel=null;return}
+  mChecking=true;
+  const p1=mSel.dataset.pair,p2=el.dataset.pair,s1=mSel.dataset.side,s2=el.dataset.side;
+  if(p1===p2&&s1!==s2){
+    // 配对成功
+    mSel.classList.remove('selected');
+    mSel.classList.add('matched');
+    el.classList.add('matched');
+    mScore+=10;
+    mPairsLeft--;
+    // 动画结束后清除
+    const a=mSel,b=el;
+    setTimeout(()=>{
+      a.classList.add('cleared');a.classList.remove('matched');
+      b.classList.add('cleared');b.classList.remove('matched');
+    },500);
+    updateMatchUI();
+    if(mPairsLeft<=0){
+      setTimeout(()=>{
+        document.getElementById('matchResult').style.display='block';
+        // 播放庆祝音效
+        try{const c=new(AudioContext||webkitAudioContext)(),o=c.createOscillator(),g=c.createGain();
+        o.connect(g);g.connect(c.destination);o.type='triangle';
+        o.frequency.setValueAtTime(523,c.currentTime);o.frequency.setValueAtTime(659,c.currentTime+.15);o.frequency.setValueAtTime(784,c.currentTime+.3);
+        g.gain.setValueAtTime(.06,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.6);
+        o.start(c.currentTime);o.stop(c.currentTime+.6)}catch(_){}
+      },600);
+    }
+    mSel=null;mChecking=false;
+  }else{
+    // 配对失败
+    el.classList.add('wrong-match');
+    mSel.classList.add('wrong-match');
+    const p=mSel;
+    setTimeout(()=>{el.classList.remove('wrong-match');p.classList.remove('wrong-match','selected');mSel=null;mChecking=false},500);
+  }
+}
+
+function updateMatchUI(){
+  const scoreEl=document.getElementById('matchScore');
+  const leftEl=document.getElementById('matchPairsLeft');
+  if(scoreEl)scoreEl.textContent='得分：'+mScore;
+  if(leftEl)leftEl.textContent='剩余配对：'+mPairsLeft;
+}
+
+// 页面加载时初始化消消乐
+setTimeout(initWellnessGame,100);
+
+// iOS fix: 首次触摸激活AudioContext和speechSynthesis
+document.addEventListener('touchstart',function(){try{const c=new(AudioContext||webkitAudioContext)();if(c.state==='suspended')c.resume()}catch(_){}try{if('speechSynthesis'in window){speechSynthesis.cancel();const t=new SpeechSynthesisUtterance('');t.volume=0;speechSynthesis.speak(t)}}catch(_){}},{once:true});
+</script>
+</body>
+</html>
