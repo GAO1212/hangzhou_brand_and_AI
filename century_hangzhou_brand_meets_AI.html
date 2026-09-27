@@ -125,7 +125,7 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
   box-shadow:0 4px 16px rgba(0,0,0,.4);transition:all .3s}
 #mapPage .back-btn:active{transform:scale(.9)}
 /* ===== 竖状招牌 + 中国结 ===== */
-.marker{position:absolute;z-index:15;cursor:pointer;transform-origin:top center;touch-action:none;filter:brightness(1.8) saturate(1.3)!important}
+.marker{position:absolute;z-index:15;cursor:pointer;transform-origin:top center;touch-action:none;filter:brightness(2.2) saturate(1.5)!important}
 .marker.mao{animation:signSway 4.5s ease-in-out infinite;animation-delay:-1.2s}
 .marker.zhu{animation:signSway 5.2s ease-in-out infinite;animation-delay:-3.1s}
 .marker.fang{animation:signSway 4.8s ease-in-out infinite;animation-delay:-0.5s}
@@ -202,7 +202,7 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
 /* ===== SHARED MERCHANT PAGE ===== */
 .merchant-page{padding:0;flex-direction:column;align-items:stretch;justify-content:flex-start}
 .merchant-page .hero{position:relative;width:100%;min-height:44vh;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;padding:70px 24px 36px;text-align:center;overflow:hidden}
+  align-items:center;justify-content:flex-start;padding:90px 24px 36px;text-align:center;overflow:hidden}
 .merchant-page .hero::before{content:'';position:absolute;inset:0;z-index:0}
 .merchant-page .hero>*{position:relative;z-index:1}
 .merchant-page .brand-tag{display:inline-block;padding:6px 20px;border-radius:30px;font-size:.9rem;
@@ -218,11 +218,22 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
   filter:drop-shadow(0 0 8px rgba(212,175,55,.15))}
 .merchant-page .quote-text{font-size:1.05rem;line-height:2.2;color:rgba(201,178,139,.78);text-align:center;
   padding:20px 0;letter-spacing:1.5px;font-style:italic}
-.merchant-page .back-top{position:fixed;top:16px;left:16px;z-index:100;background:rgba(20,18,15,.7);
+.merchant-page .back-top{position:fixed;top:20px;left:16px;z-index:100;background:rgba(20,18,15,.7);
   backdrop-filter:blur(8px);border-radius:50%;width:40px;height:40px;display:flex;align-items:center;
   justify-content:center;color:#c9b28b;font-size:18px;border:1px solid rgba(212,175,55,.2);
   box-shadow:0 4px 16px rgba(0,0,0,.4);transition:all .3s}
 .merchant-page .back-top:active{transform:scale(.9)}
+
+/* 品牌页底部导航 */
+.brand-nav{position:fixed;bottom:0;left:0;right:0;z-index:90;display:flex;justify-content:center;gap:12px;padding:12px 16px;
+  background:linear-gradient(0deg,rgba(10,10,20,.92) 0%,rgba(10,10,20,.7) 70%,transparent 100%);
+  backdrop-filter:blur(8px)}
+.brand-nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 14px;border-radius:16px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(212,175,55,.15);cursor:pointer;transition:all .3s;
+  font-family:'Ma Shan Zheng',serif;font-size:.75rem;color:#c9b28b;letter-spacing:1px;min-width:60px}
+.brand-nav-item:active{transform:scale(.92)}
+.brand-nav-item.active{border-color:rgba(212,175,55,.5);background:rgba(212,175,55,.1);color:#d4af37}
+.brand-nav-item .nav-icon{font-size:1.1rem}
 
 /* ===== MAO PAGE (Blue) ===== */
 #maoPage{background:#0a0e14}
@@ -392,6 +403,8 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
   radial-gradient(ellipse at 35% 40%,rgba(76,139,90,.12) 0%,transparent 55%),
   radial-gradient(ellipse at 65% 60%,rgba(134,239,172,.06) 0%,transparent 50%),
   linear-gradient(180deg,#050d08 0%,#0a2515 40%,#081a0e 70%,#050d08 100%)}
+#fangPage .hero{padding-top:100px;min-height:48vh}
+#fangPage .hero h2{font-size:1.6rem;line-height:1.8}
 #fangPage .brand-tag{color:#86efac;border-color:rgba(134,239,172,.35);background:rgba(134,239,172,.06);
   font-family:'Ma Shan Zheng',cursive;font-size:1.05rem;letter-spacing:4px;
   box-shadow:0 0 15px rgba(134,239,172,.1),inset 0 0 10px rgba(134,239,172,.04)}
@@ -583,6 +596,11 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
 .merchant-page .section-title{font-size:clamp(1.2rem,3.5vw,1.4rem)}
 .music-toggle{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px)}
 
+/* 全屏按钮 */
+.fullscreen-btn{position:fixed;top:12px;left:12px;z-index:9999;width:40px;height:40px;border-radius:50%;border:2px solid rgba(212,175,55,.6);background:rgba(0,0,0,.45);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);color:#d4af37;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s}
+.fullscreen-btn:hover{background:rgba(0,0,0,.65);border-color:#d4af37;transform:scale(1.1)}
+.fullscreen-btn:active{transform:scale(.95)}
+
 </style>
 </head>
 <body>
@@ -594,6 +612,9 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
   <span class="icon">♫</span>
   <div class="bar"><span style="height:4px"></span><span style="height:7px"></span><span style="height:5px"></span></div>
 </div>
+
+<!-- 全屏按钮 -->
+<div class="fullscreen-btn" id="fullscreenBtn" onclick="toggleFullscreen()">⛶</div>
 <audio id="bgm1" preload="auto"><source src="audio/水龙吟-关大洲.mp3" type="audio/mpeg"></audio>
 <audio id="bgm2" preload="auto"><source src="audio/破阵乐(特别版)-关大洲.mp3" type="audio/mpeg"></audio>
 
@@ -623,7 +644,7 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
     <div class="map-bg grayscale" id="mapBg">
       <img src="images/河坊街2.png" alt="雷峰塔" draggable="false">
     <!-- 毛源昌：蓝色胶囊招牌 -->
-    <div class="marker mao" style="left:62%;top:30%" onclick="goToMao(event)" data-draggable>
+    <div class="marker mao" style="left:48%;top:28%" onclick="goToMao(event)" data-draggable>
       <div class="lantern">
         <svg viewBox="0 0 30 44" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -681,7 +702,7 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
     </div>
 
     <!-- 朱炳仁：深木宽匾 -->
-    <div class="marker zhu" style="left:22%;top:38%" onclick="goToZhu(event)" data-draggable>
+    <div class="marker zhu" style="left:35%;top:32%" onclick="goToZhu(event)" data-draggable>
       <div class="lantern">
         <svg viewBox="0 0 30 44" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -733,7 +754,7 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
     </div>
 
     <!-- 方回春堂：朱红拱顶招牌 -->
-    <div class="marker fang" style="left:78%;top:42%" onclick="goToFang(event)" data-draggable>
+    <div class="marker fang" style="left:62%;top:36%" onclick="goToFang(event)" data-draggable>
       <div class="lantern">
         <svg viewBox="0 0 30 44" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -801,6 +822,11 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
   <div class="section"><div class="quote-text" style="font-size:1.05rem;font-weight:700;color:#c9b28b">把每一段普通人的日子，<br>都看得清清楚楚、亮亮堂堂。</div></div>
   <div class="section"><div class="section-title">【互动】视力挑战</div><div class="challenge-box"><p style="font-size:.8rem;color:rgba(201,178,139,.45);margin-bottom:16px;line-height:1.8;letter-spacing:1px">屏幕快速闪过一串数字或图案，<br>你需要在3秒内记住并选择正确答案。</p><div class="challenge-display" id="challengeDisplay"><span id="challengeContent">准备好了吗？</span><div class="timer-bar" id="timerBar" style="width:0%"></div></div><button class="challenge-start-btn" id="challengeStartBtn" onclick="startChallenge()">开始挑战</button><div class="challenge-options" id="challengeOptions" style="display:none"></div><div class="challenge-result" id="challengeResult"><p>恭喜！看的清清楚楚。</p></div></div></div>
   <div style="height:80px"></div>
+  <div class="brand-nav">
+    <div class="brand-nav-item active" onclick="switchPage('maoPage')"><span class="nav-icon">👓</span>毛源昌</div>
+    <div class="brand-nav-item" onclick="switchPage('zhuPage')"><span class="nav-icon">🏺</span>朱炳仁</div>
+    <div class="brand-nav-item" onclick="switchPage('fangPage')"><span class="nav-icon">🌿</span>方回春堂</div>
+  </div>
 </div>
 
 <!-- ====== 朱炳仁 ====== -->
@@ -813,6 +839,11 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
   <div class="section"><div class="quote-text" style="color:#e8c86a;font-size:1rem">老字号的根脉长在当代生活里，<br>做和你一起生活的"老朋友"</div></div>
   <div class="section"><div class="section-title">【点击进入，为你设计铜艺品】</div><div class="ai-design-box"><div class="upload-area" id="uploadArea" onclick="document.getElementById('copperFileInput').click()"><div class="upload-icon">📷</div><p>点击选择照片（相册/拍照）</p><p style="font-size:.7rem;margin-top:4px;opacity:.45">AI将为你生成铜艺风格设计</p></div><input type="file" id="copperFileInput" accept="image/*" style="display:none" onchange="handleCopperFile(this)"><button class="gen-btn" id="genBtn" onclick="generateCopper()" style="display:none">生成铜艺品</button><div class="ai-design-result" id="aiDesignResult"><div class="result-img"><canvas id="copperCanvas" style="width:100%;height:100%;border-radius:16px;display:none"></canvas><div class="placeholder-art" id="copperPlaceholder">🏺</div></div><p style="font-size:.85rem;color:#e8c86a;font-family:'Ma Shan Zheng',serif;letter-spacing:2px">你的专属铜艺品已生成</p><p style="font-size:.7rem;color:rgba(201,178,139,.35);margin-top:6px;letter-spacing:1px">AI根据照片融合千年铜艺风格创作</p><button onclick="resetCopperDesign()" style="margin-top:10px;padding:8px 20px;border-radius:20px;background:rgba(196,154,60,.15);border:1px solid rgba(196,154,60,.3);color:#e8c86a;font-size:.85rem;letter-spacing:2px;cursor:pointer">🔄 重新选择照片</button></div></div></div>
   <div style="height:80px"></div>
+  <div class="brand-nav">
+    <div class="brand-nav-item" onclick="switchPage('maoPage')"><span class="nav-icon">👓</span>毛源昌</div>
+    <div class="brand-nav-item active" onclick="switchPage('zhuPage')"><span class="nav-icon">🏺</span>朱炳仁</div>
+    <div class="brand-nav-item" onclick="switchPage('fangPage')"><span class="nav-icon">🌿</span>方回春堂</div>
+  </div>
 </div>
 
 <!-- ====== 方回春堂 ====== -->
@@ -835,6 +866,11 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
   <div class="report-card" id="reportCard"><h4>AI 体质报告</h4><div class="report-item"><span class="r-label">体质类型</span><span class="r-value" id="reportType">平和质</span></div><div class="report-item"><span class="r-label">舌象分析</span><span class="r-value" id="reportTongue">舌淡红，苔薄白</span></div><div class="report-item"><span class="r-label">气血状态</span><span class="r-value" id="reportQi">良好</span></div><div class="report-item"><span class="r-label">建议</span><span class="r-value" id="reportAdvice">保持规律作息</span></div><div class="report-advice"><p id="reportDetail">您的体质属于平和质，整体状态良好。建议保持规律作息，适当运动，饮食均衡。方回春堂AI小徒弟提醒您：养生不在于复杂，贵在坚持。</p></div><p style="font-size:.7rem;color:rgba(201,178,139,.25);margin-top:12px;text-align:center;letter-spacing:1px">----- 提供一种更便利的养生参考 -----</p></div></div>
   <div class="section"><div class="section-title">【互动】养生消消乐</div><p style="font-size:.8rem;color:rgba(201,178,139,.45);margin-bottom:8px;line-height:1.7;letter-spacing:1px">点选两个配对的养生知识，连对即消除！</p><div class="wellness-game"><div class="match-score" id="matchScore">得分：0</div><div class="match-pairs-left" id="matchPairsLeft">剩余配对：16</div><div class="match-grid" id="matchGrid"></div><div id="matchResult" style="margin-top:12px;display:none;text-align:center"><p style="color:#7ac08a;font-size:.9rem;font-family:'Ma Shan Zheng',serif;letter-spacing:2px">全部消除！养生达人就是你~</p></div></div></div>
   <div style="height:80px"></div>
+  <div class="brand-nav">
+    <div class="brand-nav-item" onclick="switchPage('maoPage')"><span class="nav-icon">👓</span>毛源昌</div>
+    <div class="brand-nav-item" onclick="switchPage('zhuPage')"><span class="nav-icon">🏺</span>朱炳仁</div>
+    <div class="brand-nav-item active" onclick="switchPage('fangPage')"><span class="nav-icon">🌿</span>方回春堂</div>
+  </div>
 </div>
 
 <script>
@@ -877,6 +913,17 @@ function applyMapTransform(){
   bg.style.transform=`translate(${mapDrag.tx}px,${mapDrag.ty}px) scale(${mapDrag.scale})`;
   bg.style.width='';bg.style.height='';
 }
+// 判断图片是否比容器大（允许拖动和缩放）
+function canDragOrZoom(){
+  if(!mapDrag)return false;
+  const bg=document.getElementById('mapBg'),container=document.getElementById('mapContainer');
+  const img=bg.querySelector('img');
+  if(!img||!container)return false;
+  const cw=container.clientWidth,ch=container.clientHeight;
+  const iw=(img.naturalWidth||cw*2)*mapDrag.scale,ih=(img.naturalHeight||ch*2)*mapDrag.scale;
+  // 图片在任一方向上比容器大时才允许拖动/缩放
+  return(iw>cw+2||ih>ch+2);
+}
 function clampMap(){
   if(!mapDrag)return;
   const bg=document.getElementById('mapBg'),container=document.getElementById('mapContainer');
@@ -886,13 +933,24 @@ function clampMap(){
   const iw=(img.naturalWidth||cw*2)*mapDrag.scale,ih=(img.naturalHeight||ch*2)*mapDrag.scale;
   // 限制缩放范围
   mapDrag.scale=Math.max(.5,Math.min(4,mapDrag.scale));
-  // 允许自由拖动，但限制不要拖太远
-  const margin=100;
-  mapDrag.tx=Math.max(cw-iw-margin,Math.min(margin,mapDrag.tx));
-  mapDrag.ty=Math.max(ch-ih-margin,Math.min(margin,mapDrag.ty));
+  // 限制拖动范围：图片必须覆盖容器，不允许露出黑色背景
+  // 水平方向：图片比容器宽时，tx在[0, cw-iw]之间；图片比容器窄时，居中
+  if(iw>=cw){
+    mapDrag.tx=Math.min(0,Math.max(cw-iw,mapDrag.tx));
+  }else{
+    mapDrag.tx=(cw-iw)/2;
+  }
+  // 垂直方向：同理
+  if(ih>=ch){
+    mapDrag.ty=Math.min(0,Math.max(ch-ih,mapDrag.ty));
+  }else{
+    mapDrag.ty=(ch-ih)/2;
+  }
 }
 function mapPointerDown(e){
   if(e.target.closest('.marker')||e.target.closest('.back-btn'))return;
+  // 图片与容器一样大或更小时，不允许拖动
+  if(!canDragOrZoom())return;
   mapDrag.dragging=true;
   mapDrag.startX=e.clientX;mapDrag.startY=e.clientY;
   mapDrag.startTx=mapDrag.tx;mapDrag.startTy=mapDrag.ty;
@@ -908,6 +966,8 @@ function mapPointerDown(e){
 }
 function mapTouchStart(e){
   if(e.target.closest('.marker')||e.target.closest('.back-btn'))return;
+  // 图片与容器一样大或更小时，不允许拖动
+  if(!canDragOrZoom())return;
   if(e.touches.length===1){
     mapDrag.dragging=true;
     mapDrag.startX=e.touches[0].clientX;mapDrag.startY=e.touches[0].clientY;
@@ -1138,6 +1198,29 @@ function toggleMusic(){
   if(musicOn){cur.pause();mt.classList.remove('playing');mt.classList.add('muted');musicOn=false}
   else{cur.volume=bgmVol;cur.play().then(()=>{mt.classList.add('playing');mt.classList.remove('muted');musicOn=true}).catch(()=>{mt.classList.add('playing');mt.classList.remove('muted');musicOn=true})}
 }
+
+// ===== 全屏功能 =====
+function toggleFullscreen(){
+  const btn=document.getElementById('fullscreenBtn');
+  if(!document.fullscreenElement&&!document.webkitFullscreenElement){
+    const el=document.documentElement;
+    if(el.requestFullscreen)el.requestFullscreen();
+    else if(el.webkitRequestFullscreen)el.webkitRequestFullscreen();
+    btn.textContent='✕';
+  }else{
+    if(document.exitFullscreen)document.exitFullscreen();
+    else if(document.webkitExitFullscreen)document.webkitExitFullscreen();
+    btn.textContent='⛶';
+  }
+}
+document.addEventListener('fullscreenchange',function(){
+  const btn=document.getElementById('fullscreenBtn');
+  if(btn)btn.textContent=document.fullscreenElement?'✕':'⛶';
+});
+document.addEventListener('webkitfullscreenchange',function(){
+  const btn=document.getElementById('fullscreenBtn');
+  if(btn)btn.textContent=document.webkitFullscreenElement?'✕':'⛶';
+});
 document.addEventListener('click',function(){if(!musicOn){const c=bgms[bgmIdx];c.volume=bgmVol;c.play().then(()=>{mt.classList.add('playing');mt.classList.remove('muted');musicOn=true}).catch(()=>{})}},{once:true});
 
 // 星星 (multicolor)
@@ -1197,7 +1280,8 @@ function checkAns(s,c,b){if(!chActive)return;chActive=false;const r=document.get
 // ===== 朱炳仁 =====
 const pSpeech=['昔守朱门镇百瑞，今蹲案头稳日常','熔铜铸就齐天骨，陪你闯过生活八十一关','铜葫盛过千年福，为你攒满日常甜'];
 const pVoice=[{pitch:0.4,rate:0.7,label:'雄浑'},{pitch:1.0,rate:0.9,label:'活力'},{pitch:1.3,rate:1.0,label:'喜庆'}];
-function speakProduct(i){document.getElementById('productSpeechText').textContent=pSpeech[i];document.getElementById('productSpeech').classList.add('show');if('speechSynthesis'in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(pSpeech[i]);u.lang='zh-CN';u.pitch=pVoice[i].pitch;u.rate=pVoice[i].rate;u.volume=1;speechSynthesis.speak(u);if(speechSynthesis.paused)speechSynthesis.resume()}else{console.log('speechSynthesis不可用')}}
+function speakProduct(i){document.getElementById('productSpeechText').textContent=pSpeech[i];document.getElementById('productSpeech').classList.add('show');if(!('speechSynthesis'in window)){console.log('speechSynthesis不可用');return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(pSpeech[i]);u.lang='zh-CN';u.pitch=pVoice[i].pitch;u.rate=pVoice[i].rate;u.volume=1;u.onstart=()=>{if(speechSynthesis.paused)speechSynthesis.resume()};speechSynthesis.speak(u);// 某些浏览器需要resume触发
+setTimeout(()=>{if(speechSynthesis.paused)speechSynthesis.resume()},100);setTimeout(()=>{if(speechSynthesis.paused)speechSynthesis.resume()},500)}
 function playZhuVideo(){event.currentTarget.innerHTML='<div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a1207,#3d2b0f)"><div style="font-size:40px;margin-bottom:16px">🎬</div><div style="font-family:Ma Shan Zheng,serif;font-size:.95rem;color:#c9b28b;text-align:center;line-height:1.8;letter-spacing:2px">【短视频播放中】<br>从传统铜的制作到AI漫剧的传播<br>百年铜艺，用科技重新定义中国审美</div></div>'}
 let copperImageData=null;
 function handleCopperFile(input){
