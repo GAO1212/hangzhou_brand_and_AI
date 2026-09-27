@@ -48,12 +48,12 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
 #ripple-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:50;pointer-events:none}
 
 /* ===== MUSIC TOGGLE ===== */
-.music-toggle{position:fixed;top:16px;right:16px;z-index:200;width:44px;height:44px;border-radius:50%;
+.music-toggle{position:fixed;top:60px;right:16px;z-index:200;width:36px;height:36px;border-radius:50%;
   background:rgba(20,18,15,.7);border:1px solid rgba(212,175,55,.25);backdrop-filter:blur(8px);
   display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s;
   box-shadow:0 4px 20px rgba(0,0,0,.4);flex-direction:column;gap:2px}
 .music-toggle:active{transform:scale(.9)}
-.music-toggle .icon{font-size:16px;color:#d4af37;transition:transform .3s;line-height:1}
+.music-toggle .icon{font-size:15px;color:#d4af37;transition:transform .3s;line-height:1}
 .music-toggle.playing .icon{animation:spin 3s linear infinite}
 .music-toggle .bar{display:flex;gap:2px;align-items:flex-end;height:8px}
 .music-toggle .bar span{width:2px;background:#d4af37;border-radius:1px;transition:height .2s;height:2px}
@@ -503,8 +503,8 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
   .merchant-page .section-title{font-size:1.4rem}
   .merchant-page .quote-text{font-size:1rem}
   .merchant-page .back-top{width:48px;height:48px;font-size:22px}
-  .music-toggle{width:52px;height:52px;top:20px;right:20px}
-  .music-toggle .icon{font-size:20px}
+  .music-toggle{width:36px;height:36px;top:68px;right:16px}
+  .music-toggle .icon{font-size:15px}
   .challenge-display{font-size:4.5rem;height:140px}
   .challenge-options button{padding:18px;font-size:1.4rem}
   .translate-demo .glasses-view{aspect-ratio:16/9}
@@ -594,10 +594,10 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
 .merchant-page .hero{min-height:clamp(35vh,44vh,50vh)}
 .merchant-page .hero h2{font-size:clamp(1.5rem,5vw,2.6rem)}
 .merchant-page .section-title{font-size:clamp(1.2rem,3.5vw,1.4rem)}
-.music-toggle{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px)}
+.music-toggle{width:36px;height:36px}
 
 /* 全屏按钮 */
-.fullscreen-btn{position:fixed;top:12px;left:12px;z-index:9999;width:40px;height:40px;border-radius:50%;border:2px solid rgba(212,175,55,.6);background:rgba(0,0,0,.45);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);color:#d4af37;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s}
+.fullscreen-btn{position:fixed;top:12px;right:16px;z-index:9999;width:36px;height:36px;border-radius:50%;border:2px solid rgba(212,175,55,.6);background:rgba(0,0,0,.45);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);color:#d4af37;font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s}
 .fullscreen-btn:hover{background:rgba(0,0,0,.65);border-color:#d4af37;transform:scale(1.1)}
 .fullscreen-btn:active{transform:scale(.95)}
 
@@ -644,7 +644,7 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
     <div class="map-bg grayscale" id="mapBg">
       <img src="images/河坊街2.png" alt="雷峰塔" draggable="false">
     <!-- 毛源昌：蓝色胶囊招牌 -->
-    <div class="marker mao" style="left:48%;top:28%" onclick="goToMao(event)" data-draggable>
+    <div class="marker mao" style="left:52%;top:28%" onclick="goToMao(event)" data-draggable>
       <div class="lantern">
         <svg viewBox="0 0 30 44" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -702,7 +702,7 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
     </div>
 
     <!-- 朱炳仁：深木宽匾 -->
-    <div class="marker zhu" style="left:35%;top:32%" onclick="goToZhu(event)" data-draggable>
+    <div class="marker zhu" style="left:44%;top:32%" onclick="goToZhu(event)" data-draggable>
       <div class="lantern">
         <svg viewBox="0 0 30 44" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -754,7 +754,7 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
     </div>
 
     <!-- 方回春堂：朱红拱顶招牌 -->
-    <div class="marker fang" style="left:62%;top:36%" onclick="goToFang(event)" data-draggable>
+    <div class="marker fang" style="left:60%;top:36%" onclick="goToFang(event)" data-draggable>
       <div class="lantern">
         <svg viewBox="0 0 30 44" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
