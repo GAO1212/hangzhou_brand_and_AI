@@ -21,22 +21,13 @@ html,body{width:100%;height:100%;overflow:hidden;
 @keyframes bgShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 button{font-family:inherit;border:none;cursor:pointer;outline:none}
 
-/* Global flashy text gradient utility */
-.text-gradient{background:linear-gradient(135deg,#d4af37,#ff6b6b,#c084fc,#60a5fa);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  background-size:300% 300%;animation:gradText 6s ease infinite}
 @keyframes gradText{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-
-/* Neon glow pulse */
-@keyframes neonPulse{0%,100%{filter:drop-shadow(0 0 8px var(--neon,.5)) brightness(1)}
-  50%{filter:drop-shadow(0 0 20px var(--neon,.8)) brightness(1.15)}}
 
 /* ===== PAGE SYSTEM ===== */
 .page{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
   opacity:0;pointer-events:none;transition:opacity .8s ease;z-index:1;
   overflow-y:auto;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;padding:20px;padding-bottom:60px}
 .page.active{opacity:1;pointer-events:auto;z-index:10}
-.page.fade-out{opacity:0;transition:opacity .6s ease}
 
 /* ===== RIPPLE CANVAS (全局) ===== */
 #ripple-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:50;pointer-events:none}
@@ -61,6 +52,9 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
 
 /* ===== COVER PAGE ===== */
 #cover{background:#0b0a0a;cursor:pointer;padding:0}
+/* 四周模糊填充：同图放大模糊铺满屏幕，消除 contain 的上下黑边（主图仍完整不裁切） */
+#cover .bg-blur{position:absolute;inset:0;z-index:0;background:url('images/第一页背景.jpg') center/cover no-repeat;
+  filter:blur(22px) brightness(.45) saturate(1.25);transform:scale(1.14);pointer-events:none}
 #cover .bg-img{position:absolute;inset:0;background:url('images/第一页背景.jpg') center/contain no-repeat;
   opacity:.75;transition:opacity 2s ease;filter:brightness(1.1) contrast(1.15) saturate(1.3)}
 #cover .bg-overlay{position:absolute;inset:0;
@@ -74,21 +68,18 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
 #cover .content{position:absolute;top:0;left:0;right:0;z-index:2;text-align:center;padding:0 28px;max-width:480px;margin:0 auto}
 #cover h1{font-family:'ZCOOL KuaiLe',cursive;font-size:clamp(1.5rem,6vw,2.2rem);letter-spacing:clamp(4px,2.5vw,12px);margin-bottom:12px;margin-top:11vh;
   background:linear-gradient(135deg,#60a5fa,#7ab8e6,#ffd700,#60a5fa);
-  background-size:400% 400%;animation:gradText 5s ease infinite,bounceIn 1.2s ease both;
+  background-size:400% 400%;animation:gradText 5s ease infinite,bounceIn 1.7s ease both;
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   filter:drop-shadow(0 0 20px rgba(96,165,250,.25)) drop-shadow(0 4px 16px rgba(0,0,0,.7));line-height:1.4}
 #cover .subtitle{font-family:'ZCOOL KuaiLe',cursive;font-size:clamp(1.5rem,6vw,2.2rem);letter-spacing:12px;margin-bottom:60px;
   background:linear-gradient(90deg,#7ab8e6,#60a5fa,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  filter:drop-shadow(0 2px 10px rgba(0,0,0,.6));animation:bounceIn 1.2s ease .5s both}
-#cover .quote{font-size:1.1rem;line-height:2.8;color:#f0e6d2;max-width:360px;margin:0 auto 60px;letter-spacing:1.5px;animation:bounceIn 1.2s ease .8s both}
-#cover .tap-hint{animation:heartbeat 1.4s ease-in-out infinite,bounceIn 1.2s ease 1.1s both;font-size:1.05rem;color:#d4af37;letter-spacing:6px;
+  filter:drop-shadow(0 2px 10px rgba(0,0,0,.6));animation:bounceIn 1.7s ease .5s both}
+#cover .quote{font-size:1.1rem;line-height:2.8;color:#f0e6d2;max-width:360px;margin:0 auto 60px;letter-spacing:1.5px;animation:bounceIn 1.7s ease .8s both}
+#cover .tap-hint{animation:heartbeat 1.5s ease-in-out 2.8s infinite,bounceIn 1.7s ease 1.1s backwards;font-size:1.05rem;color:#d4af37;letter-spacing:6px;
   padding:14px 40px;border:2px solid rgba(212,175,55,.35);border-radius:60px;
   background:rgba(212,175,55,.05);backdrop-filter:blur(4px);
   font-family:'Ma Shan Zheng',serif;box-shadow:0 0 30px rgba(212,175,55,.06);cursor:pointer}
-#cover .tap-hint.vibrate{animation:vibrateClick .3s ease!important}
-@keyframes vibrateClick{0%{transform:translateX(0)}20%{transform:translateX(-3px)}40%{transform:translateX(3px)}60%{transform:translateX(-2px)}80%{transform:translateX(2px)}100%{transform:translateX(0)}}
-@keyframes pulseGold{0%,100%{opacity:.45;transform:scale(1)}50%{opacity:1;transform:scale(1.03)}}
-@keyframes heartbeat{0%{transform:scale(1)}14%{transform:scale(1.05)}28%{transform:scale(1)}42%{transform:scale(1.03)}56%{transform:scale(1)}100%{transform:scale(1)}}
+@keyframes heartbeat{0%{transform:scale(1) translateY(0)}10%{transform:scale(1.06) translateY(-4px)}20%{transform:scale(1) translateY(0)}30%{transform:scale(1.04) translateY(-2px)}40%{transform:scale(1) translateY(0)}100%{transform:scale(1) translateY(0)}}
 @keyframes bounceIn{0%{opacity:0;transform:translateY(60px) scale(.6)}60%{opacity:1;transform:translateY(-12px) scale(1.05)}80%{transform:translateY(4px) scale(.98)}100%{opacity:1;transform:translateY(0) scale(1)}}
 /* 塔发光特效 */
 #cover .tower-glow{position:absolute;bottom:8%;left:50%;transform:translateX(-50%);
@@ -97,15 +88,6 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
   pointer-events:none;filter:blur(20px)}
 #cover .tower-glow.active{opacity:1;animation:towerPulse 3s ease-in-out infinite}
 @keyframes towerPulse{0%,100%{opacity:.6;transform:translateX(-50%) scale(1)}50%{opacity:1;transform:translateX(-50%) scale(1.08)}}
-/* Signboards */
-.signboards{position:absolute;bottom:80px;left:0;right:0;display:flex;justify-content:center;gap:12px;padding:0 20px;z-index:3}
-.sign{font-family:'Ma Shan Zheng',serif;font-size:.75rem;padding:7px 12px;background:rgba(30,30,30,.85);
-  color:#555;border-radius:4px;letter-spacing:3px;border:1px solid #333;transition:all 1.2s ease;
-  text-align:center;backdrop-filter:blur(2px);opacity:.45;text-shadow:0 0 6px rgba(0,0,0,.5)}
-.sign.lit{opacity:1}
-.sign.lit.myl{color:#7ab8e6;border-color:#4a8bc2;box-shadow:0 0 30px rgba(74,139,194,.35);background:rgba(10,30,50,.7)}
-.sign.lit.zbl{color:#e8c86a;border-color:#c49a3c;box-shadow:0 0 30px rgba(196,154,60,.4);background:rgba(40,30,10,.7)}
-.sign.lit.fhc{color:#7ac08a;border-color:#4c8b5a;box-shadow:0 0 30px rgba(76,139,90,.35);background:rgba(10,40,20,.7)}
 
 /* ===== PAGE TRANSITION EFFECTS ===== */
 /* VR 穿越转场：封面朝用户急速冲近并虚化提亮，配合烟雾云雾，地图从纵深远处浮现 */
@@ -156,8 +138,15 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
 @keyframes flashBurst{0%{width:0;height:0;opacity:0}18%{opacity:.5}100%{width:82vmax;height:82vmax;opacity:0}}
 
 /* ===== MAP PAGE ===== */
-#mapPage{background:#0d1215;padding:0}
-#mapPage .map-container{position:relative;width:100%;height:100%;overflow:hidden;touch-action:none}
+#mapPage{background:#0d1215;padding:0;overflow:hidden}
+/* 四周模糊填充：同图放大模糊铺满屏幕，消除 contain 地图上下留的深色边（主图仍完整不裁切） */
+#mapPage .map-blur{position:absolute;inset:0;z-index:0;background:url('images/第二页背景.jpg') center/cover no-repeat;
+  filter:blur(22px) grayscale(1) brightness(.42) saturate(1.2);transform:scale(1.14);pointer-events:none}
+/* 模糊填充的彩色层：初始 opacity:0（露出下方黑白层），点亮时淡入变彩色（与地图 .map-color 同步 1.9s，只动 opacity 不重算滤镜） */
+#mapPage .map-blur-color{position:absolute;inset:0;z-index:0;background:url('images/第二页背景.jpg') center/cover no-repeat;
+  filter:blur(22px) brightness(.45) saturate(1.3);transform:scale(1.14);pointer-events:none;opacity:0;transition:opacity 1.9s ease}
+#mapPage .map-blur-color.lit{opacity:1}
+#mapPage .map-container{position:relative;width:100%;height:100%;overflow:hidden;touch-action:none;z-index:1}
 #mapPage .map-bg{position:absolute;overflow:visible;transform-origin:0 0}
 #mapPage .map-bg img{display:block;image-rendering:auto;
   -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 4%,#000 96%,transparent 100%);
@@ -218,8 +207,14 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
 
 /* ===== SHARED MERCHANT PAGE ===== */
 .merchant-page{padding:0;flex-direction:column;align-items:stretch;justify-content:flex-start}
+/* 背景双层：清晰完整图(contain)+暗遮罩在上，四周同图放大模糊(cover)填充在下，消除手机黑边且不裁切主图 */
+.merchant-page::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:var(--mbg) center/cover no-repeat;filter:blur(20px) brightness(.5) saturate(1.15);transform:scale(1.14)}
+.merchant-page::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background-image:linear-gradient(var(--mtint),var(--mtint)),var(--mbg);
+  background-size:cover,contain;background-position:center,center;background-repeat:no-repeat,no-repeat}
 .merchant-page .hero{position:relative;width:100%;min-height:44vh;display:flex;flex-direction:column;
-  align-items:center;justify-content:flex-start;padding:90px 24px 36px;text-align:center;overflow:hidden}
+  align-items:center;justify-content:flex-start;padding:90px 24px 36px;text-align:center;overflow:hidden;flex-shrink:0}
 .merchant-page .hero::before{content:'';position:absolute;inset:0;z-index:0}
 .merchant-page .hero>*{position:relative;z-index:1}
 .merchant-page .brand-tag{display:inline-block;padding:6px 20px;border-radius:30px;font-size:.9rem;
@@ -253,14 +248,12 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
 .brand-nav-item .nav-icon{font-size:1.1rem}
 
 /* 滚动飞入：品牌页文字/区块进入视口时上浮淡入 */
-.merchant-page .reveal{opacity:0;transform:translateY(42px);
-  transition:opacity .8s ease,transform .85s cubic-bezier(.19,.78,.28,1)}
+.merchant-page .reveal{opacity:0;transform:translateY(48px);
+  transition:opacity 1.4s ease,transform 1.5s cubic-bezier(.19,.78,.28,1)}
 .merchant-page .reveal.in{opacity:1;transform:translateY(0)}
 
 /* ===== MAO PAGE (Blue) ===== */
-#maoPage{background-color:#0a0e14;
-  background-image:linear-gradient(rgba(6,10,17,.7),rgba(6,10,17,.7)),url('images/毛源昌眼镜页背景.png');
-  background-size:cover,contain;background-position:center,center;background-repeat:no-repeat,no-repeat}
+#maoPage{background-color:#0a0e14;--mbg:url('images/毛源昌眼镜页背景.png');--mtint:rgba(6,10,17,.7)}
 #maoPage .hero::before{background:
   radial-gradient(ellipse at 30% 40%,rgba(74,139,194,.16) 0%,transparent 60%),
   radial-gradient(ellipse at 70% 60%,rgba(96,165,250,.1) 0%,transparent 50%)}
@@ -379,9 +372,7 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
 .challenge-start-btn:active{transform:scale(.94);box-shadow:0 0 50px rgba(96,165,250,.35)}
 
 /* ===== ZHU PAGE (Copper/Gold) ===== */
-#zhuPage{background-color:#0d0a06;
-  background-image:linear-gradient(rgba(13,9,4,.7),rgba(13,9,4,.7)),url('images/朱炳仁铜页背景.png');
-  background-size:cover,contain;background-position:center,center;background-repeat:no-repeat,no-repeat}
+#zhuPage{background-color:#0d0a06;--mbg:url('images/朱炳仁铜页背景.png');--mtint:rgba(13,9,4,.7)}
 #zhuPage .hero::before{background:
   radial-gradient(ellipse at 40% 35%,rgba(196,154,60,.14) 0%,transparent 55%),
   radial-gradient(ellipse at 60% 65%,rgba(232,200,106,.08) 0%,transparent 50%)}
@@ -434,9 +425,7 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
   filter:drop-shadow(0 4px 20px rgba(196,154,60,.25))}
 
 /* ===== FANG PAGE (Green) ===== */
-#fangPage{background-color:#080c0a;
-  background-image:linear-gradient(rgba(6,12,9,.7),rgba(6,12,9,.7)),url('images/方回春堂页背景.png');
-  background-size:cover,contain;background-position:center,center;background-repeat:no-repeat,no-repeat}
+#fangPage{background-color:#080c0a;--mbg:url('images/方回春堂页背景.png');--mtint:rgba(6,12,9,.7)}
 #fangPage .hero::before{background:
   radial-gradient(ellipse at 35% 40%,rgba(76,139,90,.14) 0%,transparent 55%),
   radial-gradient(ellipse at 65% 60%,rgba(134,239,172,.06) 0%,transparent 50%)}
@@ -527,12 +516,8 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
   .translate-demo{padding:16px}
   .translate-demo .lens-left .cn-text{font-size:.85rem}
   .translate-demo .lens-right .en-text{font-size:.75rem}
-  .tcm-chat{padding:14px}
-  .chat-input-row input{font-size:.85rem;padding:8px 12px}
   .match-card{font-size:.55rem;padding:4px 1px}.match-grid{gap:4px}
   .ai-design-box{padding:16px}
-  .signboards{bottom:60px;gap:8px}
-  .sign{font-size:.65rem;padding:5px 8px}
 }
 
 /* 中等手机 (376-414px) */
@@ -552,7 +537,6 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
   .merchant-page .section{max-width:600px}
   .camera-area{max-width:320px}
   .ai-design-box{max-width:500px;margin:0 auto}
-  .tcm-chat{max-width:500px;margin:0 auto}
   .wellness-game{max-width:500px;margin:0 auto}
 }
 
@@ -600,6 +584,7 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
 
 <!-- ====== 封面 ====== -->
 <div id="cover" class="page active">
+  <div class="bg-blur"></div>
   <div class="bg-img"></div>
   <div class="bg-overlay"></div>
   <div class="tower-glow" id="towerGlow"></div>
@@ -619,6 +604,8 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
 
 <!-- ====== 地图页 ====== -->
 <div id="mapPage" class="page" style="padding:0">
+  <div class="map-blur"></div>
+  <div class="map-blur-color"></div>
   <button class="back-btn" onclick="goToCover()">←</button>
   <div class="map-title">百年杭字号 · 探索地图</div>
   <!-- 点击点亮提示 -->
@@ -655,7 +642,7 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
     <img id="glassesImg" src="images/AI眼镜_抠图.png" alt="AI眼镜">
   </div>
   <div class="section"><div class="quote-text">父辈带着毛源昌眼镜看清过青石板路的回家方向，<br>我们带着毛源昌AI眼镜，看见更便捷的生活。</div></div>
-  <div class="section"><div class="section-title">【互动】AI翻译体验</div><div class="translate-demo"><div class="glasses-view"><span class="gs-temple left"></span><div class="lens-left"><div class="cn-text" id="cnText">你好，欢迎来到杭州</div></div><span class="gs-bridge"></span><div class="lens-right"><div class="en-text" id="enText">Hello, welcome to Hangzhou</div></div><span class="gs-temple right"></span></div><button class="trans-btn" onclick="doTranslate()">翻 译</button><div class="voice-indicator" id="voiceIndicator" style="visibility:hidden"><span class="voice-dot"></span><span class="voice-dot"></span><span class="voice-dot"></span><span>实时语音播报中...</span></div></div><p style="font-size:.7rem;color:rgba(201,178,139,.35);margin-top:10px;text-align:center;line-height:1.8;letter-spacing:1px">左边镜片显示中文，点击"翻译"后右边镜片读出英文——<br>就像毛源昌AI眼镜的实时翻译功能一样。加入语音技术，实时播报。</p></div>
+  <div class="section"><div class="section-title">【互动】AI翻译体验</div><div class="translate-demo"><div class="glasses-view"><span class="gs-temple left"></span><div class="lens-left"><div class="cn-text" id="cnText">你好，欢迎来到杭州</div></div><span class="gs-bridge"></span><div class="lens-right"><div class="en-text" id="enText">Hello, welcome to Hangzhou</div></div><span class="gs-temple right"></span></div><button class="trans-btn" onclick="doTranslate()">翻 译</button><div class="voice-indicator" id="voiceIndicator" style="visibility:hidden"><span class="voice-dot"></span><span class="voice-dot"></span><span class="voice-dot"></span><span>实时语音播报中...</span></div></div><p style="font-size:.7rem;color:rgba(201,178,139,.35);margin-top:10px;text-align:center;line-height:1.8;letter-spacing:1px">左边镜片显示中文，点击"翻译"后右边镜片读出英文</p></div>
   <div class="section"><div class="quote-text" style="font-size:1.05rem;font-weight:700;color:#c9b28b">把每一段普通人的日子，<br>都看得清清楚楚、亮亮堂堂。</div></div>
   <div class="section"><div class="section-title">【互动】视力挑战</div><div class="challenge-box"><p style="font-size:.8rem;color:rgba(201,178,139,.45);margin-bottom:16px;line-height:1.8;letter-spacing:1px">屏幕快速闪过一串数字或图案，<br>你需要在3秒内记住并选择正确答案。</p><div class="challenge-display" id="challengeDisplay"><span id="challengeContent">准备好了吗？</span><div class="timer-bar" id="timerBar" style="width:0%"></div></div><button class="challenge-start-btn" id="challengeStartBtn" onclick="startChallenge()">开始挑战</button><div class="challenge-options" id="challengeOptions" style="display:none"></div><div class="challenge-result" id="challengeResult"><p>恭喜！看的清清楚楚。</p></div></div></div>
   <div style="height:80px"></div>
@@ -672,7 +659,7 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
   <div class="hero" style="width:100%;max-width:none;padding:0 20px;box-sizing:border-box"><div class="brand-tag">朱炳仁·铜 · 始于1875</div><h2>【朱炳仁·铜】<br>让千年铜艺，永远有新鲜的故事</h2><div class="desc" style="width:100%;font-size:clamp(.8rem,3.5vw,.95rem);line-height:1.8;margin-top:12px;color:rgba(201,178,139,.7);letter-spacing:.5px;word-wrap:break-word;overflow-wrap:break-word;white-space:normal;text-align:left">151年的老字号的智慧，不是依靠辈分等年轻人来朝圣，<br>是主动走到年轻人的语境里当朋友。</div></div>
   <div class="section"><div class="desc" style="text-align:center;margin:0 auto;font-size:.9rem;line-height:2.2;color:rgba(201,178,139,.65);letter-spacing:1px">从传统铜的制作到AI漫剧的传播。<br>百年铜艺，用科技重新定义中国审美。</div></div>
   <div class="section"><div class="section-title">'铜'我一起看剧</div><div class="video-box" onclick="playZhuVideo()" style="border-color:rgba(196,154,60,.1)"><div class="flash-glasses" style="font-size:30px">🎬</div><div class="play-icon" style="border-color:rgba(196,154,60,.25);background:rgba(196,154,60,.12)"></div></div><p style="font-size:.7rem;color:rgba(201,178,139,.3);margin-top:8px;text-align:center;letter-spacing:1px">【短视频】</p></div>
-  <div class="section"><div class="section-title">三个铜艺宝贝 · 点击听它们说话</div><div class="products-grid"><div class="product-card" onclick="speakProduct(0)"><span class="emoji"><img src="images/铜狮.png" alt="铜狮"></span><div class="p-name">铜狮</div><div class="p-desc">镇宅瑞兽</div></div><div class="product-card" onclick="speakProduct(1)"><span class="emoji"><img src="images/孙悟空.jpg" alt="齐天大圣"></span><div class="p-name">齐天大圣</div><div class="p-desc">伴你闯关</div></div><div class="product-card" onclick="speakProduct(2)"><span class="emoji"><img src="images/铜葫芦.jpg" alt="铜葫芦"></span><div class="p-name">铜葫芦</div><div class="p-desc">盛满福气</div></div></div><div class="product-speech" id="productSpeech"><p id="productSpeechText"></p></div><p style="font-size:.7rem;color:rgba(201,178,139,.25);margin-top:8px;text-align:center;letter-spacing:1px">三个产品，闪，一点，它就说话了。会动。</p></div>
+  <div class="section"><div class="section-title">三个铜艺宝贝 · 点击听它们说话</div><div class="products-grid"><div class="product-card" onclick="speakProduct(0)"><span class="emoji"><img src="images/铜狮.png" alt="铜狮"></span><div class="p-name">铜狮</div><div class="p-desc">镇宅瑞兽</div></div><div class="product-card" onclick="speakProduct(1)"><span class="emoji"><img src="images/孙悟空.jpg" alt="齐天大圣"></span><div class="p-name">齐天大圣</div><div class="p-desc">伴你闯关</div></div><div class="product-card" onclick="speakProduct(2)"><span class="emoji"><img src="images/铜葫芦.jpg" alt="铜葫芦"></span><div class="p-name">铜葫芦</div><div class="p-desc">盛满福气</div></div></div><div class="product-speech" id="productSpeech"><p id="productSpeechText"></p></div></div>
   <div class="section"><div class="quote-text" style="color:#e8c86a;font-size:1rem">老字号的根脉长在当代生活里，<br>做和你一起生活的"老朋友"</div></div>
   <div class="section"><div class="section-title">【点击进入，为你设计铜艺品】</div><div class="ai-design-box"><div class="upload-area" id="uploadArea" onclick="document.getElementById('copperFileInput').click()"><div class="upload-icon">📷</div><p>点击选择照片（相册/拍照）</p><p style="font-size:.7rem;margin-top:4px;opacity:.45">AI将为你生成铜艺风格设计</p></div><input type="file" id="copperFileInput" accept="image/*" style="display:none" onchange="handleCopperFile(this)"><button class="gen-btn" id="genBtn" onclick="generateCopper()" style="display:none">生成铜艺品</button><div class="ai-design-result" id="aiDesignResult"><div class="result-img"><canvas id="copperCanvas" style="width:100%;height:100%;border-radius:16px;display:none"></canvas><div class="placeholder-art" id="copperPlaceholder">🏺</div></div><p style="font-size:.85rem;color:#e8c86a;font-family:'Ma Shan Zheng',serif;letter-spacing:2px">你的专属铜艺品已生成</p><p style="font-size:.7rem;color:rgba(201,178,139,.35);margin-top:6px;letter-spacing:1px">AI根据照片融合千年铜艺风格创作</p><button onclick="resetCopperDesign()" style="margin-top:10px;padding:8px 20px;border-radius:20px;background:rgba(196,154,60,.15);border:1px solid rgba(196,154,60,.3);color:#e8c86a;font-size:.85rem;letter-spacing:2px;cursor:pointer">🔄 重新选择照片</button></div></div></div>
   <div style="height:80px"></div>
@@ -688,7 +675,7 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
   <button class="back-top" onclick="goToMap()">←</button>
   <div class="hero"><div class="brand-tag">方回春堂 · 始于1649</div><h2>【方回春堂】<br>河坊街的老中医，<br>收了个AI小徒弟</h2></div>
   <div class="section"><div class="desc" style="font-size:.9rem;line-height:2.2;color:rgba(201,178,139,.65);text-align:center;margin:0 auto;letter-spacing:1px">377年的老字号，在2026年，<br>把中医的哲学和当代人的情绪打通了，<br>在忙忙碌碌的日常里，<br>方回春堂的AI助手，<br>做日常健康的"提醒器"！<br>做中医科普的"翻译器"！</div></div>
-  <div class="section"><div class="section-title">AI舌诊 · 体质检测</div><div class="tongue-box"><p style="font-size:.8rem;color:rgba(201,178,139,.45);margin-bottom:16px;line-height:1.8;letter-spacing:1px">用户授权摄像头后，对准自己的舌头拍摄一张照片。<br>页面模拟方回春堂的AI舌诊技术，<br>通过智能图像识别分析舌象特征。</p><div id="tongueContent"><div class="camera-area" id="cameraArea">
+  <div class="section"><div class="section-title">AI舌诊 · 体质检测</div><div class="tongue-box"><p style="font-size:.8rem;color:rgba(201,178,139,.45);margin-bottom:16px;line-height:1.8;letter-spacing:1px">智能图像识别分析舌象特征。</p><div id="tongueContent"><div class="camera-area" id="cameraArea">
       <div class="cam-icon">📸</div>
       <p>拍照或从相册选择舌象照片</p>
       <div style="display:flex;gap:10px;margin-top:12px;justify-content:center;position:relative;z-index:5;flex-wrap:wrap">
@@ -714,7 +701,7 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
 
 // ===== 导航 =====
 let currentPage='cover',mapColorized=false;
-function switchPage(id){document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active')});document.getElementById(id).classList.add('active');currentPage=id;if(['maoPage','zhuPage','fangPage'].includes(id)){const pg=document.getElementById(id);pg.scrollTop=0;initReveal(pg)}}
+function switchPage(id){document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active')});document.getElementById(id).classList.add('active');currentPage=id;if(['maoPage','zhuPage','fangPage'].includes(id)){const pg=document.getElementById(id);pg.scrollTop=0;initReveal(pg)}if(id==='cover')restartCoverAnim()}
 function goToCover(){switchPage('cover')}
 function goToMap(){switchPage('mapPage');initMapDrag();initMarkerDrag();if(!mapColorized)showMapTapHint()}
 
@@ -750,20 +737,35 @@ function goToMapWithTransition(e){
 }
 // ===== 滚动飞入：品牌页文字/区块进入视口时上浮淡入 =====
 function initReveal(page){
-  if(!page||page._revealInit)return;
-  page._revealInit=true;
+  if(!page)return;
   const heroKids=page.querySelectorAll('.hero > *');
-  heroKids.forEach((el,i)=>{el.classList.add('reveal');el.style.transitionDelay=(i*.12)+'s'});
   const sections=page.querySelectorAll('.section');
-  sections.forEach(el=>el.classList.add('reveal'));
   const all=[...heroKids,...sections];
+  // 1) 瞬间重置到“未飞入”隐藏态：先禁用过渡，避免重进时从 opacity:1 缓慢淡出被观察器打断而不复现飞入
+  all.forEach(el=>{el.classList.add('reveal');el.classList.remove('in');el.style.transition='none'});
+  void page.offsetWidth; // 强制回流提交隐藏态（此刻无过渡，瞬间归位 opacity:0）
+  // 2) 恢复过渡并设置错峰延迟（按顺序飞入）
+  heroKids.forEach((el,i)=>{el.style.transition='';el.style.transitionDelay=(i*.2)+'s'});
+  sections.forEach(el=>{el.style.transition='';el.style.transitionDelay='0s'});
   if(!('IntersectionObserver'in window)){all.forEach(el=>el.classList.add('in'));return}
+  // 断开上一次的观察器，重新观察以再次触发飞入
+  if(page._revealIO)page._revealIO.disconnect();
   const io=new IntersectionObserver(entries=>{
     entries.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)}})
   },{root:page,threshold:.08,rootMargin:'0px 0px -8% 0px'});
+  page._revealIO=io;
+  void page.offsetWidth; // 强制回流，确保从隐藏态开始过渡
   all.forEach(el=>io.observe(el));
   // 安全兜底：即使观察器延迟/未触发，也确保首屏 hero 正常显示
-  setTimeout(()=>heroKids.forEach(el=>el.classList.add('in')),400);
+  setTimeout(()=>heroKids.forEach(el=>el.classList.add('in')),700);
+}
+// 重新进入封面时重播标题/按钮的飞入动画
+function restartCoverAnim(){
+  const cover=document.getElementById('cover');
+  if(!cover)return;
+  cover.querySelectorAll('h1,.subtitle,.quote,.tap-hint').forEach(el=>{
+    el.style.animation='none';void el.offsetWidth;el.style.animation='';
+  });
 }
 
 // ===== 塔发光特效：弹跳动画全部结束后触发 =====
@@ -1110,6 +1112,8 @@ function colorizeMap(){
   const hint=document.getElementById('mapTapHint');if(hint)hint.style.display='none';
   const colorImg=mapBg.querySelector('.map-color');
   mapBg.classList.add('colorized');
+  // 模糊填充彩色层同步淡入（黑白→彩色）
+  const blurColor=document.querySelector('#mapPage .map-blur-color');if(blurColor)blurColor.classList.add('lit');
   // 屏幕中心荡开1圈"水滴滴入水面"涟漪（轻量Canvas，替代卡顿的SVG位移滤镜）
   addWaterDropRipple(innerWidth/2,innerHeight/2);
   // 彩色层径向遮罩由中心向外扩散揭示
@@ -1151,27 +1155,39 @@ function toggleMusic(){
   else{cur.volume=bgmVol;cur.play().then(()=>{mt.classList.add('playing');mt.classList.remove('muted');musicOn=true}).catch(()=>{mt.classList.add('playing');mt.classList.remove('muted');musicOn=true})}
 }
 
-// ===== 全屏功能 =====
+// ===== 全屏功能（进入全屏锁定竖屏，避免手机自动横屏）=====
+function lockPortrait(){
+  try{const so=screen.orientation;if(so&&so.lock){const p=so.lock('portrait');if(p&&p.catch)p.catch(()=>{})}}catch(_){}
+}
+function unlockOrientation(){
+  try{if(screen.orientation&&screen.orientation.unlock)screen.orientation.unlock()}catch(_){}
+}
 function toggleFullscreen(){
   const btn=document.getElementById('fullscreenBtn');
   if(!document.fullscreenElement&&!document.webkitFullscreenElement){
     const el=document.documentElement;
     if(el.requestFullscreen)el.requestFullscreen();
     else if(el.webkitRequestFullscreen)el.webkitRequestFullscreen();
+    lockPortrait();
     btn.textContent='✕';
   }else{
     if(document.exitFullscreen)document.exitFullscreen();
     else if(document.webkitExitFullscreen)document.webkitExitFullscreen();
+    unlockOrientation();
     btn.textContent='⛶';
   }
 }
 document.addEventListener('fullscreenchange',function(){
   const btn=document.getElementById('fullscreenBtn');
-  if(btn)btn.textContent=document.fullscreenElement?'✕':'⛶';
+  const isFs=!!document.fullscreenElement;
+  if(btn)btn.textContent=isFs?'✕':'⛶';
+  if(isFs)lockPortrait();else unlockOrientation();
 });
 document.addEventListener('webkitfullscreenchange',function(){
   const btn=document.getElementById('fullscreenBtn');
-  if(btn)btn.textContent=document.webkitFullscreenElement?'✕':'⛶';
+  const isFs=!!document.webkitFullscreenElement;
+  if(btn)btn.textContent=isFs?'✕':'';
+  if(isFs)lockPortrait();else unlockOrientation();
 });
 document.addEventListener('click',function(){if(!musicOn){const c=bgms[bgmIdx];c.volume=bgmVol;c.play().then(()=>{mt.classList.add('playing');mt.classList.remove('muted');musicOn=true}).catch(()=>{})}},{once:true});
 
