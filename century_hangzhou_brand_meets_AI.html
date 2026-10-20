@@ -53,9 +53,9 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
 /* ===== COVER PAGE ===== */
 #cover{background:#0b0a0a;cursor:pointer;padding:0;overflow:hidden}
 /* 四周模糊填充：同图放大模糊铺满屏幕，消除 contain 的上下黑边（主图仍完整不裁切） */
-#cover .bg-blur{position:absolute;inset:0;z-index:0;background:url('images/第一页背景.jpg') center/cover no-repeat;
+#cover .bg-blur{position:absolute;inset:0;z-index:0;background:url('images/第一页背景_无塔.jpg') center/cover no-repeat;
   filter:blur(22px) brightness(.58) saturate(1.25);transform:scale(1.14);pointer-events:none}
-#cover .bg-img{position:absolute;inset:0;background:url('images/第一页背景.jpg') center/contain no-repeat;
+#cover .bg-img{position:absolute;inset:0;background:url('images/第一页背景_无塔.jpg') center/contain no-repeat;
   opacity:.75;transition:opacity 2s ease;filter:brightness(1.1) contrast(1.15) saturate(1.3);
   -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 15%,#000 85%,transparent 100%);
   mask-image:linear-gradient(to bottom,transparent 0,#000 15%,#000 85%,transparent 100%)}
@@ -96,6 +96,52 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
   pointer-events:none;filter:blur(20px)}
 #cover .tower-glow.active{opacity:1;animation:towerPulse 3s ease-in-out infinite}
 @keyframes towerPulse{0%,100%{opacity:.6;transform:translateX(-50%) scale(1)}50%{opacity:1;transform:translateX(-50%) scale(1.08)}}
+/* 独立古塔：WebGL 真3D为主，透明塔图仅作兼容回退。坐标按 contain 背景实际区域定位 */
+#cover .tower-stage{position:absolute;left:50%;top:92%;width:clamp(59px,16.1vw,99px);aspect-ratio:1.02;
+  z-index:4;transform:translate(-50%,-50%);perspective:900px;transform-style:preserve-3d;
+  pointer-events:none;will-change:transform,opacity,filter}
+#cover .tower-float{position:absolute;inset:0;transform-style:preserve-3d;animation:towerFloat3d 3.2s ease-in-out infinite}
+#cover .tower-spinner{position:absolute;inset:0;transform-style:preserve-3d;animation:towerSpin3d 8s linear infinite;will-change:transform}
+#cover .tower-face{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;backface-visibility:hidden;
+  filter:drop-shadow(0 7px 12px rgba(3,12,28,.65)) drop-shadow(0 0 7px rgba(96,165,250,.38))}
+#cover .tower-face.front{transform:translateZ(7px)}
+#cover .tower-face.back{transform:rotateY(180deg) translateZ(7px);filter:brightness(.52) saturate(.8) drop-shadow(0 5px 10px rgba(0,0,0,.65))}
+#cover .tower-spinner::before,#cover .tower-spinner::after{content:'';position:absolute;left:48%;top:9%;bottom:4%;width:4%;
+  background:linear-gradient(to bottom,rgba(255,226,155,.7),rgba(48,26,12,.65));transform:rotateY(90deg) translateZ(5px);
+  border-radius:50%;opacity:.56}
+#cover .tower-spinner::after{transform:rotateY(90deg) translateZ(-5px);opacity:.32}
+#cover .tower-halo{position:absolute;left:50%;top:57%;width:125%;height:72%;transform:translate(-50%,-50%);z-index:-1;
+  border-radius:50%;background:radial-gradient(ellipse,rgba(255,224,150,.36),rgba(96,165,250,.18) 36%,transparent 70%);
+  filter:blur(10px);animation:towerHaloBreath 2.4s ease-in-out infinite}
+@keyframes towerFloat3d{0%,100%{transform:translateY(0) rotateX(5deg)}50%{transform:translateY(-8px) rotateX(-3deg)}}
+@keyframes towerSpin3d{0%{transform:rotateY(-18deg)}100%{transform:rotateY(342deg)}}
+@keyframes towerHaloBreath{0%,100%{opacity:.48;transform:translate(-50%,-50%) scale(.9)}50%{opacity:.95;transform:translate(-50%,-50%) scale(1.1)}}
+/* 卷轴入口与塔到卷轴的能量光束 */
+#cover .scroll-portal{position:absolute;left:52.5%;top:51%;width:clamp(54px,16vw,98px);aspect-ratio:1.8;z-index:4;
+  transform:translate(-50%,-50%) scale(.7);border-radius:50%;opacity:0;pointer-events:none;
+  background:radial-gradient(ellipse,#fff 0%,rgba(255,229,160,.88) 10%,rgba(96,165,250,.42) 34%,rgba(192,132,252,.18) 56%,transparent 74%);
+  box-shadow:0 0 12px rgba(255,224,150,.65),0 0 28px rgba(96,165,250,.42);filter:blur(.2px)}
+#cover .scroll-portal::before,#cover .scroll-portal::after{content:'';position:absolute;inset:-14%;border-radius:50%;
+  border:1px solid rgba(255,230,176,.7);transform:rotate(-16deg)}
+#cover .scroll-portal::after{inset:-30%;border-color:rgba(96,165,250,.4);transform:rotate(18deg)}
+#cover .tower-energy-ray{position:absolute;left:50%;top:90%;width:100px;height:4px;z-index:4;opacity:0;border-radius:99px;
+  transform-origin:0 50%;transform:rotate(var(--ray-angle,-90deg)) scaleX(0);
+  background:linear-gradient(90deg,rgba(255,221,128,.15),#fff5c7 38%,#8fd3ff 76%,rgba(255,255,255,0));
+  box-shadow:0 0 8px #fff1b0,0 0 18px rgba(96,165,250,.8),0 0 34px rgba(192,132,252,.45);pointer-events:none}
+#cover.tower-sequence .scroll-portal{animation:portalOpen 1.35s ease-out forwards}
+#cover.tower-sequence .tower-energy-ray{animation:towerRayShoot .72s ease-out .15s forwards}
+#cover.tower-sequence .tower-glow{opacity:1!important;filter:blur(12px) brightness(2.1);animation:towerChargeGround .48s ease-in-out alternate infinite}
+@keyframes towerChargeGround{from{transform:translateX(-50%) scale(1);filter:blur(15px) brightness(1.35)}to{transform:translateX(-50%) scale(1.2);filter:blur(9px) brightness(2.4)}}
+#cover.tower-sequence .tower-halo{animation:towerCharge .48s ease-in-out alternate infinite}
+#cover.tower-sequence .tower-spinner{animation-duration:.9s}
+#cover .tower-stage.launching{animation:towerEnterScroll .92s cubic-bezier(.55,.02,.76,.28) forwards}
+@keyframes portalOpen{0%{opacity:0;transform:translate(-50%,-50%) scale(.35)}28%{opacity:.95}68%{opacity:1;transform:translate(-50%,-50%) scale(1.18)}100%{opacity:0;transform:translate(-50%,-50%) scale(.18)}}
+@keyframes towerRayShoot{0%{opacity:0;transform:rotate(var(--ray-angle)) scaleX(0)}18%{opacity:1}65%{opacity:1;transform:rotate(var(--ray-angle)) scaleX(1)}100%{opacity:0;transform:rotate(var(--ray-angle)) scaleX(1)}}
+@keyframes towerCharge{from{opacity:.75;filter:blur(9px) brightness(1.1);transform:translate(-50%,-50%) scale(1)}to{opacity:1;filter:blur(5px) brightness(1.9);transform:translate(-50%,-50%) scale(1.22)}}
+@keyframes towerEnterScroll{0%{transform:translate(-50%,-50%) scale(1) rotateZ(0);opacity:1;filter:brightness(1)}
+  35%{filter:brightness(2.1) drop-shadow(0 0 18px #fff2b8)}
+  100%{transform:translate(calc(-50% + var(--tower-dx,0px)),calc(-50% + var(--tower-dy,-280px))) scale(.035) rotateZ(-22deg);opacity:0;filter:brightness(3) blur(2px)}}
+@media (prefers-reduced-motion:reduce){#cover .tower-float,#cover .tower-spinner{animation:none}#cover .tower-stage.launching{animation-duration:.35s}}
 
 /* ===== PAGE TRANSITION EFFECTS ===== */
 /* VR 穿越转场：封面朝用户急速冲近并虚化提亮，配合烟雾云雾，地图从纵深远处浮现 */
@@ -292,15 +338,15 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
 #maoPage .glasses-overlay-3d img.spin-in{animation:glassesWearIn 2.6s cubic-bezier(.22,.88,.28,1) forwards}
 @keyframes glassesWearIn{
   0%{opacity:0;transform:scale(.04) translateZ(0)}
-  15%{opacity:1}
-  100%{opacity:1;transform:scale(1) translateZ(0)}
+  15%{opacity:.62}
+  100%{opacity:.62;transform:scale(1) translateZ(0)}
 }
 #maoPage .glasses-overlay-3d img.settled{
   animation:glassesFadeOut 5s cubic-bezier(.4,0,.2,1) .4s forwards}
 @keyframes glassesFadeOut{
-  0%{opacity:1;transform:scale(1) translateZ(0)}
-  40%{opacity:.45;transform:scale(1.14) translateZ(0)}
-  100%{opacity:.05;transform:scale(1.32) translateZ(0)}
+  0%{opacity:.62;transform:scale(1) translateZ(0)}
+  40%{opacity:.3;transform:scale(1.14) translateZ(0)}
+  100%{opacity:0;transform:scale(1.32) translateZ(0)}
 }
 
 /* Translation demo：简化版眼镜（纯CSS绘制，左右镜片显示中/英文，不再用真实眼镜图片） */
@@ -595,6 +641,10 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
 <audio id="bgm1" preload="auto"><source src="audio/水龙吟-关大洲.mp3" type="audio/mpeg"></audio>
 <audio id="bgm2" preload="auto"><source src="audio/破阵乐-关大洲.mp3" type="audio/mpeg"></audio>
 <audio id="transitionSfx" preload="auto"><source src="yinxiao/粒子光划过转场音效.mp3" type="audio/mpeg"></audio>
+<!-- 三个铜艺宝贝配音：铜狮→狮子、齐天大圣→猴子、铜葫芦→葫芦 -->
+<audio id="voiceLion" preload="auto"><source src="yinxiao/狮子配音.mp3" type="audio/mpeg"></audio>
+<audio id="voiceMonkey" preload="auto"><source src="yinxiao/猴子配音.mp3" type="audio/mpeg"></audio>
+<audio id="voiceGourd" preload="auto"><source src="yinxiao/葫芦配音.mp3" type="audio/mpeg"></audio>
 
 <!-- ====== 封面 ====== -->
 <div id="cover" class="page active">
@@ -602,6 +652,15 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
   <div class="bg-img"></div>
   <div class="bg-overlay"></div>
   <div class="tower-glow" id="towerGlow"></div>
+  <div class="tower-stage" id="coverTower3d" aria-hidden="true">
+    <div class="tower-halo"></div>
+    <div class="tower-float"><div class="tower-spinner">
+      <img class="tower-face front" src="images/封面古塔透明.png" alt="">
+      <img class="tower-face back" src="images/封面古塔透明.png" alt="">
+    </div></div>
+  </div>
+  <div class="scroll-portal" id="scrollPortal" aria-hidden="true"></div>
+  <div class="tower-energy-ray" id="towerEnergyRay" aria-hidden="true"></div>
   <div class="stars-container" id="starsContainer"></div>
   <div class="content">
     <h1>百年杭字号</h1>
@@ -675,7 +734,7 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
   <div class="section"><div class="section-title">'铜'我一起看剧</div><div class="video-box" onclick="playZhuVideo()" style="border-color:rgba(196,154,60,.1)"><div class="flash-glasses" style="font-size:30px">🎬</div><div class="play-icon" style="border-color:rgba(196,154,60,.25);background:rgba(196,154,60,.12)"></div></div><p style="font-size:.7rem;color:rgba(201,178,139,.3);margin-top:8px;text-align:center;letter-spacing:1px">【短视频】</p></div>
   <div class="section"><div class="section-title">三个铜艺宝贝 · 点击听它们说话</div><div class="products-grid"><div class="product-card" onclick="speakProduct(0)"><span class="emoji"><img src="images/铜狮.jpg" alt="铜狮"></span><div class="p-name">铜狮</div><div class="p-desc">镇宅瑞兽</div></div><div class="product-card" onclick="speakProduct(1)"><span class="emoji"><img src="images/孙悟空.jpg" alt="齐天大圣"></span><div class="p-name">齐天大圣</div><div class="p-desc">伴你闯关</div></div><div class="product-card" onclick="speakProduct(2)"><span class="emoji"><img src="images/铜葫芦.jpg" alt="铜葫芦"></span><div class="p-name">铜葫芦</div><div class="p-desc">盛满福气</div></div></div><div class="product-speech" id="productSpeech"><p id="productSpeechText"></p></div></div>
   <div class="section"><div class="quote-text" style="color:#e8c86a;font-size:1rem">老字号的根脉长在当代生活里，<br>做和你一起生活的"老朋友"</div></div>
-  <div class="section"><div class="section-title">【点击进入，为你设计铜艺品】</div><div class="ai-design-box"><div class="upload-area" id="uploadArea" onclick="document.getElementById('copperFileInput').click()"><div class="upload-icon">📷</div><p>点击选择照片（相册/拍照）</p><p style="font-size:.7rem;margin-top:4px;opacity:.45">AI将为你生成铜艺风格设计</p></div><input type="file" id="copperFileInput" accept="image/*" style="display:none" onchange="handleCopperFile(this)"><button class="gen-btn" id="genBtn" onclick="generateCopper()" style="display:none">生成铜艺品</button><div class="ai-design-result" id="aiDesignResult"><div class="result-img"><canvas id="copperCanvas" style="width:100%;height:100%;border-radius:16px;display:none"></canvas><div class="placeholder-art" id="copperPlaceholder">🏺</div></div><p style="font-size:.85rem;color:#e8c86a;font-family:'Ma Shan Zheng',serif;letter-spacing:2px">你的专属铜艺品已生成</p><p style="font-size:.7rem;color:rgba(201,178,139,.35);margin-top:6px;letter-spacing:1px">AI根据照片融合千年铜艺风格创作</p><button onclick="resetCopperDesign()" style="margin-top:10px;padding:8px 20px;border-radius:20px;background:rgba(196,154,60,.15);border:1px solid rgba(196,154,60,.3);color:#e8c86a;font-size:.85rem;letter-spacing:2px;cursor:pointer">🔄 重新选择照片</button></div></div></div>
+  <div class="section"><div class="section-title">【点击进入，为你设计铜艺品】</div><div class="ai-design-box"><div class="upload-area" id="uploadArea" onclick="document.getElementById('copperFileInput').click()"><div class="upload-icon">📷</div><p>点击选择照片（相册/拍照）</p><p style="font-size:.7rem;margin-top:4px;opacity:.45">自动识别照片中的物品或人物主体并铜化（首次 AI 识别需联网加载模型）</p></div><input type="file" id="copperFileInput" accept="image/*" style="display:none" onchange="handleCopperFile(this)"><button class="gen-btn" id="genBtn" onclick="generateCopper()" style="display:none">生成铜艺品</button><div class="ai-design-result" id="aiDesignResult"><div class="result-img"><canvas id="copperCanvas" style="width:100%;height:100%;border-radius:16px;display:none"></canvas><div class="placeholder-art" id="copperPlaceholder">🏺</div></div><p style="font-size:.85rem;color:#e8c86a;font-family:'Ma Shan Zheng',serif;letter-spacing:2px">你的专属铜艺品已生成</p><p style="font-size:.7rem;color:rgba(201,178,139,.35);margin-top:6px;letter-spacing:1px">已识别主体轮廓，并融合千年铜艺金属质感</p><button onclick="resetCopperDesign()" style="margin-top:10px;padding:8px 20px;border-radius:20px;background:rgba(196,154,60,.15);border:1px solid rgba(196,154,60,.3);color:#e8c86a;font-size:.85rem;letter-spacing:2px;cursor:pointer">🔄 重新选择照片</button></div></div></div>
   <div style="height:80px"></div>
   <div class="brand-nav">
     <div class="brand-nav-item" onclick="switchPage('maoPage')"><span class="nav-icon">👓</span>毛源昌</div>
@@ -710,45 +769,419 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
   </div>
 </div>
 
+<script src="vendor/three.r128.min.js"></script>
+<script>
+// ===== 三维古塔（WebGL/Three.js）：按参考图程序化建模，封面悬浮慢旋并穿入卷轴 =====
+// 四层收分楼阁、曲面飞檐、瓦垄、斗拱、栏杆、塔刹与数字网格台基；非封面停止渲染
+// 加载失败或 WebGL 不可用时自动回退为平面塔，页面功能不受影响
+window.Tower3d=(function(){
+  if(typeof THREE==='undefined')return{ready:false};
+  var renderer;
+  try{renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,premultipliedAlpha:true})}catch(err){return{ready:false}}
+  renderer.setClearColor(0x000000,0);
+  if(THREE.sRGBEncoding)renderer.outputEncoding=THREE.sRGBEncoding;
+  if(THREE.ACESFilmicToneMapping)renderer.toneMapping=THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure=1.08;
+  var canvas=renderer.domElement;
+  canvas.style.cssText='position:fixed;top:0;left:0;z-index:60;pointer-events:none;display:block';
+  (document.body||document.documentElement).appendChild(canvas);
+  var scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(27,1,.1,50);
+  camera.position.set(0,.035,5.35);
+  function visibleWorldHeight(){return 2*Math.tan(Math.PI*camera.fov/360)*camera.position.z}
+  var worldH=visibleWorldHeight(),worldW=worldH;
+  function resize(){
+    var w=innerWidth,h=innerHeight;
+    renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
+    renderer.setSize(w,h,false);
+    canvas.style.width=w+'px';canvas.style.height=h+'px';
+    camera.aspect=w/h;camera.updateProjectionMatrix();
+    worldH=visibleWorldHeight();worldW=worldH*camera.aspect;
+  }
+  resize();addEventListener('resize',resize);
+
+  scene.add(new THREE.HemisphereLight(0xd9f4ff,0x07111f,1.08));
+  var sun=new THREE.DirectionalLight(0xffeed2,1.18);sun.position.set(2.5,4.2,3.6);scene.add(sun);
+  var fill=new THREE.DirectionalLight(0x62c8ff,.72);fill.position.set(-3.2,.3,-2.5);scene.add(fill);
+  var rim=new THREE.PointLight(0x35d9ff,1.15,5.2);rim.position.set(-.75,.15,1.55);scene.add(rim);
+  var topLight=new THREE.PointLight(0xffd98c,.72,3);topLight.position.set(.55,1.45,.8);scene.add(topLight);
+
+  var roofMat=new THREE.MeshStandardMaterial({color:0x161a1d,roughness:.55,metalness:.30,side:THREE.DoubleSide});
+  var wallMat=new THREE.MeshStandardMaterial({color:0x1f2427,roughness:.62,metalness:.14,transparent:true,opacity:.88});
+  var frameMat=new THREE.MeshStandardMaterial({color:0x12161a,roughness:.5,metalness:.4});
+  var trimMat=new THREE.MeshStandardMaterial({color:0xd9a441,roughness:.38,metalness:.72,emissive:0x452e08,emissiveIntensity:.5});
+  var bracketMat=new THREE.MeshStandardMaterial({color:0x1a2024,roughness:.55,metalness:.35});
+  var baseMat=new THREE.MeshStandardMaterial({color:0x22282c,roughness:.6,metalness:.3});
+  var cyanMat=new THREE.MeshStandardMaterial({color:0x2bc9e8,emissive:0x0a6e8a,emissiveIntensity:.9,roughness:.3,metalness:.5});
+  var trimLineMat=new THREE.LineBasicMaterial({color:0x9fb9c6,transparent:true,opacity:.55});
+  var tileLineMat=new THREE.LineBasicMaterial({color:0x3d4c55,transparent:true,opacity:.8});
+  var ridgeMat=new THREE.MeshStandardMaterial({color:0x0c1114,roughness:.5,metalness:.5,emissive:0x03141c,emissiveIntensity:.3});
+  var glowMat=new THREE.MeshBasicMaterial({color:0x9ff0ff,transparent:true,opacity:.95,side:THREE.DoubleSide});
+  var gridLineMat=new THREE.LineBasicMaterial({color:0x4fdcff,transparent:true,opacity:.46});
+
+  var root=new THREE.Group(),pivot=new THREE.Group();root.add(pivot);scene.add(root);root.rotation.y=-.38;
+  var TOWER_W=1.42,TOWER_H=0;
+  function addBox(w,h,d,x,y,z,mat){var m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);pivot.add(m);return m}
+  function addCylinder(rt,rb,h,x,y,z,mat,seg){var m=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,seg||10),mat);m.position.set(x,y,z);pivot.add(m);return m}
+  function addGridBase(){
+    var size=1.42,div=12,p=[],step=size/div,half=size/2,y=.005;
+    for(var i=0;i<=div;i++){
+      var q=-half+i*step;p.push(-half,y,q,half,y,q,q,y,-half,q,y,half);
+    }
+    var g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(p,3));
+    var lines=new THREE.LineSegments(g,gridLineMat);pivot.add(lines);
+    var glow=new THREE.Mesh(new THREE.CircleGeometry(.55,48),new THREE.MeshBasicMaterial({color:0x2bd9ff,transparent:true,opacity:.1,side:THREE.DoubleSide}));
+    glow.rotation.x=-Math.PI/2;glow.position.y=.007;pivot.add(glow);
+    var plinth=addCylinder(.48,.55,.042,0,.026,0,baseMat,6);
+    var ring=new THREE.Mesh(new THREE.TorusGeometry(.48,.013,6,HEX*4),cyanMat);ring.rotation.x=Math.PI/2;ring.position.y=.052;pivot.add(ring);
+    return plinth;
+  }
+  // 六边形平面：顶点角 60° 间隔；所有塔身、屋顶、斗拱、栏杆按 6 边形分布
+  var HEX=6;
+  function hexCorner(i,r){var a=Math.PI*2/HEX*i+Math.PI/HEX;return[Math.sin(a)*r,Math.cos(a)*r,a]}
+  function hexMid(i,r){var a=Math.PI*2/HEX*i;return[Math.sin(a)*r,Math.cos(a)*r,a]}
+  // 任意正多边形柱体（塔身/台基）
+  function addPrism(r,h,x,y,z,mat,seg){var m=new THREE.Mesh(new THREE.CylinderGeometry(r*1.03,r,h,seg||HEX,1,false,Math.PI/HEX),mat);m.position.set(x,y,z);pivot.add(m);return m}
+  // 六边形平面环（平座/层板）
+  function addHexRing(r,h,y,mat){var pts=[];for(var i=0;i<HEX;i++){pts.push(hexCorner(i,r))}
+    var shape=new THREE.Shape();shape.moveTo(pts[0][0],pts[0][1]);for(var i=1;i<HEX;i++)shape.lineTo(pts[i][0],pts[i][1]);shape.closePath();
+    var g=new THREE.ExtrudeGeometry(shape,{depth:h,bevelEnabled:false});
+    var m=new THREE.Mesh(g,mat);m.rotation.x=-Math.PI/2;m.position.set(0,y+h,0);pivot.add(m);return m}
+  // 六边形曲面屋顶：六个独立屋面共享同一组六角檐口；每个面从单一脊心向外铺网，避免中心退化三角面
+  function roofPoint(angle,radial,half,rise,lift){
+    var r=half*radial;
+    // 中心最高；向檐口下沉；仅六个角在外圈上翘
+    var cornerWave=Math.pow(Math.max(0,Math.cos(HEX*(angle-Math.PI/HEX))),8);
+    var y=.008+rise*Math.pow(1-radial,.72)+lift*Math.pow(radial,3.4)*cornerWave;
+    return[Math.sin(angle)*r,y,Math.cos(angle)*r];
+  }
+  function makeCurvedRoof(half,rise,lift){
+    var verts=[],idx=[],radialSteps=7,edgeSteps=6;
+    function facePoint(face,u,radial,yOffset){
+      var c0=hexCorner(face,half),c1=hexCorner((face+1)%HEX,half);
+      var x=(c0[0]*(1-u)+c1[0]*u)*radial;
+      var z=(c0[1]*(1-u)+c1[1]*u)*radial;
+      var ang=Math.atan2(x,z);
+      var corner=Math.pow(Math.max(0,Math.cos(HEX*(ang-Math.PI/HEX))),8);
+      var y=.008+rise*Math.pow(1-radial,.72)+lift*Math.pow(radial,3.4)*corner+(yOffset||0);
+      return[x,y,z];
+    }
+    // 每个六边形屋面只保留一个中心顶点；第一圈用三角扇，后续用规则四边形网格
+    for(var face=0;face<HEX;face++){
+      var apex=verts.length/3;
+      verts.push(0,.008+rise,0);
+      var rowStarts=[];
+      for(var r=1;r<=radialSteps;r++){
+        var radial=r/radialSteps;
+        rowStarts[r]=verts.length/3;
+        for(var e=0;e<=edgeSteps;e++){
+          var p=facePoint(face,e/edgeSteps,radial,0);
+          verts.push(p[0],p[1],p[2]);
+        }
+      }
+      for(var e=0;e<edgeSteps;e++)idx.push(apex,rowStarts[1]+e,rowStarts[1]+e+1);
+      for(var r=2;r<=radialSteps;r++)for(var e=0;e<edgeSteps;e++){
+        var a=rowStarts[r-1]+e,b=a+1,c=rowStarts[r]+e,d=c+1;
+        idx.push(a,c,b,b,c,d);
+      }
+    }
+    var g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));g.setIndex(idx);g.computeVertexNormals();
+    var roof=new THREE.Mesh(g,roofMat);
+    var lp=[],vp=[];
+    function lseg(arr,a,b){arr.push(a[0],a[1],a[2],b[0],b[1],b[2])}
+    // 六条垂脊：中心→六个角；六条檐口边线严格闭合为正六边形
+    for(var k=0;k<HEX;k++){
+      var ang=Math.PI*2/HEX*k+Math.PI/HEX;
+      for(var q=0;q<10;q++)lseg(lp,roofPoint(ang,q/10,half,rise,lift),roofPoint(ang,(q+1)/10,half,rise,lift));
+      var c0=hexCorner(k,half),c1=hexCorner((k+1)%HEX,half);
+      var p0=[c0[0],roofPoint(Math.atan2(c0[0],c0[1]),1,half,rise,lift)[1],c0[1]];
+      var p1=[c1[0],roofPoint(Math.atan2(c1[0],c1[1]),1,half,rise,lift)[1],c1[1]];
+      lseg(lp,p0,p1);
+    }
+    var lg=new THREE.BufferGeometry();lg.setAttribute('position',new THREE.Float32BufferAttribute(lp,3));roof.add(new THREE.LineSegments(lg,trimLineMat));
+    // 每个屋面 5 条瓦垄，全部限制在对应六边形面内
+    for(var face=0;face<HEX;face++)for(var lane=1;lane<=5;lane++)for(var q=1;q<9;q++){
+      var r0=.12+.88*(q-1)/8,r1=.12+.88*q/8,u=lane/6;
+      lseg(vp,facePoint(face,u,r0,.007),facePoint(face,u,r1,.007));
+    }
+    var vg=new THREE.BufferGeometry();vg.setAttribute('position',new THREE.Float32BufferAttribute(vp,3));roof.add(new THREE.LineSegments(vg,tileLineMat));
+    return roof;
+  }
+  function addWindow(x,y,z,ry,w,h){var m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),glowMat);m.position.set(x,y,z);m.rotation.y=ry;pivot.add(m)}
+  function addColumn(r,h,x,y,z){var m=new THREE.Mesh(new THREE.CylinderGeometry(r,r*1.08,h,6),frameMat);m.position.set(x,y,z);pivot.add(m);return m}
+  function addDougong(L,base,halfBody){
+    var yy=base+L.h-.016;
+    // 斗拱按六条檐边等距排布，避免圆周采样导致俯视轮廓发散
+    for(var k=0;k<HEX;k++){
+      var a=hexCorner(k,halfBody+0.036),b=hexCorner((k+1)%HEX,halfBody+0.036);
+      for(var n=1;n<=3;n++){
+        var u=n/4,x=a[0]*(1-u)+b[0]*u,z=a[1]*(1-u)+b[1]*u;
+        var ang=Math.atan2(b[1]-a[1],b[0]-a[0]);
+        var br=addBox(.075,.025,.04,x,yy,z,bracketMat);br.rotation.y=-ang;
+        var arm=addBox(.12,.014,.027,x,yy+.026,z,trimMat);arm.rotation.y=-ang;
+      }
+    }
+  }
+  function addRails(L,base,halfBody){
+    var out=halfBody*1.06,ph=L.h*.22,py=base+L.h*.31;
+    // 立柱与横栏都沿六条直边布置，俯视时形成连续正六边形
+    for(var k=0;k<HEX;k++){
+      var a=hexCorner(k,out),b=hexCorner((k+1)%HEX,out);
+      for(var i=0;i<=4;i++){
+        var u=i/4,x=a[0]*(1-u)+b[0]*u,z=a[1]*(1-u)+b[1]*u;
+        addBox(.011,ph,.011,x,py,z,trimMat);
+      }
+      var mx=(a[0]+b[0])/2,mz=(a[1]+b[1])/2,len=Math.hypot(a[0]-b[0],a[1]-b[1]);
+      var ang=Math.atan2(b[1]-a[1],b[0]-a[0]);
+      var top=addBox(len,.013,.016,mx,py+ph*.5,mz,trimMat);top.rotation.y=-ang;
+      var bot=addBox(len*.98,.011,.014,mx,py-ph*.5,mz,bracketMat);bot.rotation.y=-ang;
+    }
+  }
+  function addFascia(L,base){
+    var yy=base+L.h+.006,h=L.half;
+    // 六边形双层檐口：每块檐板严格连接相邻六角，金色压边与其平行
+    for(var k=0;k<HEX;k++){
+      var a=hexCorner(k,h),b=hexCorner((k+1)%HEX,h);
+      var mx=(a[0]+b[0])/2,mz=(a[1]+b[1])/2,len=Math.hypot(a[0]-b[0],a[1]-b[1]);
+      var ang=Math.atan2(b[1]-a[1],b[0]-a[0]);
+      var board=addBox(len,.025,.034,mx,yy,mz,ridgeMat);board.rotation.y=-ang;
+      var gold=addBox(len,.009,.018,mx,yy+.019,mz,trimMat);gold.rotation.y=-ang;
+    }
+    // 六个飞檐尖从六角沿径向上挑，不再用欧拉角复合旋转扭曲长条
+    for(var k=0;k<HEX;k++){
+      var c=hexCorner(k,h),outer=hexCorner(k,h*1.13);
+      var sx=c[0]*.97,sy=yy+.015,sz=c[1]*.97,ex=outer[0],ey=yy+L.lift*.58+.032,ez=outer[1];
+      var dx=ex-sx,dy=ey-sy,dz=ez-sz,len=Math.sqrt(dx*dx+dy*dy+dz*dz);
+      var tip=addBox(len,.014,.026,(sx+ex)/2,(sy+ey)/2,(sz+ez)/2,trimMat);
+      tip.quaternion.setFromUnitVectors(new THREE.Vector3(1,0,0),new THREE.Vector3(dx,dy,dz).normalize());
+      var bell=new THREE.Mesh(new THREE.SphereGeometry(.012,8,6),cyanMat);
+      bell.position.set(ex,ey-.018,ez);pivot.add(bell);
+      var finial=new THREE.Mesh(new THREE.ConeGeometry(.010,.055,6),trimMat);
+      finial.position.set(ex,ey+.026,ez);pivot.add(finial);
+    }
+  }
+  (function build(){
+    addGridBase();
+    var y=.145;
+    // 三层六边形台基：深色石基、近黑台身、金色收边，与参考图的发光网格相接
+    addHexRing(.60,.050,.074,ridgeMat);
+    addHexRing(.55,.047,.1225,baseMat);
+    addHexRing(.50,.022,.157,trimMat);
+    for(var bs=0;bs<HEX;bs++){
+      var bc=hexCorner(bs,.52);
+      var beacon=addCylinder(.013,.018,.048,bc[0],.115,bc[1],cyanMat,8);
+    }
+    // 四层收分比例：100% / 79% / 61% / 46%，底层最高、顶层最轻
+    var layers=[
+      {body:.72,h:.215,half:.56,rise:.165,lift:.132},
+      {body:.55,h:.172,half:.44,rise:.138,lift:.108},
+      {body:.42,h:.145,half:.34,rise:.118,lift:.088},
+      {body:.31,h:.120,half:.255,rise:.100,lift:.072}
+    ];
+    for(var i=0;i<layers.length;i++){
+      var L=layers[i],base=y,halfBody=L.body/2;
+      // 六边形双层平座：深色托板 + 金色层板
+      addHexRing(L.body*.62,.034,base,bracketMat);
+      addHexRing(L.body*.58,.013,base+.038,trimMat);
+      addPrism(L.body*.52,L.h,0,base+L.h/2+.035,0,wallMat);
+      // 每层内置一圈青色光地板
+      addHexRing(L.body*.47,.012,base+.05,cyanMat);
+      // 六角圆柱 + 六面中柱
+      var ch=L.h*.92,cy=base+L.h*.52+.035;
+      for(var k=0;k<HEX;k++){
+        var cc=hexCorner(k,halfBody*.92);
+        addColumn(.014,ch,cc[0],cy,cc[1]);
+        var cm=hexMid(k,halfBody*.96);
+        addColumn(.012,ch,cm[0],cy,cm[1]);
+      }
+      // 六面门窗：每面中央门洞 + 两侧格栅窗
+      var wy=base+L.h*.6+.035;
+      for(var k=0;k<HEX;k++){
+        var mid=hexMid(k,halfBody+.006),ang=mid[2];
+        var door=addWindow(mid[0],wy-.005,mid[1],ang,L.body*.16,L.h*.56);
+        var w1=Math.sin(ang+(Math.PI/HEX*.55))*halfBody*.92,z1=Math.cos(ang+(Math.PI/HEX*.55))*halfBody*.92;
+        var w2=Math.sin(ang-(Math.PI/HEX*.55))*halfBody*.92,z2=Math.cos(ang-(Math.PI/HEX*.55))*halfBody*.92;
+        addWindow(w1,wy,z1,ang,L.body*.14,L.h*.34);
+        addWindow(w2,wy,z2,ang,L.body*.14,L.h*.34);
+        for(var gi=-1;gi<=1;gi++){
+          var ga=ang+gi*(Math.PI/HEX*.28),gr=halfBody*.99;
+          var gx=Math.sin(ga)*gr,gz=Math.cos(ga)*gr;
+          var bar=addBox(.009,L.h*.42,.009,gx,wy,gz,frameMat);bar.rotation.y=ga;
+        }
+      }
+      addRails(L,base+.035,halfBody);
+      addDougong(L,base+.035,halfBody);
+      addFascia(L,base+.035);
+      var roof=makeCurvedRoof(L.half,L.rise,L.lift);roof.position.y=base+L.h+.027;pivot.add(roof);
+      y=base+L.h+L.rise+.058;
+    }
+    // 金色塔刹：六角宝盖、刹杆、六层相轮、青光宝珠和顶针
+    var canopy=new THREE.Mesh(new THREE.ConeGeometry(.095,.065,HEX),trimMat);canopy.position.y=y+.032;canopy.rotation.y=Math.PI/HEX;pivot.add(canopy);
+    var pole=new THREE.Mesh(new THREE.CylinderGeometry(.010,.022,.31,10),trimMat);pole.position.y=y+.155;pivot.add(pole);
+    var lotus=new THREE.Mesh(new THREE.SphereGeometry(.046,14,8,0,Math.PI*2,0,Math.PI/2),trimMat);lotus.position.y=y+.064;pivot.add(lotus);
+    for(var b=0;b<6;b++){
+      var tor=new THREE.Mesh(new THREE.TorusGeometry(.060-b*.0072,.006,6,22),trimMat);tor.rotation.x=Math.PI/2;tor.position.y=y+.078+b*.036;pivot.add(tor);
+    }
+    var orb=new THREE.Mesh(new THREE.SphereGeometry(.043,16,12),cyanMat);orb.position.y=y+.300;pivot.add(orb);
+    var needle=new THREE.Mesh(new THREE.ConeGeometry(.018,.135,12),trimMat);needle.position.y=y+.395;pivot.add(needle);
+    TOWER_H=y+.475;pivot.position.y=-TOWER_H/2;
+  })();
+  // 三维塔仅在封面显示：参考图配色——近黑塔身与瓦顶、金色塔刹、青蓝发光窗与网格底座
+  var THEMES={cover:{roof:0x161a1d,wall:0x1f2427,trim:0xd9a441,glow:0x9ff0ff}};
+  var tgt={roof:new THREE.Color(THEMES.cover.roof),wall:new THREE.Color(THEMES.cover.wall),
+           trim:new THREE.Color(THEMES.cover.trim),glow:new THREE.Color(THEMES.cover.glow)};
+  var tmpColor=new THREE.Color();
+
+  var cur={fx:.5,fy:.78,px:67},tar={fx:.5,fy:.78,px:67};
+  var coverAnchor={fx:.5,fy:.78,px:67};
+  var charge=0,chargeTgt=0,spinBoost=0,flying=false,pageNow='cover';
+
+  function setTheme(name){var t=THEMES[name]||THEMES.cover;
+    tgt.roof.setHex(t.roof);tgt.wall.setHex(t.wall);tgt.trim.setHex(t.trim);tgt.glow.setHex(t.glow)}
+  function setTarget(fx,fy,px){tar.fx=fx;tar.fy=fy;tar.px=px}
+  function onPageSwitch(id){
+    pageNow=id;
+    if(id==='cover'){
+      canvas.style.display='block';root.visible=true;setTheme('cover');setTarget(coverAnchor.fx,coverAnchor.fy,coverAnchor.px);
+    }else{
+      // 用户要求仅第一页保留塔：第二页和三个品牌页均停止渲染
+      root.visible=false;canvas.style.display='none';chargeTgt=0;flying=false;renderer.clear();
+    }
+  }
+  function coverAnchorSet(fx,fy,px){coverAnchor.fx=fx;coverAnchor.fy=fy;coverAnchor.px=px;
+    if(pageNow==='cover')setTarget(fx,fy,px)}
+  function chargeUp(){chargeTgt=1;flying=false}
+  function launchTo(fx,fy){setTarget(fx,fy,Math.max(26,cur.px*.16));chargeTgt=1;flying=true;
+    setTimeout(function(){flying=false;chargeTgt=0},1000)}
+  function worldScale(){return cur.px/innerWidth*worldW/TOWER_W}
+
+  var clock=new THREE.Clock(),t=0;
+  function tick(){
+    requestAnimationFrame(tick);
+    if(document.hidden)return;
+    if(pageNow!=='cover'){clock.getDelta();return}
+    var dt=Math.min(clock.getDelta(),.05);t+=dt;
+    var kf=1-Math.exp(-dt*(flying?6.5:4));
+    cur.fx+=(tar.fx-cur.fx)*kf;cur.fy+=(tar.fy-cur.fy)*kf;cur.px+=(tar.px-cur.px)*kf;
+    charge+=(chargeTgt-charge)*(1-Math.exp(-dt*5));
+    spinBoost+=((flying?1:0)-spinBoost)*(1-Math.exp(-dt*6));
+    var k2=1-Math.exp(-dt*3.2);
+    roofMat.color.lerp(tgt.roof,k2);wallMat.color.lerp(tgt.wall,k2);trimMat.color.lerp(tgt.trim,k2);
+    tmpColor.copy(tgt.glow).multiplyScalar(1+charge*1.5);
+    glowMat.color.lerp(tmpColor,k2);
+    trimMat.emissive.copy(trimMat.color).multiplyScalar(.25);
+    var sc=worldScale();
+    root.scale.set(sc,sc,sc);
+    root.position.set((cur.fx-.5)*worldW,(.5-cur.fy)*worldH+Math.sin(t*1.35)*.018*sc,0);
+    root.rotation.y+=(.28+spinBoost*3.2)*dt;
+    root.rotation.x=.10+Math.sin(t*.7)*.035;
+    root.rotation.z=Math.sin(t*.5)*.015;
+    renderer.render(scene,camera);
+  }
+  tick();
+
+  var stage=document.getElementById('coverTower3d');
+  if(stage)stage.style.display='none';
+  return{ready:true,onPageSwitch:onPageSwitch,coverAnchor:coverAnchorSet,
+         charge:chargeUp,launchTo:launchTo};
+})();
+</script>
+
 <script>
 // ===== 招牌拖动功能已由initMarkerDrag()统一处理 =====
 
 // ===== 导航 =====
 let currentPage='cover',mapColorized=false;
-function switchPage(id){document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active')});document.getElementById(id).classList.add('active');currentPage=id;if(['maoPage','zhuPage','fangPage'].includes(id)){const pg=document.getElementById(id);pg.scrollTop=0;initReveal(pg)}if(id==='cover')restartCoverAnim()}
+function switchPage(id){document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active')});document.getElementById(id).classList.add('active');currentPage=id;if(window.Tower3d&&window.Tower3d.ready)Tower3d.onPageSwitch(id);if(['maoPage','zhuPage','fangPage'].includes(id)){const pg=document.getElementById(id);pg.scrollTop=0;initReveal(pg)}if(id==='cover')restartCoverAnim()}
 function goToCover(){switchPage('cover')}
 function goToMap(){switchPage('mapPage');initMapDrag();initMarkerDrag();if(!mapColorized)showMapTapHint()}
 
-// ===== 封面转场：点击"一起出发"跳转第二页 =====
-let coverTransitioning=false;
+// ===== 封面独立塔定位：严格跟随 contain 背景图在不同手机屏幕中的实际显示位置 =====
+const COVER_IMG_W=1600,COVER_IMG_H=2848;
+function layoutCoverScene(){
+  const cover=document.getElementById('cover'),tower=document.getElementById('coverTower3d'),portal=document.getElementById('scrollPortal');
+  if(!cover||!tower||!portal)return;
+  const w=cover.clientWidth,h=cover.clientHeight;if(!w||!h)return;
+  const s=Math.min(w/COVER_IMG_W,h/COVER_IMG_H),dw=COVER_IMG_W*s,dh=COVER_IMG_H*s;
+  const ox=(w-dw)/2,oy=(h-dh)/2;
+  layoutAnchorCache.fx=(ox+800*s)/w;layoutAnchorCache.fy=(oy+2305*s)/h;layoutAnchorCache.px=Math.max(63,Math.min(99,w*.168));
+  // 原图坐标：塔在下方中央，卷轴入口在画面中部偏右
+  tower.style.left=(ox+800*s)+'px';tower.style.top=(oy+2305*s)+'px';
+  portal.style.left=(ox+845*s)+'px';portal.style.top=(oy+1460*s)+'px';
+  if(window.Tower3d&&window.Tower3d.ready)Tower3d.coverAnchor(layoutAnchorCache.fx,layoutAnchorCache.fy,layoutAnchorCache.px);
+}
+const layoutAnchorCache={fx:.5,fy:.78,px:67};
+function resetCoverTowerScene(){
+  const cover=document.getElementById('cover'),tower=document.getElementById('coverTower3d'),ray=document.getElementById('towerEnergyRay');
+  const map=document.getElementById('mapPage'),ring=document.getElementById('transition-ring-overlay');
+  if(cover)cover.classList.remove('tower-sequence','vr-dive');if(map)map.classList.remove('vr-emerge');if(ring)ring.classList.remove('active','smoking');
+  if(window.Tower3d&&window.Tower3d.ready){Tower3d.onPageSwitch('cover');Tower3d.coverAnchor(layoutAnchorCache.fx,layoutAnchorCache.fy,layoutAnchorCache.px)}
+  if(tower){tower.classList.remove('launching');tower.style.removeProperty('--tower-dx');tower.style.removeProperty('--tower-dy')}
+  if(ray){ray.style.opacity='';ray.style.width='';ray.style.left='';ray.style.top='';ray.style.removeProperty('--ray-angle')}
+  requestAnimationFrame(layoutCoverScene);
+}
+let _coverLayoutTimer=null;
+function scheduleCoverLayout(){clearTimeout(_coverLayoutTimer);_coverLayoutTimer=setTimeout(()=>{if(currentPage==='cover'&&!coverTransitioning)layoutCoverScene()},80)}
+window.addEventListener('resize',scheduleCoverLayout);window.addEventListener('orientationchange',scheduleCoverLayout);
+if(window.visualViewport)window.visualViewport.addEventListener('resize',scheduleCoverLayout);
+requestAnimationFrame(layoutCoverScene);
+
+// ===== 封面转场：塔蓄光射入卷轴，再穿越到第二页 =====
+let coverTransitioning=false,coverTransitionSeq=0,coverTransitionTimers=[];
+function clearCoverTransitionTimers(){coverTransitionTimers.forEach(clearTimeout);coverTransitionTimers=[];coverTransitionSeq++}
+function scheduleCoverTransition(fn,delay,seq){const t=setTimeout(function(){if(seq===coverTransitionSeq)fn()},delay);coverTransitionTimers.push(t);return t}
 function goToMapWithTransition(e){
   if(e)e.stopPropagation();
   if(coverTransitioning)return;
+  clearCoverTransitionTimers();const transitionSeq=coverTransitionSeq;
   coverTransitioning=true;
-  // 震动反馈（手机）：加速—突破两段触感
-  try{if(navigator.vibrate)navigator.vibrate([18,42,26])}catch(_){}
+  try{if(navigator.vibrate)navigator.vibrate([18,42,32,36,45])}catch(_){}
   const cover=document.getElementById('cover'),map=document.getElementById('mapPage'),ring=document.getElementById('transition-ring-overlay');
-  // 转场音效
-  try{const sfx=document.getElementById('transitionSfx');if(sfx){sfx.volume=.3;sfx.currentTime=0;sfx.play().catch(()=>{});}}catch(_){}
-  // 第一阶段：封面 3D 冲入放大 + 烟雾涌起（营造穿越云涛感）
-  if(ring){ring.classList.remove('active','smoking');void ring.offsetWidth;ring.classList.add('smoking');}
-  cover.classList.add('vr-dive');
-  // 第二阶段：突破瞬间——中心强光爆发 + 能量光环闪现 + 地图从纵深远处浮现
-  setTimeout(()=>{
+  const tower=document.getElementById('coverTower3d'),portal=document.getElementById('scrollPortal'),ray=document.getElementById('towerEnergyRay');
+  const t3d=window.Tower3d&&window.Tower3d.ready?window.Tower3d:null;
+  try{const sfx=document.getElementById('transitionSfx');if(sfx){sfx.volume=.32;sfx.currentTime=0;sfx.play().catch(()=>{})}}catch(_){}
+  resetCoverTowerScene();layoutCoverScene();void cover.offsetWidth;
+  // 计算塔尖到卷轴入口的光线路径；真3D与平面回退都使用同一条可见能量光束
+  let portalFx=.5,portalFy=.5;
+  if(portal&&ray){
+    const pr=portal.getBoundingClientRect(),tx=pr.left+pr.width*.5,ty=pr.top+pr.height*.5;
+    portalFx=tx/innerWidth;portalFy=ty/innerHeight;
+    let sx,sy;
+    if(t3d){
+      sx=layoutAnchorCache.fx*innerWidth;
+      sy=layoutAnchorCache.fy*innerHeight-layoutAnchorCache.px*.72;
+      t3d.charge();
+    }
+    else if(tower){const tr=tower.getBoundingClientRect();sx=tr.left+tr.width*.5;sy=tr.top+tr.height*.12;
+      const tcx=tr.left+tr.width*.5,tcy=tr.top+tr.height*.5;
+      tower.style.setProperty('--tower-dx',(tx-tcx)+'px');tower.style.setProperty('--tower-dy',(ty-tcy)+'px')}
+    if(Number.isFinite(sx)&&Number.isFinite(sy)){
+      const dx=tx-sx,dy=ty-sy;
+      ray.style.left=sx+'px';ray.style.top=sy+'px';ray.style.width=Math.hypot(dx,dy)+'px';
+      ray.style.setProperty('--ray-angle',Math.atan2(dy,dx)+'rad');
+    }
+  }
+  // 三维塔同样复用上一版 tower-sequence，确保塔身蓄光、光束和卷轴入口均被触发
+  cover.classList.add('tower-sequence');
+  // 第一阶段：塔身蓄光，光线先命中卷轴；第二阶段：塔沿光路缩小穿入卷轴
+  scheduleCoverTransition(()=>{
+    if(t3d){charge3dSfxCover();t3d.launchTo(portalFx,portalFy)}
+    else if(tower)tower.classList.add('launching');
+  },480,transitionSeq);
+  // 塔接近卷轴后再启动烟雾与封面穿越，避免过早遮住塔和光束
+  scheduleCoverTransition(()=>{if(ring){ring.classList.remove('active','smoking');void ring.offsetWidth;ring.classList.add('smoking')}cover.classList.add('vr-dive')},920,transitionSeq);
+  // 塔完全穿入卷轴后才切换第二页
+  scheduleCoverTransition(()=>{
     if(ring)ring.classList.add('active');
-    switchPage('mapPage');
-    map.classList.add('vr-emerge');
-    initMapDrag();initMarkerDrag();
-    if(!mapColorized)showMapTapHint();
-  },470);
-  // 收尾：清理动画类，恢复常态
-  setTimeout(()=>{
-    cover.classList.remove('vr-dive');
-    map.classList.remove('vr-emerge');
-    if(ring)ring.classList.remove('active','smoking');
-    coverTransitioning=false;
-  },1750);
+    switchPage('mapPage');map.classList.add('vr-emerge');
+    initMapDrag();initMarkerDrag();if(!mapColorized)showMapTapHint();
+  },1260,transitionSeq);
+  scheduleCoverTransition(()=>{
+    cover.classList.remove('vr-dive','tower-sequence');map.classList.remove('vr-emerge');
+    if(tower)tower.classList.remove('launching');if(ring)ring.classList.remove('active','smoking');
+    coverTransitioning=false;coverTransitionTimers=[];
+  },2300,transitionSeq);
 }
+function charge3dSfxCover(){try{const sfx=document.getElementById('transitionSfx');if(sfx){sfx.volume=.18;sfx.currentTime=.12;sfx.play().catch(()=>{})}}catch(_){}}
 // ===== 滚动飞入：品牌页文字/区块进入视口时上浮淡入 =====
 function initReveal(page){
   if(!page)return;
@@ -777,6 +1210,7 @@ function initReveal(page){
 function restartCoverAnim(){
   const cover=document.getElementById('cover');
   if(!cover)return;
+  clearCoverTransitionTimers();coverTransitioning=false;resetCoverTowerScene();
   cover.querySelectorAll('h1,.subtitle,.quote,.tap-hint').forEach(el=>{
     el.style.animation='none';void el.offsetWidth;el.style.animation='';
   });
@@ -806,6 +1240,7 @@ function initMapDrag(){
   const cw=container.clientWidth,ch=container.clientHeight;
   // 计算合适的初始缩放（contain：完整显示整张图，不放大）
   const iw=img.naturalWidth,ih=img.naturalHeight;
+  // 与第一页一致的 contain 适配：完整显示整张图并居中（全屏/退出全屏后重算即可适配新屏幕尺寸）
   const scale=Math.min(cw/iw,ch/ih);
   // 初始偏移居中
   const ox=-(iw*scale-cw)/2, oy=-(ih*scale-ch)/2;
@@ -984,9 +1419,14 @@ function markerTouchStart(e){
   container.addEventListener('touchmove',onMove,{passive:false});
   container.addEventListener('touchend',onEnd);
 }
-function goToMao(e){if(e&&e.currentTarget&&e.currentTarget._skipClick)return;hideMapTapHint();createRipple(e);setTimeout(()=>switchPage('maoPage'),500)}
-function goToZhu(e){if(e&&e.currentTarget&&e.currentTarget._skipClick)return;hideMapTapHint();createRipple(e);setTimeout(()=>switchPage('zhuPage'),500)}
-function goToFang(e){if(e&&e.currentTarget&&e.currentTarget._skipClick)return;hideMapTapHint();createRipple(e);setTimeout(()=>switchPage('fangPage'),500)}
+function goToMao(e){brandFly(e,'maoPage')}
+function goToZhu(e){brandFly(e,'zhuPage')}
+function goToFang(e){brandFly(e,'fangPage')}
+// 品牌光点点击：塔仅保留在第一页，地图到店家使用原有涟漪转场
+function brandFly(e,pageId){
+  if(e&&e.currentTarget&&e.currentTarget._skipClick)return;
+  hideMapTapHint();createRipple(e);setTimeout(()=>switchPage(pageId),500);
+}
 
 // ===== 精美Canvas涟漪 =====
 const RC=document.getElementById('ripple-canvas'),rx=RC.getContext('2d');
@@ -1196,13 +1636,45 @@ document.addEventListener('fullscreenchange',function(){
   const isFs=!!document.fullscreenElement;
   if(btn)btn.textContent=isFs?'✕':'⛶';
   if(isFs)lockPortrait();else unlockOrientation();
+  refitMapForViewport();watchMapViewport();
 });
 document.addEventListener('webkitfullscreenchange',function(){
   const btn=document.getElementById('fullscreenBtn');
   const isFs=!!document.webkitFullscreenElement;
   if(btn)btn.textContent=isFs?'✕':'';
   if(isFs)lockPortrait();else unlockOrientation();
+  refitMapForViewport();watchMapViewport();
 });
+// 全屏/旋转等视口尺寸变化后，重新按 contain 适配第二页背景并居中（等布局稳定后再测量）
+let _mapRefitTimer=null,_mapRefitTimer2=null,_mapLastVp='';
+function refitMapForViewport(){
+  if(typeof currentPage==='undefined'||currentPage!=='mapPage')return;
+  // 立即记下当前视口；手机全屏时尺寸更新可能滞后，用轮询+resize 双保险
+  _mapLastVp=innerWidth+'x'+innerHeight;
+  clearTimeout(_mapRefitTimer);
+  _mapRefitTimer=setTimeout(function(){try{initMapDrag()}catch(_){}},120);
+  // 兜底：再等一帧布局稳定后二次确认；若视口仍在变化，延迟到尺寸稳定为止
+  clearTimeout(_mapRefitTimer2);
+  _mapRefitTimer2=setTimeout(function(){
+    const vp=innerWidth+'x'+innerHeight;
+    if(vp!==_mapLastVp){refitMapForViewport();return}
+    try{initMapDrag()}catch(_){}
+  },520);
+}
+// 窗口尺寸变化（含全屏切换、地址栏收起）也会影响 contain 居中，统一重算
+window.addEventListener('resize',refitMapForViewport);
+// 手机全屏进入后持续监控约2秒，视口一变就重算，确保背景最终停在屏幕中心
+let _mapVpWatch=null;
+function watchMapViewport(){
+  clearInterval(_mapVpWatch);
+  const start=Date.now();
+  _mapVpWatch=setInterval(function(){
+    if(Date.now()-start>2000){clearInterval(_mapVpWatch);return}
+    const vp=innerWidth+'x'+innerHeight;
+    if(vp!==_mapLastVp)refitMapForViewport();
+  },300);
+}
+window.addEventListener('orientationchange',refitMapForViewport);
 document.addEventListener('click',function(){if(!musicOn){const c=bgms[bgmIdx];c.volume=bgmVol;c.play().then(()=>{mt.classList.add('playing');mt.classList.remove('muted');musicOn=true}).catch(()=>{})}},{once:true});
 
 // 星星 (multicolor)
@@ -1261,16 +1733,31 @@ function checkAns(s,c,b){if(!chActive)return;chActive=false;const r=document.get
 
 // ===== 朱炳仁 =====
 const pSpeech=['昔守朱门镇百瑞，今蹲案头稳日常','熔铜铸就齐天骨，陪你闯过生活八十一关','铜葫盛过千年福，为你攒满日常甜'];
-const pVoice=[{pitch:0.4,rate:0.7,label:'雄浑'},{pitch:1.0,rate:0.9,label:'活力'},{pitch:1.3,rate:1.0,label:'喜庆'}];
-function speakProduct(i){document.getElementById('productSpeechText').textContent=pSpeech[i];document.getElementById('productSpeech').classList.add('show');if(!('speechSynthesis'in window)){console.log('speechSynthesis不可用');return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(pSpeech[i]);u.lang='zh-CN';u.pitch=pVoice[i].pitch;u.rate=pVoice[i].rate;u.volume=1;u.onstart=()=>{if(speechSynthesis.paused)speechSynthesis.resume()};speechSynthesis.speak(u);// 某些浏览器需要resume触发
-setTimeout(()=>{if(speechSynthesis.paused)speechSynthesis.resume()},100);setTimeout(()=>{if(speechSynthesis.paused)speechSynthesis.resume()},500)}
+// 三个铜艺宝贝的配音音频：铜狮→狮子配音、齐天大圣→猴子配音、铜葫芦→葫芦配音
+const pVoiceSrc=['voiceLion','voiceMonkey','voiceGourd'];
+function speakProduct(i){
+  document.getElementById('productSpeechText').textContent=pSpeech[i];
+  document.getElementById('productSpeech').classList.add('show');
+  // 停掉系统 TTS 与其他宝贝配音，避免叠加播放
+  if('speechSynthesis'in window)speechSynthesis.cancel();
+  pVoiceSrc.forEach(function(id){var a=document.getElementById(id);if(a&&!a.paused)a.pause()});
+  var clip=document.getElementById(pVoiceSrc[i]);
+  if(clip){
+    clip.volume=.55; // 配音音量调低，避免盖过背景音乐
+    clip.currentTime=0;
+    var p=clip.play();
+    if(p&&p.catch)p.catch(function(){console.log('配音播放被浏览器拦截，等待下次交互重试')});
+  }else{console.log('未找到配音音频：'+pVoiceSrc[i])}
+}
 function playZhuVideo(){event.currentTarget.innerHTML='<div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a1207,#3d2b0f)"><div style="font-size:40px;margin-bottom:16px">🎬</div><div style="font-family:Ma Shan Zheng,serif;font-size:.95rem;color:#c9b28b;text-align:center;line-height:1.8;letter-spacing:2px">【短视频播放中】<br>从传统铜的制作到AI漫剧的传播<br>百年铜艺，用科技重新定义中国审美</div></div>'}
-let copperImageData=null;
+let copperImageData=null,copperTaskSeq=0;
 function handleCopperFile(input){
   const file=input.files[0];
   if(!file)return;
+  const task=++copperTaskSeq;
   const reader=new FileReader();
   reader.onload=function(e){
+    if(task!==copperTaskSeq)return;
     copperImageData=e.target.result;
     const a=document.getElementById('uploadArea');
     // 显示选择的图片预览
@@ -1288,196 +1775,220 @@ function handleCopperFile(input){
   input.value='';
 }
 
-// 前景分割：从四周边框估计背景色(K-means)，结合中心先验，生成柔和的“物品”遮罩
-// 返回 Float32Array(N)，值 0~1（1=物品/前景，0=背景）
+let copperAIModulePromise=null;
+function loadCopperSegmentationAI(){
+  if(!copperAIModulePromise){
+    copperAIModulePromise=import('https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/+esm')
+      .catch(function(err){copperAIModulePromise=null;throw err});
+  }
+  return copperAIModulePromise;
+}
+async function buildAISubjectMask(imageSource,W,H,button){
+  const mod=await loadCopperSegmentationAI();
+  if(!mod||typeof mod.removeBackground!=='function')throw new Error('AI segmentation module unavailable');
+  let lastText='',timeoutId=null;
+  const task=mod.removeBackground(imageSource,{
+    model:'isnet_quint8',device:'cpu',output:{format:'image/png'},
+    progress:function(key,current,total){
+      if(!button)return;let txt='AI正在识别主体';
+      if(total>0){const pct=Math.max(0,Math.min(100,Math.round(current/total*100)));txt=(key&&String(key).toLowerCase().includes('fetch')?'首次加载AI模型 ':'AI正在识别主体 ')+pct+'%'}
+      if(txt!==lastText){button.textContent=txt;lastText=txt}
+    }
+  });
+  let blob;
+  try{blob=await Promise.race([task,new Promise(function(_,reject){timeoutId=setTimeout(()=>reject(new Error('AI segmentation timeout')),45000)})])}
+  finally{clearTimeout(timeoutId)}
+  let decoded=null,tmpUrl='';
+  try{
+    if('createImageBitmap'in window)decoded=await createImageBitmap(blob);
+    else{tmpUrl=URL.createObjectURL(blob);decoded=await new Promise(function(resolve,reject){const im=new Image();im.onload=()=>resolve(im);im.onerror=reject;im.src=tmpUrl})}
+    const c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d',{willReadFrequently:true});
+    x.clearRect(0,0,W,H);x.drawImage(decoded,0,0,W,H);const d=x.getImageData(0,0,W,H).data,mask=new Float32Array(W*H);
+    // 对 AI Alpha 做 Otsu 自适应阈值：保留透明/浅色主体，同时抑制整幅低置信背景
+    const hist=new Uint32Array(256);for(let i=0;i<mask.length;i++)hist[d[i*4+3]]++;
+    let total=mask.length,sum=0;for(let i=0;i<256;i++)sum+=i*hist[i];
+    let wb=0,sb=0,best=0,bestV=-1;
+    for(let t=0;t<256;t++){wb+=hist[t];if(!wb)continue;const wf=total-wb;if(!wf)break;sb+=t*hist[t];const mb=sb/wb,mf=(sum-sb)/wf,v=wb*wf*(mb-mf)*(mb-mf);if(v>bestV){bestV=v;best=t}}
+    const lo=Math.max(2,best-24),hi=Math.min(252,Math.max(best+44,lo+32));
+    for(let i=0;i<mask.length;i++){let m=(d[i*4+3]-lo)/(hi-lo);m=m<0?0:m>1?1:m;m=m*m*(3-2*m);mask[i]=m}
+    return mask;
+  }finally{if(decoded&&decoded.close)decoded.close();if(tmpUrl)URL.revokeObjectURL(tmpUrl)}
+}
+
+// 通用主体估计：边框背景建模 + 边缘连通背景排除 + 显著性/纹理 + 连通主体筛选
+// 纯前端离线运行，不依赖云端 API；返回 Float32Array(N)，1=主体，0=背景
 function buildSubjectMask(src,W,H){
   const N=W*H;
-  // 1) 采集四周边框像素作为背景样本（用户照片主体通常居中，背景落在四周）
-  const bw=Math.max(3,Math.round(Math.min(W,H)*0.07));
-  const step=Math.max(1,Math.round(Math.min(W,H)/200));
+  // 透明 PNG/WebP 直接使用 Alpha 通道：这是最可靠的原生主体信息
+  let transparent=0;
+  for(let i=0;i<N;i++)if(src[i*4+3]<245)transparent++;
+  if(transparent>N*.012){const direct=new Float32Array(N);for(let i=0;i<N;i++){let m=src[i*4+3]/255;m=m*m*(3-2*m);direct[i]=m}return direct}
+  const lum=new Float32Array(N),grad=new Float32Array(N);
+  let ar=0,ag=0,ab=0;
+  for(let i=0;i<N;i++){const j=i*4,r=src[j],g=src[j+1],b=src[j+2];lum[i]=.2126*r+.7152*g+.0722*b;ar+=r;ag+=g;ab+=b}
+  ar/=N;ag/=N;ab/=N;
+  // 1) 用四周边框建立背景调色板；K=8 可适应室内、户外、渐变等复杂背景
+  const bw=Math.max(4,Math.round(Math.min(W,H)*.065)),step=Math.max(1,Math.round(Math.min(W,H)/180));
   const samp=[];
-  for(let y=0;y<H;y+=step){
-    for(let x=0;x<W;x+=step){
-      if(x<bw||x>=W-bw||y<bw||y>=H-bw){const j=(y*W+x)*4;samp.push(src[j],src[j+1],src[j+2])}
-    }
+  for(let y=0;y<H;y+=step)for(let x=0;x<W;x+=step){if(x<bw||x>=W-bw||y<bw||y>=H-bw){const j=(y*W+x)*4;samp.push(src[j],src[j+1],src[j+2])}}
+  const ns=samp.length/3,K=Math.max(1,Math.min(8,ns)),cent=[];
+  for(let k=0;k<K;k++){const q=Math.floor((ns-1)*k/Math.max(1,K-1))*3;cent.push([samp[q]||ar,samp[q+1]||ag,samp[q+2]||ab])}
+  for(let it=0;it<7&&ns>0;it++){
+    const sum=Array.from({length:K},()=>[0,0,0,0]);
+    for(let s=0;s<ns;s++){const r=samp[s*3],g=samp[s*3+1],b=samp[s*3+2];let bi=0,bd=1e12;
+      for(let k=0;k<K;k++){const dr=r-cent[k][0],dg=g-cent[k][1],db=b-cent[k][2],d=.30*dr*dr+.59*dg*dg+.11*db*db;if(d<bd){bd=d;bi=k}}
+      sum[bi][0]+=r;sum[bi][1]+=g;sum[bi][2]+=b;sum[bi][3]++}
+    for(let k=0;k<K;k++)if(sum[k][3])cent[k]=[sum[k][0]/sum[k][3],sum[k][1]/sum[k][3],sum[k][2]/sum[k][3]];
   }
-  const ns=samp.length/3;
-  // 2) K-means(K=6) 聚类边框色，得到背景调色板
-  let cent=[];
-  if(ns<6){
-    let r=0,g=0,b=0;for(let i=0;i<N;i++){const j=i*4;r+=src[j];g+=src[j+1];b+=src[j+2]}
-    cent=[[r/N,g/N,b/N]];
-  }else{
-    const K=6;
-    for(let k=0;k<K;k++){const idx=Math.floor(ns*k/K)*3;cent.push([samp[idx],samp[idx+1],samp[idx+2]])}
-    for(let it=0;it<8;it++){
-      const sum=[];for(let k=0;k<K;k++)sum.push([0,0,0,0]);
-      for(let s=0;s<ns;s++){
-        const r=samp[s*3],g=samp[s*3+1],bl=samp[s*3+2];
-        let best=0,bd=1e9;
-        for(let k=0;k<K;k++){const dr=r-cent[k][0],dg=g-cent[k][1],db=bl-cent[k][2];const d=dr*dr+dg*dg+db*db;if(d<bd){bd=d;best=k}}
-        sum[best][0]+=r;sum[best][1]+=g;sum[best][2]+=bl;sum[best][3]++;
-      }
-      for(let k=0;k<K;k++){if(sum[k][3]>0)cent[k]=[sum[k][0]/sum[k][3],sum[k][1]/sum[k][3],sum[k][2]/sum[k][3]]}
-    }
-  }
-  // 3) 逐像素到背景调色板的最小色差 → 前景分数（差得越多越像物品）
-  const mask=new Float32Array(N);
-  const T0=22,T1=62;
-  for(let i=0;i<N;i++){
-    const j=i*4,r=src[j],g=src[j+1],bl=src[j+2];
-    let bd=1e9;
-    for(let k=0;k<cent.length;k++){const dr=r-cent[k][0],dg=g-cent[k][1],db=bl-cent[k][2];const d=dr*dr+dg*dg+db*db;if(d<bd)bd=d}
-    let f=(Math.sqrt(bd)-T0)/(T1-T0);f=f<0?0:f>1?1:f;
-    mask[i]=f;
-  }
-  // 4) 中心先验：主体多居中，越靠边适度抑制，避免背景噪点误判
-  const cx=(W-1)/2,cy=(H-1)/2;
-  for(let y=0;y<H;y++){
-    const dy=(y-cy)/cy;
-    for(let x=0;x<W;x++){
-      const dx=(x-cx)/cx;
-      const rr=Math.sqrt(dx*dx+dy*dy);
-      let cw=1-(rr-0.6)/0.74;cw=cw<0?0:cw>1?1:cw;
-      mask[y*W+x]*=0.4+0.6*cw;
-    }
-  }
-  // 5) 盒式模糊柔化边界(两遍) + smoothstep 收紧，得到平滑抗锯齿遮罩
-  const rad=Math.max(1,Math.round(Math.min(W,H)*0.011));
-  const blur=m=>{
-    const t=new Float32Array(N),o=new Float32Array(N);
-    for(let y=0;y<H;y++){const r0=y*W;
-      for(let x=0;x<W;x++){let s=0,c=0;for(let k=-rad;k<=rad;k++){const xx=x+k;if(xx>=0&&xx<W){s+=m[r0+xx];c++}}t[r0+x]=s/c}}
-    for(let y=0;y<H;y++){const r0=y*W;
-      for(let x=0;x<W;x++){let s=0,c=0;for(let k=-rad;k<=rad;k++){const yy=y+k;if(yy>=0&&yy<H){s+=t[yy*W+x];c++}}o[r0+x]=s/c}}
+  // 2) 局部梯度：补足与背景同色但轮廓/纹理明显的物品
+  for(let y=1;y<H-1;y++)for(let x=1;x<W-1;x++){const i=y*W+x;
+    const gx=lum[i+1]-lum[i-1],gy=lum[i+W]-lum[i-W];grad[i]=Math.min(1,Math.sqrt(gx*gx+gy*gy)/72)}
+  // O(N) 盒式模糊，用于闭合主体内部与抗锯齿
+  const boxBlur=(m,rad)=>{const t=new Float32Array(N),o=new Float32Array(N);
+    for(let y=0;y<H;y++){let s=0;const row=y*W;for(let x=0;x<=rad&&x<W;x++)s+=m[row+x];
+      for(let x=0;x<W;x++){t[row+x]=s/(Math.min(W-1,x+rad)-Math.max(0,x-rad)+1);const rm=x-rad;if(rm>=0)s-=m[row+rm];const ad=x+rad+1;if(ad<W)s+=m[row+ad]}}
+    for(let x=0;x<W;x++){let s=0;for(let y=0;y<=rad&&y<H;y++)s+=t[y*W+x];
+      for(let y=0;y<H;y++){o[y*W+x]=s/(Math.min(H-1,y+rad)-Math.max(0,y-rad)+1);const rm=y-rad;if(rm>=0)s-=t[rm*W+x];const ad=y+rad+1;if(ad<H)s+=t[ad*W+x]}}
     return o};
-  const sm=blur(blur(mask));
-  for(let i=0;i<N;i++){let m=sm[i];m=m*m*(3-2*m);m=m*m*(3-2*m);sm[i]=m<0?0:m>1?1:m}
-  return sm;
+  // 3) 背景色差 + 全局显著性 + 纹理 + 温和空间先验（主体可偏离中心或触边）
+  const raw=new Float32Array(N),globalDiff=new Float32Array(N),cx=(W-1)/2,cy=(H-1)/2;
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){const i=y*W+x,j=i*4,r=src[j],g=src[j+1],b=src[j+2];let bd=1e12;
+    for(let k=0;k<K;k++){const dr=r-cent[k][0],dg=g-cent[k][1],db=b-cent[k][2],d=.30*dr*dr+.59*dg*dg+.11*db*db;if(d<bd)bd=d}
+    let color=(Math.sqrt(bd)-14)/54;color=color<0?0:color>1?1:color;
+    let sal=Math.sqrt(.30*(r-ar)*(r-ar)+.59*(g-ag)*(g-ag)+.11*(b-ab)*(b-ab))/105;sal=sal>1?1:sal;globalDiff[i]=sal;
+    const dx=(x-cx)/Math.max(1,cx),dy=(y-cy)/Math.max(1,cy),rr=Math.sqrt(dx*dx+dy*dy);
+    const spatial=Math.max(0,Math.min(1,1-(rr-.52)/.82));
+    let f=color*.72+sal*.16+grad[i]*.22+spatial*.08;f*=.68+.32*spatial;raw[i]=f>1?1:f;
+  }
+  // 4) 从图像四边向内洪泛“像背景且低纹理”的像素；物品触边但颜色不同也不会被误删
+  const bg=new Uint8Array(N),queue=new Int32Array(N);let qh=0,qt=0;
+  const seed=k=>{if(!bg[k]&&(raw[k]<.23||(raw[k]<.35&&globalDiff[k]<.34))&&grad[k]<.50){bg[k]=1;queue[qt++]=k}};
+  for(let x=0;x<W;x++){seed(x);seed((H-1)*W+x)}for(let y=0;y<H;y++){seed(y*W);seed(y*W+W-1)}
+  while(qh<qt){const k=queue[qh++],x=k%W,y=(k/W)|0;
+    if(x>0){const n=k-1;if(!bg[n]&&(raw[n]<.29||(raw[n]<.40&&globalDiff[n]<.40))&&grad[n]<.57){bg[n]=1;queue[qt++]=n}}
+    if(x<W-1){const n=k+1;if(!bg[n]&&(raw[n]<.29||(raw[n]<.40&&globalDiff[n]<.40))&&grad[n]<.57){bg[n]=1;queue[qt++]=n}}
+    if(y>0){const n=k-W;if(!bg[n]&&(raw[n]<.29||(raw[n]<.40&&globalDiff[n]<.40))&&grad[n]<.57){bg[n]=1;queue[qt++]=n}}
+    if(y<H-1){const n=k+W;if(!bg[n]&&(raw[n]<.29||(raw[n]<.40&&globalDiff[n]<.40))&&grad[n]<.57){bg[n]=1;queue[qt++]=n}}
+  }
+  for(let i=0;i<N;i++){if(bg[i])raw[i]*=.035;else raw[i]=Math.max(raw[i],.20+globalDiff[i]*.18+grad[i]*.06)}
+  const rad=Math.max(2,Math.round(Math.min(W,H)*.009)),soft=boxBlur(boxBlur(raw,rad),Math.max(1,Math.round(rad*.55)));
+  // 5) 连通域筛选：保留最显著主体，也保留达到主主体一定比例的多个物品/人物
+  const labels=new Int32Array(N),areas=[0],scores=[0],central=[0];let lid=0,maxMetric=0;
+  for(let i=0;i<N;i++){if(labels[i]||bg[i]||soft[i]<.245)continue;lid++;qh=0;qt=0;queue[qt++]=i;labels[i]=lid;let area=0,sum=0,hit=0;
+    while(qh<qt){const k=queue[qh++],x=k%W,y=(k/W)|0;area++;sum+=soft[k];
+      const dx=(x-cx)/Math.max(1,cx),dy=(y-cy)/Math.max(1,cy);if(dx*dx+dy*dy<.52)hit++;
+      if(x>0){const n=k-1;if(!labels[n]&&!bg[n]&&soft[n]>=.245){labels[n]=lid;queue[qt++]=n}}
+      if(x<W-1){const n=k+1;if(!labels[n]&&!bg[n]&&soft[n]>=.245){labels[n]=lid;queue[qt++]=n}}
+      if(y>0){const n=k-W;if(!labels[n]&&!bg[n]&&soft[n]>=.245){labels[n]=lid;queue[qt++]=n}}
+      if(y<H-1){const n=k+W;if(!labels[n]&&!bg[n]&&soft[n]>=.245){labels[n]=lid;queue[qt++]=n}}
+    }
+    areas[lid]=area;scores[lid]=sum;central[lid]=hit;
+    const metric=sum*(hit?1.3:1);if(metric>maxMetric)maxMetric=metric;
+  }
+  const keep=new Uint8Array(lid+1),minArea=Math.max(48,Math.round(N*.00055));
+  for(let id=1;id<=lid;id++){const avg=scores[id]/Math.max(1,areas[id]),metric=scores[id]*(central[id]?1.3:1);
+    if(areas[id]>=minArea&&avg>.255&&(central[id]>0||metric>=maxMetric*.12||areas[id]>=N*.045))keep[id]=1}
+  let shaped=new Float32Array(N),sumMask=0;
+  for(let i=0;i<N;i++){let m=labels[i]&&keep[labels[i]]?soft[i]:soft[i]*.035;if(bg[i])m*=.03;
+    m=(m-.12)/.63;m=m<0?0:m>1?1:m;m=m*m*(3-2*m);shaped[i]=m;sumMask+=m}
+  // 极端照片兜底：如果主体覆盖过小，保留最大的显著连通区域，不返回空遮罩
+  if(sumMask/N<.018){for(let i=0;i<N;i++){const x=i%W,y=(i/W)|0,dx=(x-cx)/Math.max(1,cx),dy=(y-cy)/Math.max(1,cy);
+      const cp=Math.max(.18,1-Math.sqrt(dx*dx+dy*dy)*.52);let m=soft[i]*cp;m=(m-.08)/.52;shaped[i]=m<0?0:m>1?1:m}}
+  const feather=boxBlur(shaped,Math.max(1,Math.round(Math.min(W,H)*.004)));
+  for(let i=0;i<N;i++){let m=shaped[i]*.72+feather[i]*.28;if(grad[i]>.42)m=shaped[i]*.86+feather[i]*.14;shaped[i]=m<0?0:m>1?1:m}
+  return shaped;
 }
 
 function generateCopper(){
-  if(!copperImageData){
-    // 没有真实图片时回退模拟
-    const a=document.getElementById('uploadArea');
-    a.innerHTML='<div style="font-size:40px;margin-bottom:8px">🖼️</div><p style="font-size:.8rem;color:#e8c86a;letter-spacing:1px">照片已选择</p><p style="font-size:.7rem;color:rgba(201,178,139,.3);margin-top:4px">点击下方按钮生成铜艺品</p>';
-    a.style.borderColor='rgba(196,154,60,.35)';
-    const b=document.getElementById('genBtn');b.textContent='生成中...';b.style.opacity='.6';b.style.pointerEvents='none';
-    setTimeout(()=>{b.style.display='none';document.getElementById('aiDesignResult').classList.add('show')},2000);
-    return;
-  }
-  const b=document.getElementById('genBtn');b.textContent='生成中...';b.style.opacity='.6';b.style.pointerEvents='none';
-  // 只把照片中的“物品”改成铜质感+金属光泽，背景保持原样：
-  // 柔化→浮雕→铜色渐变映射→金属光泽/暗角 得到整幅铜质版本，再用前景遮罩只贴到物品上
+  if(!copperImageData)return;
+  const copperTask=++copperTaskSeq;
+  const b=document.getElementById('genBtn');b.textContent='正在识别主体...';b.style.opacity='.66';b.style.pointerEvents='none';
   const img=new Image();
   img.onload=function(){
-    const canvas=document.getElementById('copperCanvas');
+    if(copperTask!==copperTaskSeq)return;
+    const canvas=document.getElementById('copperCanvas'),resultBox=canvas.closest('.result-img');
     const ctx=canvas.getContext('2d',{willReadFrequently:true});
-    const size=Math.min(img.width,img.height,900);
-    const ratio=size/Math.max(img.width,img.height);
+    const ratio=Math.min(1,760/Math.max(img.width,img.height));
     const W=Math.max(2,Math.round(img.width*ratio)),H=Math.max(2,Math.round(img.height*ratio));
-    canvas.width=W;canvas.height=H;
+    canvas.width=W;canvas.height=H;if(resultBox)resultBox.style.aspectRatio=W+'/'+H;
     ctx.drawImage(img,0,0,W,H);
-    const src=ctx.getImageData(0,0,W,H).data;   // 原始照片像素
-    const N=W*H;
-    const orig=new Uint8ClampedArray(src);       // 备份原图（背景保持不变）
-    // 1) 亮度提取
-    const L0=new Float32Array(N);
-    for(let i=0;i<N;i++){const j=i*4;L0[i]=.299*src[j]+.587*src[j+1]+.114*src[j+2]}
-    // 2) 两次3x3盒式柔光（保留轮廓，抑制照片噪点）
-    const smooth=s=>{const d=s.slice();
-      for(let y=1;y<H-1;y++){const r0=y*W;
-        for(let x=1;x<W-1;x++){const k=r0+x;
-          d[k]=(s[k]*4+s[k-1]+s[k+1]+s[k-W]+s[k+W])/8}}
-      return d};
-    const L=smooth(smooth(L0));
-    // 3) 浮雕（光源在左上）：模拟錾刻起伏，让物品呈现铜雕立体感
-    const relief=new Float32Array(N);
-    for(let y=1;y<H-1;y++){const r0=y*W;
-      for(let x=1;x<W-1;x++){const k=r0+x;relief[k]=(L[k]-L[k+W+1])*.85}}
-    // 4) 铜色渐变映射（暗棕→标准铜→亮金高光，连续过渡不失真）
-    const stops=[[0,26,13,7],[.16,66,32,14],[.34,124,64,26],[.52,178,110,47],[.68,215,153,85],[.84,243,199,139],[1,255,241,215]];
-    const ramp=t=>{t=t<0?0:t>1?1:t;
-      for(let i=1;i<stops.length;i++){if(t<=stops[i][0]){
-        const a=stops[i-1],b2=stops[i],f=(t-a[0])/(b2[0]-a[0]);
-        return [a[1]+(b2[1]-a[1])*f,a[2]+(b2[2]-a[2])*f,a[3]+(b2[3]-a[3])*f]}}
-      return [255,241,215]};
-    const copperImg=ctx.createImageData(W,H);
-    const cd=copperImg.data;
-    // 铜色基底 + 法线漫反射明暗 + 双瓣镜面高光（宽缎面光泽 + 锐利金属亮点），强化铜质感
-    const bump=2.8;                          // 凹凸强度
-    const gb=Math.max(2,Math.round(Math.min(W,H)*0.015)); // 法线梯度基线（较宽→捕捉宏观形态，平滑物体也能出高光）
-    const LX=-0.42,LY=-0.58,LZ=0.70;         // 光源方向（左上前）
-    let HX=LX,HY=LY,HZ=LZ+1;                 // 半程向量 L+V（V=视线正前）
-    const hinv=1/Math.sqrt(HX*HX+HY*HY+HZ*HZ);HX*=hinv;HY*=hinv;HZ*=hinv;
-    for(let y=0;y<H;y++){const r0=y*W;
-      for(let x=0;x<W;x++){
-        const k=r0+x,j=k*4;
-        let v=.5+(L[k]/255-.5)*1.4;          // 提高对比：暗部更沉、亮部更金
-        v+=relief[k]/255;
-        v+=(Math.random()-.5)*.022;
-        const c=ramp(v);
-        let R=c[0],G=c[1],B=c[2];
-        if(x>=gb&&x<W-gb&&y>=gb&&y<H-gb){
-          const dx=(L[k+gb]-L[k-gb])/255,dy=(L[k+gb*W]-L[k-gb*W])/255;  // 宽基线梯度→形态法线
-          let nx=-dx*bump,ny=-dy*bump,nz=1;
-          const inv=1/Math.sqrt(nx*nx+ny*ny+nz*nz);nx*=inv;ny*=inv;nz*=inv;
-          let nl=nx*LX+ny*LY+nz*LZ;if(nl<0)nl=0;         // 漫反射：錾刻立体明暗
-          const shade=.5+.72*nl;
-          R*=shade;G*=shade;B*=shade;
-          let d=nx*HX+ny*HY+nz*HZ;if(d<0)d=0;             // 双瓣镜面高光
-          const d2=d*d,d4=d2*d2,d8=d4*d4;
-          let spec=d8*d2*.30+d8*d8*d4*d2*1.0;             // d^10 缎面 + d^22 亮点
-          if(spec>1.15)spec=1.15;
-          R+=(255-R)*spec;G+=(247-G)*spec;B+=(226-B)*spec;
-        }
-        cd[j]=R<0?0:R>255?255:R;
-        cd[j+1]=G<0?0:G>255?255:G;
-        cd[j+2]=B<0?0:B>255?255:B;
-        cd[j+3]=255;
-      }
-    }
-    ctx.putImageData(copperImg,0,0);
-    // 5) 定向金属光泽（overlay混合）：左上暖金反光→右下深铜阴影
-    ctx.globalCompositeOperation='overlay';
-    const sheen=ctx.createLinearGradient(0,0,W,H);
-    sheen.addColorStop(0,'rgba(255,240,200,.5)');sheen.addColorStop(.42,'rgba(255,214,150,.14)');
-    sheen.addColorStop(.74,'rgba(122,54,18,.2)');sheen.addColorStop(1,'rgba(52,19,6,.36)');
-    ctx.fillStyle=sheen;ctx.fillRect(0,0,W,H);
-    ctx.globalCompositeOperation='source-over';
-    // 6) 左上柔和高光 + 边缘暗角（铜器实体感）
-    const gl=ctx.createRadialGradient(W*.3,H*.24,0,W*.3,H*.24,Math.max(W,H)*.5);
-    gl.addColorStop(0,'rgba(255,244,214,.18)');gl.addColorStop(.5,'rgba(255,232,184,.05)');gl.addColorStop(1,'rgba(255,232,184,0)');
-    ctx.fillStyle=gl;ctx.fillRect(0,0,W,H);
-    const edge=ctx.createRadialGradient(W/2,H/2,Math.min(W,H)*.36,W/2,H/2,Math.max(W,H)*.72);
-    edge.addColorStop(0,'rgba(0,0,0,0)');edge.addColorStop(.8,'rgba(26,10,2,.15)');edge.addColorStop(1,'rgba(14,6,1,.38)');
-    ctx.fillStyle=edge;ctx.fillRect(0,0,W,H);
-    const copperFull=ctx.getImageData(0,0,W,H).data;  // 完整铜质版本
-    // 7) 前景分割：只保留“物品”区域变铜，背景用回原图像素
-    const mask=buildSubjectMask(src,W,H);
-    const out=ctx.createImageData(W,H);
-    const od=out.data;
-    for(let i=0;i<N;i++){const j=i*4,m=mask[i],im=1-m;
-      od[j]=orig[j]*im+copperFull[j]*m;
-      od[j+1]=orig[j+1]*im+copperFull[j+1]*m;
-      od[j+2]=orig[j+2]*im+copperFull[j+2]*m;
-      od[j+3]=255;
-    }
-    ctx.putImageData(out,0,0);
-    // 显示结果
-    canvas.style.display='block';
-    document.getElementById('copperPlaceholder').style.display='none';
-    b.style.display='none';
-    document.getElementById('aiDesignResult').classList.add('show');
+    const src=ctx.getImageData(0,0,W,H).data,N=W*H,orig=new Uint8ClampedArray(src);
+    let transparentPixels=0;for(let i=0;i<N;i++)if(src[i*4+3]<245)transparentPixels++;
+    const sourceHasAlpha=transparentPixels>N*.012;
+    // 让按钮先完成一次重绘，再执行主体识别，避免用户误以为页面卡死
+    setTimeout(function(){(async function(){
+      let mask=null,aiUsed=false;
+      if(sourceHasAlpha){b.textContent='已读取透明主体轮廓';mask=buildSubjectMask(src,W,H)}
+      else try{b.textContent='AI正在识别主体（首次需加载模型）';mask=await buildAISubjectMask(copperImageData,W,H,b);aiUsed=true}
+      catch(err){console.warn('AI主体识别不可用，切换本地算法：',err);b.textContent='正在使用离线主体识别...';mask=buildSubjectMask(src,W,H)}
+      if(copperTask!==copperTaskSeq)return;
+      if(aiUsed){const local=buildSubjectMask(src,W,H);for(let i=0;i<N;i++)mask[i]=Math.max(mask[i],local[i]*.42)}
+      b.textContent='正在塑造铜金属...';
+      setTimeout(function(){
+        if(copperTask!==copperTaskSeq)return;
+        const L0=new Float32Array(N);
+        for(let i=0;i<N;i++){const j=i*4;L0[i]=.2126*src[j]+.7152*src[j+1]+.0722*src[j+2]}
+        const smooth=s=>{const d=s.slice();for(let y=1;y<H-1;y++){const r0=y*W;for(let x=1;x<W-1;x++){const k=r0+x;
+          d[k]=(s[k]*4+s[k-1]+s[k+1]+s[k-W]+s[k+W])/8}}return d};
+        const L=smooth(smooth(smooth(L0))),detail=new Float32Array(N),relief=new Float32Array(N);
+        for(let y=1;y<H-1;y++)for(let x=1;x<W-1;x++){const k=y*W+x;detail[k]=L0[k]-L[k];relief[k]=(L[k]-L[k+W+1])*.88}
+        // 暗褐铜→朱铜→亮金：保留原主体明暗结构，强化实心铸铜感
+        const stops=[[0,20,8,4],[.13,52,20,8],[.29,104,43,16],[.46,160,78,27],[.62,203,125,52],[.77,232,173,99],[.90,250,218,171],[1,255,247,226]];
+        const ramp=t=>{t=t<0?0:t>1?1:t;for(let i=1;i<stops.length;i++)if(t<=stops[i][0]){const a=stops[i-1],c=stops[i],f=(t-a[0])/(c[0]-a[0]);return[a[1]+(c[1]-a[1])*f,a[2]+(c[2]-a[2])*f,a[3]+(c[3]-a[3])*f]}return[255,247,226]};
+        const out=ctx.createImageData(W,H),od=out.data;
+        const bump=3.25,gb=Math.max(2,Math.round(Math.min(W,H)*.012));
+        const LX=-.40,LY=-.56,LZ=.72;let HX=LX,HY=LY,HZ=LZ+1;const hi=1/Math.sqrt(HX*HX+HY*HY+HZ*HZ);HX*=hi;HY*=hi;HZ*=hi;
+        for(let y=0;y<H;y++){const row=y*W;for(let x=0;x<W;x++){
+          const k=row+x,j=k*4;
+          // 背景轻微降饱和、降亮度并偏暖；透明输入则用暖棕摄影棚背景替代黑底
+          const gray=L0[k],oa=orig[j+3]/255,dx0=x/W-.5,dy0=y/H-.44,glow=Math.max(0,1-Math.sqrt(dx0*dx0+dy0*dy0)*1.65);
+          const bgR=oa>.04?orig[j]*.70+gray*.15+5:20+glow*42;
+          const bgG=oa>.04?orig[j+1]*.70+gray*.12+2:9+glow*24;
+          const bgB=oa>.04?orig[j+2]*.70+gray*.08:4+glow*11;
+          let v=.62+(L[k]/255-.5)*.78+relief[k]/245+detail[k]/370;
+          const grain=(((x*17+y*29)%37)/37-.5),brush=Math.sin(x*.43+y*.075)*.5+Math.sin(x*.11-y*.19)*.24;
+          v+=grain*.025+brush*.012;
+          const c=ramp(v);let R=c[0],G=c[1],B=c[2];
+          if(x>=gb&&x<W-gb&&y>=gb&&y<H-gb){
+            const dx=(L[k+gb]-L[k-gb])/255,dy=(L[k+gb*W]-L[k-gb*W])/255;
+            let nx=-dx*bump,ny=-dy*bump,nz=1,inv=1/Math.sqrt(nx*nx+ny*ny+nz*nz);nx*=inv;ny*=inv;nz*=inv;
+            let nl=Math.max(0,nx*LX+ny*LY+nz*LZ),shade=.62+.62*nl;R*=shade;G*=shade;B*=shade;
+            let d=Math.max(0,nx*HX+ny*HY+nz*HZ),d2=d*d,d4=d2*d2,d8=d4*d4;
+            const rough=.22+.30*(1-Math.min(1,Math.abs(detail[k])/32));
+            let spec=d8*d2*(.34+rough*.28)+d8*d8*d4*d2*(.78-rough*.32);spec=Math.min(1.12,spec);
+            // 一道沿物体掠过的环境反光带，模拟抛光铜镜面
+            const bandPos=x/W*.86+y/H*.28,band=Math.exp(-Math.pow((bandPos-.43)/.105,2))*.34;
+            spec=Math.min(1.2,spec+band);
+            R+=(255-R)*spec;G+=(244-G)*spec;B+=(214-B)*spec;
+          }
+          // 边缘亮金：来自遮罩梯度，强调主体轮廓而不是把背景染铜
+          let rim=0;if(x>0&&x<W-1&&y>0&&y<H-1)rim=Math.min(1,(Math.abs(mask[k+1]-mask[k-1])+Math.abs(mask[k+W]-mask[k-W]))*1.8);
+          R+=(255-R)*rim*.48;G+=(224-G)*rim*.40;B+=(151-B)*rim*.26;
+          // 暗部轻微铜绿氧化，只落在铜主体阴影里
+          const patina=Math.max(0,.28-v)*(.45+.55*Math.max(0,brush));G+=patina*64;B+=patina*47;R-=patina*22;
+          R=Math.max(0,Math.min(255,R));G=Math.max(0,Math.min(255,G));B=Math.max(0,Math.min(255,B));
+          let m=Math.min(1,Math.pow(mask[k],.72)*1.08);m=m*m*(3-2*m);const im=1-m;
+          od[j]=bgR*im+R*m;od[j+1]=bgG*im+G*m;od[j+2]=bgB*im+B*m;od[j+3]=255;
+        }}
+        ctx.putImageData(out,0,0);
+        // 顶层暖金光与暗角，统一铜器摄影质感
+        ctx.globalCompositeOperation='soft-light';
+        const sheen=ctx.createLinearGradient(0,0,W,H);sheen.addColorStop(0,'rgba(255,239,191,.25)');sheen.addColorStop(.44,'rgba(204,116,40,.06)');sheen.addColorStop(1,'rgba(44,14,4,.16)');
+        ctx.fillStyle=sheen;ctx.fillRect(0,0,W,H);ctx.globalCompositeOperation='source-over';
+        canvas.style.display='block';document.getElementById('copperPlaceholder').style.display='none';
+        b.style.display='none';document.getElementById('aiDesignResult').classList.add('show');
+      },36);
+    })().catch(function(err){if(copperTask!==copperTaskSeq)return;console.error(err);b.textContent='处理失败，请换一张照片重试';b.style.opacity='1';b.style.pointerEvents='auto'})},56);
   };
+  img.onerror=function(){if(copperTask!==copperTaskSeq)return;b.textContent='图片读取失败，请重新选择';b.style.opacity='1';b.style.pointerEvents='auto'};
   img.src=copperImageData;
 }
 
 function resetCopperDesign(){
   // 重置为初始状态
-  copperImageData=null;
+  copperTaskSeq++;copperImageData=null;
   const a=document.getElementById('uploadArea');
-  a.innerHTML='<div class="upload-icon">📷</div><p>点击选择照片（相册/拍照）</p><p style="font-size:.7rem;margin-top:4px;opacity:.45">AI将为你生成铜艺风格设计</p>';
+  a.innerHTML='<div class="upload-icon">📷</div><p>点击选择照片（相册/拍照）</p><p style="font-size:.7rem;margin-top:4px;opacity:.45">自动识别照片中的物品或人物主体并铜化（首次 AI 识别需联网加载模型）</p>';
   a.style.borderColor='';a.style.overflow='';
   document.getElementById('genBtn').style.display='none';
   document.getElementById('aiDesignResult').classList.remove('show');
