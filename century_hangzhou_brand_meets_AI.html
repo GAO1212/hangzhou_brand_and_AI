@@ -265,7 +265,7 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
 .merchant-page{padding:0;flex-direction:column;align-items:stretch;justify-content:flex-start}
 /* 背景双层：清晰完整图(contain)+暗遮罩在上，四周同图放大模糊(cover)填充在下，消除手机黑边且不裁切主图 */
 .merchant-page::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background:var(--mbg) center/cover no-repeat;filter:blur(20px) brightness(.6) saturate(1.15);transform:scale(1.14)}
+  background:var(--mbg) center/cover no-repeat;filter:blur(20px) brightness(.68) saturate(1.15);transform:scale(1.14)}
 .merchant-page::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
   background-image:linear-gradient(var(--mtint),var(--mtint)),var(--mbg);
   background-size:cover,contain;background-position:center,center;background-repeat:no-repeat,no-repeat;
@@ -313,7 +313,7 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
 .merchant-page .reveal.in{opacity:1;transform:translateY(0)}
 
 /* ===== MAO PAGE (Blue) ===== */
-#maoPage{background-color:#0a0e14;--mbg:url('images/毛源昌眼镜页背景.jpg');--mtint:rgba(6,10,17,.7)}
+#maoPage{background-color:#0a0e14;--mbg:url('images/毛源昌眼镜页背景.jpg');--mtint:rgba(6,10,17,.5)}
 #maoPage .hero::before{background:
   radial-gradient(ellipse at 30% 40%,rgba(74,139,194,.16) 0%,transparent 60%),
   radial-gradient(ellipse at 70% 60%,rgba(96,165,250,.1) 0%,transparent 50%)}
@@ -432,7 +432,7 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
 .challenge-start-btn:active{transform:scale(.94);box-shadow:0 0 50px rgba(96,165,250,.35)}
 
 /* ===== ZHU PAGE (Copper/Gold) ===== */
-#zhuPage{background-color:#0d0a06;--mbg:url('images/朱炳仁铜页背景.jpg');--mtint:rgba(13,9,4,.7)}
+#zhuPage{background-color:#0d0a06;--mbg:url('images/朱炳仁铜页背景.jpg');--mtint:rgba(13,9,4,.5)}
 #zhuPage .hero::before{background:
   radial-gradient(ellipse at 40% 35%,rgba(196,154,60,.14) 0%,transparent 55%),
   radial-gradient(ellipse at 60% 65%,rgba(232,200,106,.08) 0%,transparent 50%)}
@@ -445,16 +445,55 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
   animation:gradText 5s ease infinite;
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   filter:drop-shadow(0 0 25px rgba(232,200,106,.25))}
-.products-grid{display:flex;gap:12px;overflow-x:auto;padding:8px 0;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory}
+.products-grid{display:flex;gap:12px;overflow-x:auto;padding:28px 0 16px;margin-top:-20px;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory}
 .product-card{flex:0 0 calc(33.33% - 8px);min-width:110px;background:rgba(196,154,60,.04);border-radius:20px;
-  padding:16px;text-align:center;border:1px solid rgba(196,154,60,.08);scroll-snap-align:start;
-  cursor:pointer;transition:all .3s;box-shadow:0 8px 30px rgba(0,0,0,.3)}
-.product-card:active{transform:scale(.95);background:rgba(196,154,60,.08)}
-.product-card .emoji{font-size:40px;margin-bottom:10px;display:block;transition:transform .5s}
-.product-card .emoji img{width:80px;height:80px;object-fit:cover;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.4)}
-.product-card:active .emoji{transform:rotate(8deg) scale(1.12)}
-.product-card .p-name{font-family:'Ma Shan Zheng',serif;font-size:1.1rem;color:#e8c86a;margin-bottom:4px;letter-spacing:2px}
-.product-card .p-desc{font-size:.85rem;color:rgba(201,178,139,.45);line-height:1.6}
+  padding:12px 8px;text-align:center;border:1px solid rgba(196,154,60,.08);scroll-snap-align:start;
+  cursor:pointer;transition:transform .25s ease,background .25s ease,border-color .25s ease;box-shadow:0 8px 30px rgba(0,0,0,.3);color:inherit}
+.product-card:active{transform:scale(.96);background:rgba(196,154,60,.08)}
+.product-stage{position:relative;display:block;width:100%;max-width:122px;aspect-ratio:1;margin:0 auto 7px;isolation:isolate}
+.product-rig{position:absolute;inset:0;display:block;transform-origin:50% 78%;will-change:transform}
+.product-art{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 8px 9px rgba(0,0,0,.5));pointer-events:none;user-select:none;-webkit-user-drag:none}
+.product-mouth{position:absolute;left:var(--mouth-x);top:var(--mouth-y);width:var(--mouth-w);height:var(--mouth-h);
+  transform:translate(-50%,-50%) scaleY(.12);transform-origin:center;opacity:0;z-index:2;border-radius:50%;
+  background:radial-gradient(ellipse at 50% 34%,#f4be69 0 12%,#5a170d 32%,#160705 76%);
+  border:1px solid rgba(255,211,121,.82);box-shadow:0 0 5px rgba(255,181,61,.48);pointer-events:none}
+.product-stage::after{content:'';position:absolute;left:50%;bottom:7%;width:72%;height:18%;transform:translateX(-50%) scale(.55);
+  border-radius:50%;background:radial-gradient(ellipse,rgba(232,168,50,.32),rgba(232,168,50,0) 70%);opacity:0;z-index:-1}
+.product-card.speaking{background:rgba(196,154,60,.09);border-color:rgba(232,200,106,.38)}
+.product-card.speaking .product-mouth{opacity:.96;animation:copperMouth .24s ease-in-out infinite alternate}
+.product-card.speaking .product-stage::after{animation:copperVoiceGlow .9s ease-in-out infinite alternate}
+.product-card[data-character='lion'].speaking .product-rig{animation:copperLionTalk 1.15s ease-in-out infinite}
+.product-card[data-character='monkey'].speaking .product-rig{animation:copperMonkeyTalk 1.15s ease-in-out infinite}
+.product-card[data-character='gourd'].speaking .product-rig{animation:copperGourdTalk 1.15s ease-in-out infinite}
+@keyframes copperMouth{from{transform:translate(-50%,-50%) scaleY(.16)}to{transform:translate(-50%,-50%) scaleY(1)}}
+@keyframes copperVoiceGlow{from{opacity:.35;transform:translateX(-50%) scale(.72)}to{opacity:1;transform:translateX(-50%) scale(1.22)}}
+/* 手机小屏强化动作：位移、旋转与轻微缩放均只作用于铜品角色 */
+@keyframes copperLionTalk{
+  0%,100%{transform:translateY(0) rotate(0) scale(1)}
+  28%{transform:translateY(5px) rotate(-5deg) scale(1.04)}
+  58%{transform:translateY(-5px) rotate(3.5deg) scale(1.08)}
+  78%{transform:translateY(2px) rotate(-2deg) scale(1.03)}
+}
+@keyframes copperMonkeyTalk{
+  0%,100%{transform:translateY(0) rotate(0) scale(1)}
+  25%{transform:translateY(-14px) rotate(-6deg) scale(1.08)}
+  48%{transform:translateY(2px) rotate(5deg) scale(.98)}
+  70%{transform:translateY(-9px) rotate(-3.5deg) scale(1.05)}
+  86%{transform:translateY(1px) rotate(2deg) scale(1)}
+}
+@keyframes copperGourdTalk{
+  0%,100%{transform:translateY(1px) rotate(-5deg) scale(1)}
+  50%{transform:translateY(-9px) rotate(6deg) scale(1.07)}
+}
+.product-card .p-name{display:block;font-family:'Ma Shan Zheng',serif;font-size:1.1rem;color:#e8c86a;margin-bottom:4px;letter-spacing:2px}
+.product-card .p-desc{display:block;font-size:.85rem;color:rgba(201,178,139,.45);line-height:1.6}
+@media (prefers-reduced-motion:reduce){
+  #zhuPage .product-card{transition:none}
+  #zhuPage .product-card:active{transform:none}
+  #zhuPage .product-card.speaking .product-rig,#zhuPage .product-card.speaking .product-stage::after{animation:none}
+  #zhuPage .product-card.speaking .product-mouth{animation:none;transform:translate(-50%,-50%) scaleY(.55)}
+  #zhuPage .product-speech{animation:none}
+}
 .product-speech{margin-top:12px;padding:16px;border-radius:16px;background:rgba(196,154,60,.06);
   border:1px solid rgba(196,154,60,.12);display:none;text-align:center;animation:fadeUp .5s ease}
 .product-speech.show{display:block}
@@ -485,7 +524,7 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
   filter:drop-shadow(0 4px 20px rgba(196,154,60,.25))}
 
 /* ===== FANG PAGE (Green) ===== */
-#fangPage{background-color:#080c0a;--mbg:url('images/方回春堂页背景.jpg');--mtint:rgba(6,12,9,.7)}
+#fangPage{background-color:#080c0a;--mbg:url('images/方回春堂页背景.jpg');--mtint:rgba(6,12,9,.5)}
 #fangPage .hero::before{background:
   radial-gradient(ellipse at 35% 40%,rgba(76,139,90,.14) 0%,transparent 55%),
   radial-gradient(ellipse at 65% 60%,rgba(134,239,172,.06) 0%,transparent 50%)}
@@ -569,8 +608,8 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
   .merchant-page .hero h2{font-size:1.5rem}
   .merchant-page .section{padding:20px 16px}
   .merchant-page .section-title{font-size:1.2rem}
-  .product-card .emoji img{width:60px;height:60px}
-  .product-card{min-width:90px;padding:12px}
+  .product-stage{max-width:96px}
+  .product-card{min-width:90px;padding:10px 6px}
   .camera-area{max-width:220px}
   .challenge-display{font-size:2.5rem;height:90px}
   .translate-demo{padding:16px}
@@ -732,7 +771,30 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
   <div class="hero" style="width:100%;max-width:none;padding:90px 24px 36px;box-sizing:border-box"><div class="brand-tag">朱炳仁·铜 · 始于1875</div><h2>【朱炳仁·铜】<br>让千年铜艺，永远有新鲜的故事</h2><div class="desc" style="width:100%;font-size:clamp(.8rem,3.5vw,.95rem);line-height:1.8;margin-top:12px;color:rgba(201,178,139,.7);letter-spacing:.5px;word-wrap:break-word;overflow-wrap:break-word;white-space:normal;text-align:left">151年的老字号的智慧，不是依靠辈分等年轻人来朝圣，<br>是主动走到年轻人的语境里当朋友。</div></div>
   <div class="section"><div class="desc" style="text-align:center;margin:0 auto;font-size:.9rem;line-height:2.2;color:rgba(201,178,139,.65);letter-spacing:1px">从传统铜的制作到AI漫剧的传播。<br>百年铜艺，用科技重新定义中国审美。</div></div>
   <div class="section"><div class="section-title">'铜'我一起看剧</div><div class="video-box" onclick="playZhuVideo()" style="border-color:rgba(196,154,60,.1)"><div class="flash-glasses" style="font-size:30px">🎬</div><div class="play-icon" style="border-color:rgba(196,154,60,.25);background:rgba(196,154,60,.12)"></div></div><p style="font-size:.7rem;color:rgba(201,178,139,.3);margin-top:8px;text-align:center;letter-spacing:1px">【短视频】</p></div>
-  <div class="section"><div class="section-title">三个铜艺宝贝 · 点击听它们说话</div><div class="products-grid"><div class="product-card" onclick="speakProduct(0)"><span class="emoji"><img src="images/铜狮.jpg" alt="铜狮"></span><div class="p-name">铜狮</div><div class="p-desc">镇宅瑞兽</div></div><div class="product-card" onclick="speakProduct(1)"><span class="emoji"><img src="images/孙悟空.jpg" alt="齐天大圣"></span><div class="p-name">齐天大圣</div><div class="p-desc">伴你闯关</div></div><div class="product-card" onclick="speakProduct(2)"><span class="emoji"><img src="images/铜葫芦.jpg" alt="铜葫芦"></span><div class="p-name">铜葫芦</div><div class="p-desc">盛满福气</div></div></div><div class="product-speech" id="productSpeech"><p id="productSpeechText"></p></div></div>
+  <div class="section">
+    <div class="section-title">三个铜艺宝贝 · 点击听它们说话</div>
+    <div class="products-grid">
+      <button type="button" class="product-card" data-character="lion" onclick="speakProduct(0,this)" aria-label="点击听铜狮说话" aria-pressed="false">
+        <span class="product-stage" style="--mouth-x:46%;--mouth-y:43%;--mouth-w:18%;--mouth-h:8%">
+          <span class="product-rig"><img class="product-art" src="images/铜狮_角色.png" alt="铜狮"><span class="product-mouth" aria-hidden="true"></span></span>
+        </span>
+        <span class="p-name">铜狮</span><span class="p-desc">镇宅瑞兽</span>
+      </button>
+      <button type="button" class="product-card" data-character="monkey" onclick="speakProduct(1,this)" aria-label="点击听齐天大圣说话" aria-pressed="false">
+        <span class="product-stage" style="--mouth-x:54.7%;--mouth-y:51.2%;--mouth-w:4.2%;--mouth-h:2.2%">
+          <span class="product-rig"><img class="product-art" src="images/齐天大圣_角色.png" alt="齐天大圣"><span class="product-mouth" aria-hidden="true"></span></span>
+        </span>
+        <span class="p-name">齐天大圣</span><span class="p-desc">伴你闯关</span>
+      </button>
+      <button type="button" class="product-card" data-character="gourd" onclick="speakProduct(2,this)" aria-label="点击听铜葫芦说话" aria-pressed="false">
+        <span class="product-stage">
+          <span class="product-rig"><img class="product-art" src="images/铜葫芦_角色.png" alt="铜葫芦"></span>
+        </span>
+        <span class="p-name">铜葫芦</span><span class="p-desc">盛满福气</span>
+      </button>
+    </div>
+    <div class="product-speech" id="productSpeech"><p id="productSpeechText"></p></div>
+  </div>
   <div class="section"><div class="quote-text" style="color:#e8c86a;font-size:1rem">老字号的根脉长在当代生活里，<br>做和你一起生活的"老朋友"</div></div>
   <div class="section"><div class="section-title">【点击进入，为你设计铜艺品】</div><div class="ai-design-box"><div class="upload-area" id="uploadArea" onclick="document.getElementById('copperFileInput').click()"><div class="upload-icon">📷</div><p>点击选择照片（相册/拍照）</p><p style="font-size:.7rem;margin-top:4px;opacity:.45">自动识别照片中的物品或人物主体并铜化（首次 AI 识别需联网加载模型）</p></div><input type="file" id="copperFileInput" accept="image/*" style="display:none" onchange="handleCopperFile(this)"><button class="gen-btn" id="genBtn" onclick="generateCopper()" style="display:none">生成铜艺品</button><div class="ai-design-result" id="aiDesignResult"><div class="result-img"><canvas id="copperCanvas" style="width:100%;height:100%;border-radius:16px;display:none"></canvas><div class="placeholder-art" id="copperPlaceholder">🏺</div></div><p style="font-size:.85rem;color:#e8c86a;font-family:'Ma Shan Zheng',serif;letter-spacing:2px">你的专属铜艺品已生成</p><p style="font-size:.7rem;color:rgba(201,178,139,.35);margin-top:6px;letter-spacing:1px">已识别主体轮廓，并融合千年铜艺金属质感</p><button onclick="resetCopperDesign()" style="margin-top:10px;padding:8px 20px;border-radius:20px;background:rgba(196,154,60,.15);border:1px solid rgba(196,154,60,.3);color:#e8c86a;font-size:.85rem;letter-spacing:2px;cursor:pointer">🔄 重新选择照片</button></div></div></div>
   <div style="height:80px"></div>
@@ -1091,7 +1153,7 @@ window.Tower3d=(function(){
 
 // ===== 导航 =====
 let currentPage='cover',mapColorized=false;
-function switchPage(id){document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active')});document.getElementById(id).classList.add('active');currentPage=id;if(window.Tower3d&&window.Tower3d.ready)Tower3d.onPageSwitch(id);if(['maoPage','zhuPage','fangPage'].includes(id)){const pg=document.getElementById(id);pg.scrollTop=0;initReveal(pg)}if(id==='cover')restartCoverAnim()}
+function switchPage(id){if(currentPage==='zhuPage'&&id!=='zhuPage'&&typeof clearCopperCharacterState==='function')clearCopperCharacterState(true);document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active')});document.getElementById(id).classList.add('active');currentPage=id;if(window.Tower3d&&window.Tower3d.ready)Tower3d.onPageSwitch(id);if(['maoPage','zhuPage','fangPage'].includes(id)){const pg=document.getElementById(id);pg.scrollTop=0;initReveal(pg)}if(id==='cover')restartCoverAnim()}
 function goToCover(){switchPage('cover')}
 function goToMap(){switchPage('mapPage');initMapDrag();initMarkerDrag();if(!mapColorized)showMapTapHint()}
 
@@ -1735,19 +1797,41 @@ function checkAns(s,c,b){if(!chActive)return;chActive=false;const r=document.get
 const pSpeech=['昔守朱门镇百瑞，今蹲案头稳日常','熔铜铸就齐天骨，陪你闯过生活八十一关','铜葫盛过千年福，为你攒满日常甜'];
 // 三个铜艺宝贝的配音音频：铜狮→狮子配音、齐天大圣→猴子配音、铜葫芦→葫芦配音
 const pVoiceSrc=['voiceLion','voiceMonkey','voiceGourd'];
-function speakProduct(i){
-  document.getElementById('productSpeechText').textContent=pSpeech[i];
-  document.getElementById('productSpeech').classList.add('show');
-  // 停掉系统 TTS 与其他宝贝配音，避免叠加播放
+let copperVoiceToken=0,copperVoiceAudio=null,copperVoiceCard=null;
+function clearCopperCharacterState(hideSpeech){
+  copperVoiceToken++;
+  if(copperVoiceAudio){
+    copperVoiceAudio.onended=null;copperVoiceAudio.onerror=null;
+    copperVoiceAudio.pause();try{copperVoiceAudio.currentTime=0}catch(_){}
+  }
+  copperVoiceAudio=null;copperVoiceCard=null;
+  document.querySelectorAll('#zhuPage .product-card.speaking').forEach(function(card){card.classList.remove('speaking');card.setAttribute('aria-pressed','false')});
+  if(hideSpeech){const speech=document.getElementById('productSpeech');if(speech)speech.classList.remove('show')}
+}
+function finishCopperCharacter(token){
+  if(token!==copperVoiceToken)return;
+  if(copperVoiceCard){copperVoiceCard.classList.remove('speaking');copperVoiceCard.setAttribute('aria-pressed','false')}
+  if(copperVoiceAudio){copperVoiceAudio.onended=null;copperVoiceAudio.onerror=null}
+  copperVoiceAudio=null;copperVoiceCard=null;
+}
+function speakProduct(i,card){
+  clearCopperCharacterState(false);
+  const token=copperVoiceToken;
+  const speech=document.getElementById('productSpeech'),text=document.getElementById('productSpeechText');
+  if(text)text.textContent=pSpeech[i];if(speech)speech.classList.add('show');
   if('speechSynthesis'in window)speechSynthesis.cancel();
-  pVoiceSrc.forEach(function(id){var a=document.getElementById(id);if(a&&!a.paused)a.pause()});
-  var clip=document.getElementById(pVoiceSrc[i]);
-  if(clip){
-    clip.volume=.55; // 配音音量调低，避免盖过背景音乐
-    clip.currentTime=0;
-    var p=clip.play();
-    if(p&&p.catch)p.catch(function(){console.log('配音播放被浏览器拦截，等待下次交互重试')});
-  }else{console.log('未找到配音音频：'+pVoiceSrc[i])}
+  card=card||document.querySelectorAll('#zhuPage .product-card')[i];
+  const clip=document.getElementById(pVoiceSrc[i]);
+  if(!clip||!card){console.log('未找到铜艺宝贝或配音：'+pVoiceSrc[i]);return}
+  copperVoiceAudio=clip;copperVoiceCard=card;
+  card.classList.add('speaking');card.setAttribute('aria-pressed','true');
+  clip.volume=.55;try{clip.currentTime=0}catch(_){}
+  clip.onended=function(){finishCopperCharacter(token)};
+  clip.onerror=function(){finishCopperCharacter(token)};
+  const playPromise=clip.play();
+  if(playPromise&&playPromise.catch)playPromise.catch(function(){
+    if(token===copperVoiceToken){finishCopperCharacter(token);console.log('配音播放被浏览器拦截，等待下次交互重试')}
+  });
 }
 function playZhuVideo(){event.currentTarget.innerHTML='<div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a1207,#3d2b0f)"><div style="font-size:40px;margin-bottom:16px">🎬</div><div style="font-family:Ma Shan Zheng,serif;font-size:.95rem;color:#c9b28b;text-align:center;line-height:1.8;letter-spacing:2px">【短视频播放中】<br>从传统铜的制作到AI漫剧的传播<br>百年铜艺，用科技重新定义中国审美</div></div>'}
 let copperImageData=null,copperTaskSeq=0;
