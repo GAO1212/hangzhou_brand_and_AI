@@ -6,7 +6,7 @@
 <title>百年杭字号 AI新本事</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&family=Orbitron:wght@400;700;900&family=ZCOOL+KuaiLe&family=Liu+Jian+Mao+Cao&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
 <style>
 /* ===== RESET & BASE ===== */
 *{margin:0;padding:0;box-sizing:border-box}
@@ -215,8 +215,8 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
   filter:brightness(1.05) contrast(1.12) saturate(1.25);
   -webkit-mask-image:radial-gradient(circle at 50% 50%,#000 0%,rgba(0,0,0,0) 0%);
   mask-image:radial-gradient(circle at 50% 50%,#000 0%,rgba(0,0,0,0) 0%)}
-#mapPage .map-title{position:absolute;top:56px;left:0;right:0;text-align:center;z-index:25;
-  font-family:'ZCOOL KuaiLe',cursive;font-size:1.8rem;letter-spacing:6px;
+#mapPage .map-title{position:absolute;top:100px;left:0;right:0;text-align:center;z-index:25;
+  font-family:'ZCOOL KuaiLe',cursive;font-size:clamp(1.4rem,6.2vw,1.8rem);letter-spacing:clamp(3px,1.4vw,6px);white-space:nowrap;
   background:linear-gradient(90deg,#ffd700,#ff6b6b,#c084fc,#60a5fa);background-size:300% 300%;
   animation:gradText 5s ease infinite;
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
@@ -367,7 +367,7 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
 
 /* ===== MAO PAGE (Blue) ===== */
 /* 毛源昌页全页蓝色字体系列：不同深浅适配深蓝背景 */
-#maoPage, #maoPage .merchant-desc, #maoPage .section .desc, #maoPage .hero .desc{color:#aee0ff}
+#maoPage, #maoPage .section .desc, #maoPage .hero .desc{color:#aee0ff}
 #maoPage .section{color:#aee0ff}
 #maoPage .section p, #maoPage .section>div:not(.section-title){color:#9fd2f8}
 #maoPage .quote-text{color:#8fc6ef}
@@ -748,6 +748,13 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
 .fullscreen-btn:hover{background:rgba(0,0,0,.65);border-color:#d4af37;transform:scale(1.1)}
 .fullscreen-btn:active{transform:scale(.95)}
 
+/* 极窄屏兜底（<320px，非主流设备保险）：三处临界文案行再缩一档，主流屏不受影响 */
+@media(max-width:319px){
+  #maoPage .hero .desc{font-size:.95rem!important}
+  #fangPage .hero .desc{font-size:.85rem!important}
+  #fangPage .quote-text{font-size:.7rem!important}
+}
+
 </style>
 </head>
 <body>
@@ -836,7 +843,7 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
 <!-- ====== 毛源昌 ====== -->
 <div id="maoPage" class="page merchant-page">
   <button class="back-top" onclick="goToMap()">←</button>
-  <div class="hero" style="padding-bottom:0;min-height:auto"><div class="brand-tag" style="font-size:1.2rem;letter-spacing:4px;padding:8px 26px">毛源昌眼镜 · 始于1862</div><div class="desc" style="font-size:1.15rem">164年的时间，<br>毛源昌把一副眼镜做成了"数字之眼"。</div></div>
+  <div class="hero" style="padding-bottom:0;min-height:auto"><div class="brand-tag" style="font-size:1.2rem;letter-spacing:4px;padding:8px 26px">毛源昌眼镜 · 始于1862</div><div class="desc" style="font-size:clamp(1.05rem,4.2vw,1.15rem)">164年的时间，<br>毛源昌把一副眼镜做成了"数字之眼"。</div></div>
   <div class="bridge-h2" style="text-align:center;padding:34px 24px"><h2 style="font-family:'Ma Shan Zheng',cursive;font-weight:400;font-size:1.15rem;letter-spacing:2px;line-height:1.6;margin:0;color:#aee0ff;display:inline-block">用<span style="font-family:Calibri,'Segoe UI',Arial,sans-serif;font-weight:700">AI</span>给老字号配幅新眼镜</h2></div>
   <div class="section" style="padding-top:0"><div class="section-title">点击看视频</div><div class="video-box" id="maoVideo" onclick="playMaoVideo()"><div class="flash-glasses">👓</div><div class="play-icon"></div></div></div>
   <!-- 3D floating glasses overlay (page-level) -->
@@ -899,7 +906,7 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
 <!-- ====== 方回春堂 ====== -->
 <div id="fangPage" class="page merchant-page">
   <button class="back-top" onclick="goToMap()">←</button>
-  <div class="hero"><div class="brand-tag" style="font-size:1.2rem;letter-spacing:4px;padding:8px 26px">方回春堂 · 始于1649</div><div class="desc" style="font-size:1rem;line-height:2.2;color:#a9dcb8;text-align:center;margin:0 auto;letter-spacing:1px;max-width:380px">377年的老字号，在2026年，<br>把中医的哲学和当代人的情绪打通了，<br>在忙忙碌碌的日常里，<br>方回春堂的AI助手，<br>做日常健康的"提醒器"！<br>做中医科普的"翻译器"！</div></div>
+  <div class="hero"><div class="brand-tag" style="font-size:1.2rem;letter-spacing:4px;padding:8px 26px">方回春堂 · 始于1649</div><div class="desc" style="font-size:clamp(.95rem,3.9vw,1rem);line-height:2.2;color:#a9dcb8;text-align:center;margin:0 auto;letter-spacing:1px;max-width:380px">377年的老字号，在2026年，<br>把中医的哲学和当代人的情绪打通了，<br>在忙忙碌碌的日常里，<br>方回春堂的AI助手，<br>做日常健康的"提醒器"！<br>做中医科普的"翻译器"！</div></div>
   <div class="bridge-h2" style="text-align:center;padding:34px 20px"><h2 style="font-family:'Ma Shan Zheng',cursive;font-weight:400;font-size:1rem;letter-spacing:1px;line-height:1.6;margin:0;color:#a9dcb8;display:inline-block;white-space:nowrap">河坊街的老中医 收了个<span style="font-family:'Baoli SC','报隶-简','STBaoli',serif">AI</span>小徒弟</h2></div>
   <div class="section" style="padding-top:0"><div class="section-title">AI舌诊 · 体质检测</div><div class="tongue-box"><p style="font-size:.8rem;color:rgba(134,239,172,.6);margin-bottom:16px;line-height:1.8;letter-spacing:1px">智能图像识别分析舌象特征。</p><div id="tongueContent"><div class="camera-area" id="cameraArea">
       <div class="cam-icon">📸</div>
@@ -912,7 +919,7 @@ button{font-family:inherit;border:none;cursor:pointer;outline:none}
       <div class="scan-line"></div>
     </div><button class="tongue-btn" id="tongueBtn" onclick="generateReport()" style="display:none">生成AI体质报告</button></div><div id="tongueClosed" style="display:none;text-align:center;padding:20px 0"><button onclick="openTongueCamera()" style="padding:12px 28px;border-radius:24px;background:rgba(76,139,90,.15);border:1px solid rgba(76,139,90,.3);color:#7ac08a;font-size:.95rem;letter-spacing:2px;cursor:pointer;font-family:'Ma Shan Zheng',serif">📸 开启AI舌诊</button></div><div style="text-align:right;margin-top:8px"><button id="tongueCloseBtn" onclick="closeTongueCamera()" style="padding:4px 14px;border-radius:16px;background:rgba(76,139,90,.08);border:1px solid rgba(76,139,90,.15);color:rgba(122,192,138,.5);font-size:.75rem;letter-spacing:1px;cursor:pointer">✕ 关闭舌诊</button></div></div>
   <div class="report-card" id="reportCard"><h4>AI 体质报告</h4><div class="report-item"><span class="r-label">体质类型</span><span class="r-value" id="reportType">平和质</span></div><div class="report-item"><span class="r-label">舌象分析</span><span class="r-value" id="reportTongue">舌淡红，苔薄白</span></div><div class="report-item"><span class="r-label">气血状态</span><span class="r-value" id="reportQi">良好</span></div><div class="report-item"><span class="r-label">建议</span><span class="r-value" id="reportAdvice">保持规律作息</span></div><div class="report-advice"><p id="reportDetail">您的体质属于平和质，整体状态良好。建议保持规律作息，适当运动，饮食均衡。方回春堂AI小徒弟提醒您：养生不在于复杂，贵在坚持。</p></div><p style="font-size:.7rem;color:rgba(134,239,172,.35);margin-top:12px;text-align:center;letter-spacing:1px">----- 提供一种更便利的养生参考 -----</p></div></div>
-  <div class="section"><div class="quote-text" style="font-size:.95rem;line-height:2.4;color:#8fd6a8">AI读得懂舌头上的寒热纹路，<br>但读不懂的是老药铺"但愿世间人无病"的初心。<br>它永远是帮着老药铺照顾百姓日常的"小徒弟"，<br>不是高高在上的"神医"：<br>不神化技术，不夸大效果，<br>这才是370年的老牌子最金贵的靠谱。</div></div>
+  <div class="section"><div class="quote-text" style="font-size:clamp(.8rem,3.6vw,.95rem);line-height:2.4;color:#8fd6a8">AI读得懂舌头上的寒热纹路，<br>但读不懂的是老药铺"但愿世间人无病"的初心。<br>它永远是帮着老药铺照顾百姓日常的"小徒弟"，<br>不是高高在上的"神医"：<br>不神化技术，不夸大效果，<br>这才是370年的老牌子最金贵的靠谱。</div></div>
   <div class="section"><div class="section-title">【互动】养生消消乐</div><p style="font-size:.8rem;color:rgba(134,239,172,.6);margin-bottom:8px;line-height:1.7;letter-spacing:1px">点选两个配对的养生知识，连对即消除！</p><div class="wellness-game"><div class="match-score" id="matchScore">得分：0</div><div class="match-pairs-left" id="matchPairsLeft">剩余配对：4</div><div class="match-grid" id="matchGrid"></div><div id="matchResult" style="display:none"><p style="color:#b7f0c8;font-size:1rem;font-family:'Ma Shan Zheng',serif;letter-spacing:2px;text-shadow:0 0 10px rgba(134,239,172,.5)">全部消除！恭喜！养生达人就是你~</p><button onclick="restartWellnessGame()" style="padding:9px 28px;border-radius:22px;background:rgba(76,139,90,.18);border:1px solid rgba(122,192,138,.45);color:#7ac08a;font-size:.9rem;font-family:'Ma Shan Zheng',serif;letter-spacing:2px;cursor:pointer;box-shadow:0 0 14px rgba(76,139,90,.18);transition:transform .2s">🔄 再来一局</button></div></div></div>
   <div style="height:80px"></div>
   <div class="brand-nav">
@@ -1245,7 +1252,7 @@ window.Tower3d=(function(){
 // ===== 导航 =====
 let currentPage='cover',mapColorized=false;
 function resetBrandVrState(){document.querySelectorAll('#mapPage .marker.vr-entering').forEach(m=>m.classList.remove('vr-entering'));const o=document.getElementById('brand-vr-overlay');if(o)o.classList.remove('active','leaving');if(typeof brandVrBusy!=='undefined')brandVrBusy=false}
-function switchPage(id,keepBrandVr){if(!keepBrandVr)resetBrandVrState();if(currentPage==='zhuPage'&&id!=='zhuPage'&&typeof clearCopperCharacterState==='function')clearCopperCharacterState(true);document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active')});document.getElementById(id).classList.add('active');currentPage=id;if(window.Tower3d&&window.Tower3d.ready)Tower3d.onPageSwitch(id);if(['maoPage','zhuPage','fangPage'].includes(id)){const pg=document.getElementById(id);pg.scrollTop=0;initReveal(pg)}if(id==='cover')restartCoverAnim()}
+function switchPage(id,keepBrandVr){if(!keepBrandVr)resetBrandVrState();if(currentPage==='zhuPage'&&id!=='zhuPage'&&typeof clearCopperCharacterState==='function')clearCopperCharacterState(true);document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active')});document.getElementById(id).classList.add('active');currentPage=id;if(window.Tower3d&&window.Tower3d.ready)Tower3d.onPageSwitch(id);if(['maoPage','zhuPage','fangPage'].includes(id)){const pg=document.getElementById(id);pg.scrollTop=0;initReveal(pg)}if(id==='zhuPage'&&typeof prefetchCopperVoices==='function')prefetchCopperVoices();if(id==='cover')restartCoverAnim()}
 function goToCover(){switchPage('cover')}
 function goToMap(){switchPage('mapPage');initMapDrag();initMarkerDrag();if(!mapColorized)showMapTapHint()}
 
@@ -1890,11 +1897,27 @@ function doTranslate(){
   const c=document.getElementById('cnText'),e=document.getElementById('enText'),v=document.getElementById('voiceIndicator');
   c.classList.remove('show');e.classList.remove('show');
   const p=tPairs[tIdx%tPairs.length];tIdx++;
+  // 关键修复：iOS/微信浏览器要求语音必须在用户手势同步调用链内触发，
+  // 原实现嵌套 setTimeout 后才 speak 会脱离手势栈被静默拦截 → 改为手势内立即播报
+  if('speechSynthesis'in window){
+    try{
+      // iOS 需要手势内先碰一次 voices 才能激活合成引擎（后续异步语音才有效）
+      if(!window.speechSynthesis._voicesTouched){
+        window.speechSynthesis.getVoices();
+        window.speechSynthesis._voicesTouched=true;
+      }
+      window.speechSynthesis.cancel();
+      const u=new SpeechSynthesisUtterance(p.en);
+      u.lang='en-US';u.rate=.9;
+      let spoke=false;
+      u.onstart=function(){spoke=true};
+      window.speechSynthesis.speak(u);
+    }catch(_){}
+  }
   setTimeout(()=>{
     c.textContent=p.cn;c.classList.add('show');
     setTimeout(()=>{
       e.textContent=p.en;e.classList.add('show');v.style.visibility='visible';
-      if('speechSynthesis'in window){const u=new SpeechSynthesisUtterance(p.en);u.lang='en-US';u.rate=.9;speechSynthesis.speak(u)}
       setTimeout(()=>{v.style.visibility='hidden'},3000);
     },500);
   },200);
@@ -1905,12 +1928,52 @@ function showChOpt(correct){const o=document.getElementById('challengeOptions');
 function checkAns(s,c,b){if(!chActive)return;chActive=false;const r=document.getElementById('challengeResult');if(s===c){b.classList.add('correct');r.classList.add('show')}else{b.classList.add('wrong');document.querySelectorAll('.challenge-options button').forEach(x=>{if(x.textContent===c)x.classList.add('correct')});r.innerHTML='<p style="color:#d4af37">没关系，再来一次吧！</p>';r.classList.add('show')}setTimeout(function(){try{r.scrollIntoView({behavior:'smooth',block:'center'})}catch(_){}},60);setTimeout(()=>{document.getElementById('challengeStartBtn').style.display='';document.getElementById('challengeStartBtn').textContent='再来一次'},1500)}
 
 // ===== 朱炳仁 =====
-const pSpeech=['昔守朱门镇百瑞，今蹲案头稳日常','熔铜铸就齐天骨，陪你闯过生活八十一关','铜葫盛过千年福，为你攒满日常甜'];
+// 三句宝贝台词均为两行（按语义断行，不显示逗号）
+const pSpeech=['昔守朱门镇百瑞<br>今蹲案头稳日常','熔铜铸就齐天骨<br>陪你闯过生活八十一关','铜葫盛过千年福<br>为你攒满日常甜'];
 // 三个铜艺宝贝的配音音频：铜狮→狮子配音、齐天大圣→猴子配音、铜葫芦→葫芦配音
 const pVoiceSrc=['voiceLion','voiceMonkey','voiceGourd'];
 let copperVoiceToken=0,copperVoiceAudio=null,copperVoiceCard=null;
+// 手机（iOS/微信单音轨策略）播配音时系统会暂停背景音乐；配音结束后若音乐本应开着则自动续播（兜底）
+function resumeBgmAfterVoice(){
+  if(typeof musicOn!=='undefined'&&musicOn){
+    const cur=bgms[bgmIdx];
+    if(cur&&cur.paused){cur.volume=bgmVol;cur.play().catch(function(){})}
+  }
+}
+// 手机上宝贝配音改走 Web Audio 输出：不抢占 <audio> 的媒体通道，说话时背景音乐全程不断（与电脑表现一致）
+let copperAudioCtx=null,copperVoiceBuf={},copperVoiceSrcNode=null,copperVoicesPrefetched=false;
+function getCopperAudioCtx(){
+  if(!copperAudioCtx){try{copperAudioCtx=new(window.AudioContext||window.webkitAudioContext)()}catch(_){copperAudioCtx=null}}
+  if(copperAudioCtx&&copperAudioCtx.state==='suspended'){try{copperAudioCtx.resume()}catch(_){}}
+  return copperAudioCtx;
+}
+function loadCopperVoice(i,cb){
+  if(copperVoiceBuf[i]){cb(copperVoiceBuf[i]);return}
+  const clip=document.getElementById(pVoiceSrc[i]);
+  if(!clip){cb(null);return}
+  const srcEl=clip.querySelector('source');
+  const url=(srcEl&&srcEl.src)||clip.src||clip.currentSrc;
+  if(!url){cb(null);return}
+  fetch(url).then(function(r){return r.arrayBuffer()}).then(function(ab){
+    const ctx=getCopperAudioCtx();
+    if(!ctx){cb(null);return}
+    ctx.decodeAudioData(ab,function(buf){copperVoiceBuf[i]=buf||null;cb(copperVoiceBuf[i])},function(){cb(null)});
+  }).catch(function(){cb(null)});
+}
+function prefetchCopperVoices(){
+  if(copperVoicesPrefetched)return;copperVoicesPrefetched=true;
+  getCopperAudioCtx();
+  for(let i=0;i<pVoiceSrc.length;i++)loadCopperVoice(i,function(){});
+}
+function stopCopperVoiceNode(){
+  if(copperVoiceSrcNode){
+    try{copperVoiceSrcNode.onended=null;copperVoiceSrcNode.stop()}catch(_){}
+    copperVoiceSrcNode=null;
+  }
+}
 function clearCopperCharacterState(hideSpeech){
   copperVoiceToken++;
+  stopCopperVoiceNode();
   if(copperVoiceAudio){
     copperVoiceAudio.onended=null;copperVoiceAudio.onerror=null;
     copperVoiceAudio.pause();try{copperVoiceAudio.currentTime=0}catch(_){}
@@ -1918,30 +1981,53 @@ function clearCopperCharacterState(hideSpeech){
   copperVoiceAudio=null;copperVoiceCard=null;
   document.querySelectorAll('#zhuPage .product-card.speaking').forEach(function(card){card.classList.remove('speaking');card.setAttribute('aria-pressed','false')});
   if(hideSpeech){const speech=document.getElementById('productSpeech');if(speech)speech.classList.remove('show')}
+  // 被切换/离开朱页时配音中止，恢复背景音乐
+  resumeBgmAfterVoice();
 }
 function finishCopperCharacter(token){
   if(token!==copperVoiceToken)return;
   if(copperVoiceCard){copperVoiceCard.classList.remove('speaking');copperVoiceCard.setAttribute('aria-pressed','false')}
   if(copperVoiceAudio){copperVoiceAudio.onended=null;copperVoiceAudio.onerror=null}
+  stopCopperVoiceNode();
   copperVoiceAudio=null;copperVoiceCard=null;
+  // 配音播完，恢复背景音乐
+  resumeBgmAfterVoice();
 }
 function speakProduct(i,card){
   clearCopperCharacterState(false);
   const token=copperVoiceToken;
+  // 点击手势内创建/激活 AudioContext（iOS 要求手势内 resume）
+  getCopperAudioCtx();
   const speech=document.getElementById('productSpeech'),text=document.getElementById('productSpeechText');
-  if(text)text.textContent=pSpeech[i];if(speech)speech.classList.add('show');
+  if(text)text.innerHTML=pSpeech[i];if(speech)speech.classList.add('show');
   if('speechSynthesis'in window)speechSynthesis.cancel();
   card=card||document.querySelectorAll('#zhuPage .product-card')[i];
   const clip=document.getElementById(pVoiceSrc[i]);
   if(!clip||!card){console.log('未找到铜艺宝贝或配音：'+pVoiceSrc[i]);return}
-  copperVoiceAudio=clip;copperVoiceCard=card;
+  copperVoiceCard=card;
   card.classList.add('speaking');card.setAttribute('aria-pressed','true');
-  clip.volume=.55;try{clip.currentTime=0}catch(_){}
-  clip.onended=function(){finishCopperCharacter(token)};
-  clip.onerror=function(){finishCopperCharacter(token)};
-  const playPromise=clip.play();
-  if(playPromise&&playPromise.catch)playPromise.catch(function(){
-    if(token===copperVoiceToken){finishCopperCharacter(token);console.log('配音播放被浏览器拦截，等待下次交互重试')}
+  loadCopperVoice(i,function(buf){
+    if(token!==copperVoiceToken)return;
+    if(buf&&copperAudioCtx){
+      // Web Audio 路径：与背景音乐互不干扰，手机上 BGM 不会中断
+      const src=copperAudioCtx.createBufferSource();
+      src.buffer=buf;
+      const gain=copperAudioCtx.createGain();gain.gain.value=.55;
+      src.connect(gain);gain.connect(copperAudioCtx.destination);
+      copperVoiceSrcNode=src;
+      src.onended=function(){finishCopperCharacter(token)};
+      try{src.start(0)}catch(_){finishCopperCharacter(token)}
+      return;
+    }
+    // 回退：<audio> 元素直播（电脑路径；手机上若被系统暂停BGM，结束后由恢复机制兜底）
+    copperVoiceAudio=clip;
+    clip.volume=.55;try{clip.currentTime=0}catch(_){}
+    clip.onended=function(){finishCopperCharacter(token)};
+    clip.onerror=function(){finishCopperCharacter(token)};
+    const playPromise=clip.play();
+    if(playPromise&&playPromise.catch)playPromise.catch(function(){
+      if(token===copperVoiceToken){finishCopperCharacter(token);console.log('配音播放被浏览器拦截，等待下次交互重试')}
+    });
   });
 }
 function playZhuVideo(){event.currentTarget.innerHTML='<div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a1207,#3d2b0f)"><div style="font-size:40px;margin-bottom:16px">🎬</div><div style="font-family:Ma Shan Zheng,serif;font-size:.95rem;color:#c9b28b;text-align:center;line-height:1.8;letter-spacing:2px">【短视频播放中】<br>从传统铜的制作到AI漫剧的传播<br>百年铜艺，用科技重新定义中国审美</div></div>'}
@@ -2470,8 +2556,8 @@ function restartWellnessGame(){
 // 页面加载时初始化消消乐
 setTimeout(initWellnessGame,100);
 
-// iOS fix: 首次触摸激活AudioContext和speechSynthesis
-document.addEventListener('touchstart',function(){try{const c=new(AudioContext||webkitAudioContext)();if(c.state==='suspended')c.resume()}catch(_){}try{if('speechSynthesis'in window){speechSynthesis.cancel();const t=new SpeechSynthesisUtterance('');t.volume=0;speechSynthesis.speak(t)}}catch(_){}},{once:true});
+// iOS fix: 首次触摸激活AudioContext和speechSynthesis（保留原音效预热；不再 cancel 后播空语音，避免把语音引擎重置回未激活态）
+document.addEventListener('touchstart',function(){try{const c=new(AudioContext||webkitAudioContext)();if(c.state==='suspended')c.resume()}catch(_){}try{if('speechSynthesis'in window){window.speechSynthesis.getVoices();/*手势内预热voices列表，iOS激活合成引擎*/}}catch(_){}},{once:true});
 </script>
 </body>
 </html>
